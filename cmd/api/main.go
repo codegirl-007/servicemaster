@@ -52,8 +52,8 @@ func main() {
 	})
 
 	server := &http.Server{
-		Addr: cfg.HTTPAddr,
-		Handler: mux,
+		Addr:              cfg.HTTPAddr,
+		Handler:           mux,
 		ReadHeaderTimeout: time.Second,
 	}
 
@@ -74,7 +74,7 @@ func main() {
 	select {
 	case err := <-serverErrors:
 		log.Fatalf("http server: %v", err)
-	case signal := <- shutdownSignals:
+	case signal := <-shutdownSignals:
 		log.Printf("received shutdown signal: %s", signal)
 	}
 
