@@ -22,3 +22,19 @@ docker run --name servicemaster-postgres \
   -p 5432:5432 \
   -d postgres:16
 ```
+
+## Database migrations and queries
+
+ServiceMaster uses Goose for SQL migrations and sqlc for typed Go query generation.
+
+Directories:
+
+- `db/migrations`: Goose migration files
+- `db/queries`: handwritten SQL queries for sqlc
+- `internal/store`: generated sqlc Go code
+
+Apply local migrations:
+
+```sh
+goose -dir db/migrations postgres "$DATABASE_URL" up
+```
