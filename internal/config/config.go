@@ -26,6 +26,8 @@ type Config struct {
 	DatabaseConnMaxLifetime time.Duration
 	// DatabaseConnMaxIdleTime is the max idle time for a DB connection.
 	DatabaseConnMaxIdleTime time.Duration
+	//Token Encryption Key
+	TokenEncryptionKeyBase64 string
 }
 
 const (
