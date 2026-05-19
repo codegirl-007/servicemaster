@@ -32,6 +32,20 @@ type QboConnectionEvent struct {
 	OccurredAt      time.Time
 }
 
+type QboConnectionToken struct {
+	QboConnectionID       uuid.UUID
+	TenantID              uuid.UUID
+	EncryptedAccessToken  []byte
+	EncryptedRefreshToken []byte
+	AccessTokenExpiresAt  time.Time
+	RefreshTokenExpiresAt sql.NullTime
+	TokenType             string
+	Scope                 sql.NullString
+	Version               int64
+	CreatedAt             time.Time
+	UpdatedAt             time.Time
+}
+
 type Tenant struct {
 	ID        uuid.UUID
 	Name      string
