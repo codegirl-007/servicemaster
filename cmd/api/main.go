@@ -16,11 +16,11 @@ func main() {
 
 	log.Println("initializing database...")
 
-	db, err := db.Open(cfg)
+	databaseHandle, err := db.Open(cfg)
 	if err != nil {
 		log.Fatalf("initializing database: %v", err)
 	}
-	defer db.Close()
+	defer databaseHandle.Close()
 
 	log.Println("database initialized")
 }
