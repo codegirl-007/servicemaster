@@ -5,10 +5,32 @@
 package store
 
 import (
+	"database/sql"
+	"encoding/json"
 	"time"
 
 	"github.com/google/uuid"
 )
+
+type QboConnection struct {
+	ID          uuid.UUID
+	TenantID    uuid.UUID
+	RealmID     string
+	CompanyName sql.NullString
+	State       string
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
+}
+
+type QboConnectionEvent struct {
+	ID              uuid.UUID
+	QboConnectionID uuid.UUID
+	TenantID        uuid.UUID
+	EventType       string
+	Message         sql.NullString
+	Metadata        json.RawMessage
+	OccurredAt      time.Time
+}
 
 type Tenant struct {
 	ID        uuid.UUID
