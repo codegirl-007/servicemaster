@@ -26,7 +26,7 @@ type Config struct {
 	DatabaseConnMaxLifetime time.Duration
 	// DatabaseConnMaxIdleTime is the max idle time for a DB connection.
 	DatabaseConnMaxIdleTime time.Duration
-	//Token Encryption Key
+	// TokenEncryptionKeyBase64 is the base64-encoded key used to encrypt stored tokens.
 	TokenEncryptionKeyBase64 string
 }
 
@@ -44,13 +44,14 @@ func Load() (Config, error) {
 	_ = godotenv.Load()
 
 	config := Config{
-		AppEnv:                  getEnv("APP_ENV", defaultAppEnv),
-		HTTPAddr:                getEnv("HTTP_ADDR", defaultHTTPAddr),
-		DatabaseURL:             os.Getenv("DATABASE_URL"),
-		DatabaseMaxOpenConns:    getEnvInt("DATABASE_MAX_OPEN_CONNS", defaultDatabaseMaxOpenConns),
-		DatabaseMaxIdleConns:    getEnvInt("DATABASE_MAX_IDLE_CONNS", defaultDatabaseMaxIdleConns),
-		DatabaseConnMaxLifetime: getEnvDuration("DATABASE_CONN_MAX_LIFETIME", defaultDatabaseConnMaxLifetime),
-		DatabaseConnMaxIdleTime: getEnvDuration("DATABASE_CONN_MAX_IDLE_TIME", defaultDatabaseConnMaxIdleTime),
+		AppEnv:                   getEnv("APP_ENV", defaultAppEnv),
+		HTTPAddr:                 getEnv("HTTP_ADDR", defaultHTTPAddr),
+		DatabaseURL:              os.Getenv("DATABASE_URL"),
+		DatabaseMaxOpenConns:     getEnvInt("DATABASE_MAX_OPEN_CONNS", defaultDatabaseMaxOpenConns),
+		DatabaseMaxIdleConns:     getEnvInt("DATABASE_MAX_IDLE_CONNS", defaultDatabaseMaxIdleConns),
+		DatabaseConnMaxLifetime:  getEnvDuration("DATABASE_CONN_MAX_LIFETIME", defaultDatabaseConnMaxLifetime),
+		DatabaseConnMaxIdleTime:  getEnvDuration("DATABASE_CONN_MAX_IDLE_TIME", defaultDatabaseConnMaxIdleTime),
+		TokenEncryptionKeyBase64: getEnv("TOKEN_ENCRYPTION_KEY_BASE64", ""),
 	}
 
 	if err := config.Validate(); err != nil {
@@ -64,6 +65,10 @@ func Load() (Config, error) {
 func (c Config) Validate() error {
 	if c.DatabaseURL == "" {
 		return fmt.Errorf("DATABASE_URL is required")
+	}
+
+	if c.TokenEncryptionKeyBase64 == "" {
+		return fmt.Errorf("TOKEN_ENCRYPTION_KEY_BASE64 is required")
 	}
 
 	return nil
