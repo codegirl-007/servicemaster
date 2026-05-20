@@ -3,15 +3,6 @@ package types
 
 import "time"
 
-// InvoicePrintStatus represents the documented invoice print status values.
-type InvoicePrintStatus string
-
-const (
-	InvoicePrintStatusNotSet        InvoicePrintStatus = "NotSet"
-	InvoicePrintStatusNeedToPrint   InvoicePrintStatus = "NeedToPrint"
-	InvoicePrintStatusPrintComplete InvoicePrintStatus = "PrintComplete"
-)
-
 // InvoiceLineDetailType represents the documented invoice line detail types.
 type InvoiceLineDetailType string
 
@@ -47,7 +38,7 @@ type Invoice struct {
 	ShipFromAddr          *PhysicalAddress     `json:"ShipFromAddr,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
-	PrintStatus           InvoicePrintStatus   `json:"PrintStatus,omitempty"`
+	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
 	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
@@ -82,7 +73,7 @@ type CreateInvoiceRequest struct {
 	ShipFromAddr          *PhysicalAddress     `json:"ShipFromAddr,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
-	PrintStatus           InvoicePrintStatus   `json:"PrintStatus,omitempty"`
+	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
 	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
@@ -113,7 +104,7 @@ type SparseUpdateInvoiceRequest struct {
 	ShipFromAddr          *PhysicalAddress     `json:"ShipFromAddr,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
-	PrintStatus           InvoicePrintStatus   `json:"PrintStatus,omitempty"`
+	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
 	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`

@@ -16,3 +16,11 @@ const (
 	EmailStatusNeedToSend EmailStatus = "NeedToSend"
 	EmailStatusEmailSent  EmailStatus = "EmailSent"
 )
+
+type PrintStatus string
+
+const (
+	PrintStatusNotSet        PrintStatus = "NotSet"
+	PrintStatusNeedToPrint   PrintStatus = "NeedToPrint"
+	PrintStatusPrintComplete PrintStatus = "PrintComplete"
+)

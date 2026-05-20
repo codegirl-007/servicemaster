@@ -14,15 +14,6 @@ const (
 	EstimateTxnStatusConverted EstimateTxnStatus = "Converted"
 )
 
-// EstimatePrintStatus represents the documented estimate print status values.
-type EstimatePrintStatus string
-
-const (
-	EstimatePrintStatusNotSet        EstimatePrintStatus = "NotSet"
-	EstimatePrintStatusNeedToPrint   EstimatePrintStatus = "NeedToPrint"
-	EstimatePrintStatusPrintComplete EstimatePrintStatus = "PrintComplete"
-)
-
 // EstimateLineDetailType represents the documented estimate line detail types.
 type EstimateLineDetailType string
 
@@ -56,7 +47,7 @@ type Estimate struct {
 	PrivateNote           string                `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress         `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus           `json:"EmailStatus,omitempty"`
-	PrintStatus           EstimatePrintStatus   `json:"PrintStatus,omitempty"`
+	PrintStatus           PrintStatus           `json:"PrintStatus,omitempty"`
 	CurrencyRef           *Reference            `json:"CurrencyRef,omitempty"`
 	ExchangeRate          float64               `json:"ExchangeRate,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation  `json:"GlobalTaxCalculation,omitempty"`
@@ -94,7 +85,7 @@ type CreateEstimateRequest struct {
 	PrivateNote           string                `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress         `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus           `json:"EmailStatus,omitempty"`
-	PrintStatus           EstimatePrintStatus   `json:"PrintStatus,omitempty"`
+	PrintStatus           PrintStatus           `json:"PrintStatus,omitempty"`
 	CurrencyRef           *Reference            `json:"CurrencyRef,omitempty"`
 	ExchangeRate          float64               `json:"ExchangeRate,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation  `json:"GlobalTaxCalculation,omitempty"`
@@ -128,7 +119,7 @@ type SparseUpdateEstimateRequest struct {
 	PrivateNote           string                `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress         `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus           `json:"EmailStatus,omitempty"`
-	PrintStatus           EstimatePrintStatus   `json:"PrintStatus,omitempty"`
+	PrintStatus           PrintStatus           `json:"PrintStatus,omitempty"`
 	CurrencyRef           *Reference            `json:"CurrencyRef,omitempty"`
 	ExchangeRate          float64               `json:"ExchangeRate,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation  `json:"GlobalTaxCalculation,omitempty"`
