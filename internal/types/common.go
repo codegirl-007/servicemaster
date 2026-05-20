@@ -16,3 +16,12 @@ const (
 	EmailStatusNeedToSend EmailStatus = "NeedToSend"
 	EmailStatusEmailSent  EmailStatus = "EmailSent"
 )
+
+// PrintStatus represents the documented QuickBooks print status values.
+type PrintStatus string
+
+const (
+	PrintStatusNotSet        PrintStatus = "NotSet"
+	PrintStatusNeedToPrint   PrintStatus = "NeedToPrint"
+	PrintStatusPrintComplete PrintStatus = "PrintComplete"
+)
