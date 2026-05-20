@@ -12,15 +12,6 @@ const (
 	CreditMemoPrintStatusPrintComplete CreditMemoPrintStatus = "PrintComplete"
 )
 
-// CreditMemoEmailStatus represents the documented credit memo email status values.
-type CreditMemoEmailStatus string
-
-const (
-	CreditMemoEmailStatusNotSet     CreditMemoEmailStatus = "NotSet"
-	CreditMemoEmailStatusNeedToSend CreditMemoEmailStatus = "NeedToSend"
-	CreditMemoEmailStatusEmailSent  CreditMemoEmailStatus = "EmailSent"
-)
-
 // CreditMemoLineDetailType represents the documented credit memo line detail types.
 type CreditMemoLineDetailType string
 
@@ -80,7 +71,7 @@ type CreateCreditMemoRequest struct {
 	CustomerMemo          *InvoiceMemo          `json:"CustomerMemo,omitempty"`
 	PrivateNote           string                `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress         `json:"BillEmail,omitempty"`
-	EmailStatus           CreditMemoEmailStatus `json:"EmailStatus,omitempty"`
+	EmailStatus           EmailStatus           `json:"EmailStatus,omitempty"`
 	PrintStatus           CreditMemoPrintStatus `json:"PrintStatus,omitempty"`
 	TxnTaxDetail          *InvoiceTxnTaxDetail  `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation  `json:"GlobalTaxCalculation,omitempty"`
@@ -106,7 +97,7 @@ type SparseUpdateCreditMemoRequest struct {
 	CustomerMemo          *InvoiceMemo          `json:"CustomerMemo,omitempty"`
 	PrivateNote           string                `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress         `json:"BillEmail,omitempty"`
-	EmailStatus           CreditMemoEmailStatus `json:"EmailStatus,omitempty"`
+	EmailStatus           EmailStatus           `json:"EmailStatus,omitempty"`
 	PrintStatus           CreditMemoPrintStatus `json:"PrintStatus,omitempty"`
 	TxnTaxDetail          *InvoiceTxnTaxDetail  `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation  `json:"GlobalTaxCalculation,omitempty"`
