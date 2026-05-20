@@ -64,7 +64,7 @@ type Estimate struct {
 	ShipFromAddr          *PhysicalAddress      `json:"ShipFromAddr,omitempty"`
 	ShipDate              *Date                 `json:"ShipDate,omitempty"`
 	ShipMethodRef         *Reference            `json:"ShipMethodRef,omitempty"`
-	LinkedTxn             []EstimateLinkedTxn   `json:"LinkedTxn,omitempty"`
+	LinkedTxn             []LinkedTxn           `json:"LinkedTxn,omitempty"`
 	MetaData              *MetaData             `json:"MetaData,omitempty"`
 	Domain                string                `json:"domain,omitempty"`
 	Sparse                *bool                 `json:"sparse,omitempty"`
@@ -100,7 +100,7 @@ type CreateEstimateRequest struct {
 	ShipFromAddr          *PhysicalAddress      `json:"ShipFromAddr,omitempty"`
 	ShipDate              *Date                 `json:"ShipDate,omitempty"`
 	ShipMethodRef         *Reference            `json:"ShipMethodRef,omitempty"`
-	LinkedTxn             []EstimateLinkedTxn   `json:"LinkedTxn,omitempty"`
+	LinkedTxn             []LinkedTxn           `json:"LinkedTxn,omitempty"`
 }
 
 // SparseUpdateEstimateRequest represents the documented sparse update payload.
@@ -134,7 +134,7 @@ type SparseUpdateEstimateRequest struct {
 	ShipFromAddr          *PhysicalAddress      `json:"ShipFromAddr,omitempty"`
 	ShipDate              *Date                 `json:"ShipDate,omitempty"`
 	ShipMethodRef         *Reference            `json:"ShipMethodRef,omitempty"`
-	LinkedTxn             []EstimateLinkedTxn   `json:"LinkedTxn,omitempty"`
+	LinkedTxn             []LinkedTxn           `json:"LinkedTxn,omitempty"`
 	Domain                string                `json:"domain,omitempty"`
 }
 
@@ -208,11 +208,4 @@ type EstimateTaxLineDetail struct {
 	TaxInclusiveAmount  float64    `json:"TaxInclusiveAmount,omitempty"`
 	OverrideDeltaAmount float64    `json:"OverrideDeltaAmount,omitempty"`
 	TaxPercent          float64    `json:"TaxPercent,omitempty"`
-}
-
-// EstimateLinkedTxn represents transactions linked to an estimate.
-type EstimateLinkedTxn struct {
-	TxnID     string `json:"TxnId,omitempty"`
-	TxnType   string `json:"TxnType,omitempty"`
-	TxnLineID string `json:"TxnLineId,omitempty"`
 }

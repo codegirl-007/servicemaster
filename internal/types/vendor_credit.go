@@ -21,7 +21,7 @@ type VendorCredit struct {
 	TotalAmt                float64                 `json:"TotalAmt,omitempty"`
 	DocNumber               string                  `json:"DocNumber,omitempty"`
 	PrivateNote             string                  `json:"PrivateNote,omitempty"`
-	LinkedTxn               []BillLinkedTxn         `json:"LinkedTxn,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
 	ExchangeRate            float64                 `json:"ExchangeRate,omitempty"`
 	APAccountRef            *Reference              `json:"APAccountRef,omitempty"`
 	DepartmentRef           *Reference              `json:"DepartmentRef,omitempty"`
@@ -42,7 +42,7 @@ type CreateVendorCreditRequest struct {
 	CurrencyRef             *Reference              `json:"CurrencyRef,omitempty"`
 	DocNumber               string                  `json:"DocNumber,omitempty"`
 	PrivateNote             string                  `json:"PrivateNote,omitempty"`
-	LinkedTxn               []BillLinkedTxn         `json:"LinkedTxn,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
 	ExchangeRate            float64                 `json:"ExchangeRate,omitempty"`
 	APAccountRef            *Reference              `json:"APAccountRef,omitempty"`
 	DepartmentRef           *Reference              `json:"DepartmentRef,omitempty"`
@@ -62,7 +62,7 @@ type SparseUpdateVendorCreditRequest struct {
 	CurrencyRef             *Reference              `json:"CurrencyRef,omitempty"`
 	DocNumber               string                  `json:"DocNumber,omitempty"`
 	PrivateNote             string                  `json:"PrivateNote,omitempty"`
-	LinkedTxn               []BillLinkedTxn         `json:"LinkedTxn,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
 	ExchangeRate            float64                 `json:"ExchangeRate,omitempty"`
 	APAccountRef            *Reference              `json:"APAccountRef,omitempty"`
 	DepartmentRef           *Reference              `json:"DepartmentRef,omitempty"`

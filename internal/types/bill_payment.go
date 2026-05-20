@@ -62,14 +62,14 @@ type CreateBillPaymentRequest struct {
 
 // BillPaymentLine represents an applied bill payment line.
 type BillPaymentLine struct {
-	Amount    float64         `json:"Amount"`
-	LinkedTxn []BillLinkedTxn `json:"LinkedTxn"`
+	Amount    float64     `json:"Amount"`
+	LinkedTxn []LinkedTxn `json:"LinkedTxn"`
 }
 
 // BillPaymentCheck represents check payment details for a bill payment.
 type BillPaymentCheck struct {
-	BankAccountRef Reference          `json:"BankAccountRef"`
-	PrintStatus    InvoicePrintStatus `json:"PrintStatus,omitempty"`
+	BankAccountRef Reference   `json:"BankAccountRef"`
+	PrintStatus    PrintStatus `json:"PrintStatus,omitempty"`
 }
 
 // BillPaymentCreditCard represents credit card payment details for a bill payment.

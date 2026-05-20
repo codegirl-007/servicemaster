@@ -5,17 +5,17 @@ package types
 type ProfitAndLossSummarizeColumnBy string
 
 const (
-	ProfitAndLossSummarizeColumnByTotal              ProfitAndLossSummarizeColumnBy = "Total"
-	ProfitAndLossSummarizeColumnByMonth              ProfitAndLossSummarizeColumnBy = "Month"
-	ProfitAndLossSummarizeColumnByWeek               ProfitAndLossSummarizeColumnBy = "Week"
-	ProfitAndLossSummarizeColumnByDays               ProfitAndLossSummarizeColumnBy = "Days"
-	ProfitAndLossSummarizeColumnByQuarter            ProfitAndLossSummarizeColumnBy = "Quarter"
-	ProfitAndLossSummarizeColumnByYear               ProfitAndLossSummarizeColumnBy = "Year"
-	ProfitAndLossSummarizeColumnByCustomers          ProfitAndLossSummarizeColumnBy = "Customers"
-	ProfitAndLossSummarizeColumnByVendors            ProfitAndLossSummarizeColumnBy = "Vendors"
-	ProfitAndLossSummarizeColumnByClasses            ProfitAndLossSummarizeColumnBy = "Classes"
-	ProfitAndLossSummarizeColumnByDepartments        ProfitAndLossSummarizeColumnBy = "Departments"
-	ProfitAndLossSummarizeColumnByEmployees          ProfitAndLossSummarizeColumnBy = "Employees"
+	ProfitAndLossSummarizeColumnByTotal               ProfitAndLossSummarizeColumnBy = "Total"
+	ProfitAndLossSummarizeColumnByMonth               ProfitAndLossSummarizeColumnBy = "Month"
+	ProfitAndLossSummarizeColumnByWeek                ProfitAndLossSummarizeColumnBy = "Week"
+	ProfitAndLossSummarizeColumnByDays                ProfitAndLossSummarizeColumnBy = "Days"
+	ProfitAndLossSummarizeColumnByQuarter             ProfitAndLossSummarizeColumnBy = "Quarter"
+	ProfitAndLossSummarizeColumnByYear                ProfitAndLossSummarizeColumnBy = "Year"
+	ProfitAndLossSummarizeColumnByCustomers           ProfitAndLossSummarizeColumnBy = "Customers"
+	ProfitAndLossSummarizeColumnByVendors             ProfitAndLossSummarizeColumnBy = "Vendors"
+	ProfitAndLossSummarizeColumnByClasses             ProfitAndLossSummarizeColumnBy = "Classes"
+	ProfitAndLossSummarizeColumnByDepartments         ProfitAndLossSummarizeColumnBy = "Departments"
+	ProfitAndLossSummarizeColumnByEmployees           ProfitAndLossSummarizeColumnBy = "Employees"
 	ProfitAndLossSummarizeColumnByProductsAndServices ProfitAndLossSummarizeColumnBy = "ProductsAndServices"
 )
 
@@ -28,17 +28,17 @@ type ProfitAndLossReport struct {
 
 // ProfitAndLossQuery represents the supported query parameters for the profit and loss report.
 type ProfitAndLossQuery struct {
-	StartDate         *Date                         
-	EndDate           *Date                         
-	DateMacro         ReportDateMacro              
-	AccountingMethod  ReportBasis                  
+	StartDate         *Date
+	EndDate           *Date
+	DateMacro         ReportDateMacro
+	AccountingMethod  ReportBasis
 	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
-	SortOrder         ReportSortOrder              
-	Customer          string                       
-	Vendor            string                       
-	Class             string                       
-	Department        string                       
-	Item              string                       
-	QZURL             *bool                        
-	AdjustedGainLoss  *bool                        
+	SortOrder         ReportSortOrder
+	Customer          string
+	Vendor            string
+	Class             string
+	Department        string
+	Item              string
+	QZURL             *bool
+	AdjustedGainLoss  *bool
 }

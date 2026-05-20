@@ -78,61 +78,61 @@ type UpdatePreferencesRequest struct {
 
 // SalesFormsPrefs represents sales form preferences.
 type SalesFormsPrefs struct {
-	CustomField                  []CustomFieldDefinition `json:"CustomField,omitempty"`
-	AllowDeposit                 *bool                   `json:"AllowDeposit,omitempty"`
-	AllowDiscount                *bool                   `json:"AllowDiscount,omitempty"`
-	AllowEstimates               *bool                   `json:"AllowEstimates,omitempty"`
-	AllowServiceDate             *bool                   `json:"AllowServiceDate,omitempty"`
-	DefaultCustomerMessage       *PreferenceMessage      `json:"DefaultCustomerMessage,omitempty"`
-	DefaultItem                  *Reference              `json:"DefaultItem,omitempty"`
-	DefaultTerms                 *Reference              `json:"DefaultTerms,omitempty"`
-	ETransactionEnabledStatus    string                  `json:"ETransactionEnabledStatus,omitempty"`
-	EmailCopyToCompany           *bool                   `json:"EmailCopyToCompany,omitempty"`
-	CustomTxnNumbers             *bool                   `json:"CustomTxnNumbers,omitempty"`
-	AllowShipping                *bool                   `json:"AllowShipping,omitempty"`
-	DefaultDiscountAccount       *Reference              `json:"DefaultDiscountAccount,omitempty"`
-	AllowPriceRules              *bool                   `json:"AllowPriceRules,omitempty"`
+	CustomField               []CustomFieldDefinition `json:"CustomField,omitempty"`
+	AllowDeposit              *bool                   `json:"AllowDeposit,omitempty"`
+	AllowDiscount             *bool                   `json:"AllowDiscount,omitempty"`
+	AllowEstimates            *bool                   `json:"AllowEstimates,omitempty"`
+	AllowServiceDate          *bool                   `json:"AllowServiceDate,omitempty"`
+	DefaultCustomerMessage    *PreferenceMessage      `json:"DefaultCustomerMessage,omitempty"`
+	DefaultItem               *Reference              `json:"DefaultItem,omitempty"`
+	DefaultTerms              *Reference              `json:"DefaultTerms,omitempty"`
+	ETransactionEnabledStatus string                  `json:"ETransactionEnabledStatus,omitempty"`
+	EmailCopyToCompany        *bool                   `json:"EmailCopyToCompany,omitempty"`
+	CustomTxnNumbers          *bool                   `json:"CustomTxnNumbers,omitempty"`
+	AllowShipping             *bool                   `json:"AllowShipping,omitempty"`
+	DefaultDiscountAccount    *Reference              `json:"DefaultDiscountAccount,omitempty"`
+	AllowPriceRules           *bool                   `json:"AllowPriceRules,omitempty"`
 }
 
 // VendorAndPurchasesPrefs represents vendor and purchase preferences.
 type VendorAndPurchasesPrefs struct {
-	TrackingByCustomer          *bool      `json:"TrackingByCustomer,omitempty"`
-	BillableExpenseTracking     *bool      `json:"BillableExpenseTracking,omitempty"`
-	TaxIncluded                 *bool      `json:"TaxIncluded,omitempty"`
-	DefaultTerms                *Reference `json:"DefaultTerms,omitempty"`
-	DefaultMarkup               float64    `json:"DefaultMarkup,omitempty"`
-	DefaultExpenseAccount       *Reference `json:"DefaultExpenseAccount,omitempty"`
-	ETransactionEnabledStatus   string     `json:"ETransactionEnabledStatus,omitempty"`
+	TrackingByCustomer        *bool      `json:"TrackingByCustomer,omitempty"`
+	BillableExpenseTracking   *bool      `json:"BillableExpenseTracking,omitempty"`
+	TaxIncluded               *bool      `json:"TaxIncluded,omitempty"`
+	DefaultTerms              *Reference `json:"DefaultTerms,omitempty"`
+	DefaultMarkup             float64    `json:"DefaultMarkup,omitempty"`
+	DefaultExpenseAccount     *Reference `json:"DefaultExpenseAccount,omitempty"`
+	ETransactionEnabledStatus string     `json:"ETransactionEnabledStatus,omitempty"`
 }
 
 // AccountingInfoPrefs represents accounting information preferences.
 type AccountingInfoPrefs struct {
-	ClassTrackingPerTxn     *bool                  `json:"ClassTrackingPerTxn,omitempty"`
-	ClassTrackingPerTxnLine *bool                  `json:"ClassTrackingPerTxnLine,omitempty"`
-	TrackDepartments        *bool                  `json:"TrackDepartments,omitempty"`
-	DepartmentTerminology   string                 `json:"DepartmentTerminology,omitempty"`
-	CustomerTerminology     string                 `json:"CustomerTerminology,omitempty"`
-	BookCloseDate           *Date                  `json:"BookCloseDate,omitempty"`
-	FirstMonthOfFiscalYear  FiscalYearStartMonth   `json:"FirstMonthOfFiscalYear,omitempty"`
+	ClassTrackingPerTxn     *bool                `json:"ClassTrackingPerTxn,omitempty"`
+	ClassTrackingPerTxnLine *bool                `json:"ClassTrackingPerTxnLine,omitempty"`
+	TrackDepartments        *bool                `json:"TrackDepartments,omitempty"`
+	DepartmentTerminology   string               `json:"DepartmentTerminology,omitempty"`
+	CustomerTerminology     string               `json:"CustomerTerminology,omitempty"`
+	BookCloseDate           *Date                `json:"BookCloseDate,omitempty"`
+	FirstMonthOfFiscalYear  FiscalYearStartMonth `json:"FirstMonthOfFiscalYear,omitempty"`
 }
 
 // TaxPrefs represents tax preferences.
 type TaxPrefs struct {
-	UsingSalesTax       *bool      `json:"UsingSalesTax,omitempty"`
-	PartnerTaxEnabled   *bool      `json:"PartnerTaxEnabled,omitempty"`
-	TaxGroupCodeRef     *Reference `json:"TaxGroupCodeRef,omitempty"`
-	DefaultTaxCodeRef   *Reference `json:"DefaultTaxCodeRef,omitempty"`
+	UsingSalesTax     *bool      `json:"UsingSalesTax,omitempty"`
+	PartnerTaxEnabled *bool      `json:"PartnerTaxEnabled,omitempty"`
+	TaxGroupCodeRef   *Reference `json:"TaxGroupCodeRef,omitempty"`
+	DefaultTaxCodeRef *Reference `json:"DefaultTaxCodeRef,omitempty"`
 }
 
 // TimeTrackingPrefs represents time tracking preferences.
 type TimeTrackingPrefs struct {
-	UsingTimeTracking        *bool                  `json:"UsingTimeTracking,omitempty"`
-	BillCustomers            *bool                  `json:"BillCustomers,omitempty"`
-	ShowBillRateToAll        *bool                  `json:"ShowBillRateToAll,omitempty"`
-	MarkTimeEntriesBillable  *bool                  `json:"MarkTimeEntriesBillable,omitempty"`
-	FirstDayOfWeek           PreferencesWeekDay     `json:"FirstDayOfWeek,omitempty"`
-	WorkWeekStartDate        *Date                  `json:"WorkWeekStartDate,omitempty"`
-	FrequencyType            RecognitionFrequencyType `json:"FrequencyType,omitempty"`
+	UsingTimeTracking       *bool                    `json:"UsingTimeTracking,omitempty"`
+	BillCustomers           *bool                    `json:"BillCustomers,omitempty"`
+	ShowBillRateToAll       *bool                    `json:"ShowBillRateToAll,omitempty"`
+	MarkTimeEntriesBillable *bool                    `json:"MarkTimeEntriesBillable,omitempty"`
+	FirstDayOfWeek          PreferencesWeekDay       `json:"FirstDayOfWeek,omitempty"`
+	WorkWeekStartDate       *Date                    `json:"WorkWeekStartDate,omitempty"`
+	FrequencyType           RecognitionFrequencyType `json:"FrequencyType,omitempty"`
 }
 
 // CurrencyPrefs represents currency preferences.
@@ -148,12 +148,12 @@ type ReportPrefs struct {
 
 // ProductAndServicesPrefs represents product and service preferences.
 type ProductAndServicesPrefs struct {
-	ForSales             *bool `json:"ForSales,omitempty"`
-	ForPurchase          *bool `json:"ForPurchase,omitempty"`
-	QuantityOnHand       *bool `json:"QuantityOnHand,omitempty"`
+	ForSales                 *bool `json:"ForSales,omitempty"`
+	ForPurchase              *bool `json:"ForPurchase,omitempty"`
+	QuantityOnHand           *bool `json:"QuantityOnHand,omitempty"`
 	QuantityWithPriceAndRate *bool `json:"QuantityWithPriceAndRate,omitempty"`
-	StockKeepingUnit     *bool `json:"StockKeepingUnit,omitempty"`
-	CategoriesEnabled    *bool `json:"CategoriesEnabled,omitempty"`
+	StockKeepingUnit         *bool `json:"StockKeepingUnit,omitempty"`
+	CategoriesEnabled        *bool `json:"CategoriesEnabled,omitempty"`
 }
 
 // EmailMessagesPrefs represents default email message preferences.
@@ -172,8 +172,8 @@ type PreferenceMessage struct {
 
 // CustomFieldDefinition represents a custom field definition in preferences.
 type CustomFieldDefinition struct {
-	Name     string          `json:"Name,omitempty"`
-	Type     CustomFieldType `json:"Type,omitempty"`
-	BooleanValue *bool       `json:"BooleanValue,omitempty"`
-	StringValue  string      `json:"StringValue,omitempty"`
+	Name         string          `json:"Name,omitempty"`
+	Type         CustomFieldType `json:"Type,omitempty"`
+	BooleanValue *bool           `json:"BooleanValue,omitempty"`
+	StringValue  string          `json:"StringValue,omitempty"`
 }

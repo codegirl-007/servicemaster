@@ -39,7 +39,7 @@ type SalesReceipt struct {
 	TxnDate               *Date                     `json:"TxnDate,omitempty"`
 	CustomField           []NameValue               `json:"CustomField,omitempty"`
 	ClassRef              *Reference                `json:"ClassRef,omitempty"`
-	PrintStatus           InvoicePrintStatus        `json:"PrintStatus,omitempty"`
+	PrintStatus           PrintStatus               `json:"PrintStatus,omitempty"`
 	DocNumber             string                    `json:"DocNumber,omitempty"`
 	PrivateNote           string                    `json:"PrivateNote,omitempty"`
 	TxnTaxDetail          *InvoiceTxnTaxDetail      `json:"TxnTaxDetail,omitempty"`
@@ -70,7 +70,7 @@ type CreateSalesReceiptRequest struct {
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	CustomField           []NameValue          `json:"CustomField,omitempty"`
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
-	PrintStatus           InvoicePrintStatus   `json:"PrintStatus,omitempty"`
+	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
 	PaymentMethodRef      *Reference           `json:"PaymentMethodRef,omitempty"`
@@ -99,7 +99,7 @@ type SparseUpdateSalesReceiptRequest struct {
 	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
-	PrintStatus           InvoicePrintStatus   `json:"PrintStatus,omitempty"`
+	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
 	PaymentMethodRef      *Reference           `json:"PaymentMethodRef,omitempty"`
