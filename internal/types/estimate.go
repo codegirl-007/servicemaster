@@ -34,40 +34,40 @@ type EstimateResponse struct {
 
 // Estimate represents a QuickBooks estimate object.
 type Estimate struct {
-	ID                    string                `json:"Id"`
-	SyncToken             string                `json:"SyncToken"`
-	CustomerRef           *Reference            `json:"CustomerRef,omitempty"`
-	Line                  []EstimateLine        `json:"Line,omitempty"`
-	TxnDate               *Date                 `json:"TxnDate,omitempty"`
-	ExpirationDate        *Date                 `json:"ExpirationDate,omitempty"`
-	AcceptedDate          *Date                 `json:"AcceptedDate,omitempty"`
-	TxnStatus             EstimateTxnStatus     `json:"TxnStatus,omitempty"`
-	DocNumber             string                `json:"DocNumber,omitempty"`
-	CustomerMemo          *EstimateMemo         `json:"CustomerMemo,omitempty"`
-	PrivateNote           string                `json:"PrivateNote,omitempty"`
-	BillEmail             *EmailAddress         `json:"BillEmail,omitempty"`
-	EmailStatus           EmailStatus           `json:"EmailStatus,omitempty"`
-	PrintStatus           PrintStatus           `json:"PrintStatus,omitempty"`
-	CurrencyRef           *Reference            `json:"CurrencyRef,omitempty"`
-	ExchangeRate          float64               `json:"ExchangeRate,omitempty"`
-	GlobalTaxCalculation  GlobalTaxCalculation  `json:"GlobalTaxCalculation,omitempty"`
-	TxnTaxDetail          *EstimateTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
-	ApplyTaxAfterDiscount *bool                 `json:"ApplyTaxAfterDiscount,omitempty"`
-	TotalAmt              float64               `json:"TotalAmt,omitempty"`
-	HomeTotalAmt          float64               `json:"HomeTotalAmt,omitempty"`
-	SalesTermRef          *Reference            `json:"SalesTermRef,omitempty"`
-	ClassRef              *Reference            `json:"ClassRef,omitempty"`
-	DepartmentRef         *Reference            `json:"DepartmentRef,omitempty"`
-	ProjectRef            *Reference            `json:"ProjectRef,omitempty"`
-	BillAddr              *PhysicalAddress      `json:"BillAddr,omitempty"`
-	ShipAddr              *PhysicalAddress      `json:"ShipAddr,omitempty"`
-	ShipFromAddr          *PhysicalAddress      `json:"ShipFromAddr,omitempty"`
-	ShipDate              *Date                 `json:"ShipDate,omitempty"`
-	ShipMethodRef         *Reference            `json:"ShipMethodRef,omitempty"`
-	LinkedTxn             []LinkedTxn           `json:"LinkedTxn,omitempty"`
-	MetaData              *MetaData             `json:"MetaData,omitempty"`
-	Domain                string                `json:"domain,omitempty"`
-	Sparse                *bool                 `json:"sparse,omitempty"`
+	ID                    string               `json:"Id"`
+	SyncToken             string               `json:"SyncToken"`
+	CustomerRef           *Reference           `json:"CustomerRef,omitempty"`
+	Line                  []EstimateLine       `json:"Line,omitempty"`
+	TxnDate               *Date                `json:"TxnDate,omitempty"`
+	ExpirationDate        *Date                `json:"ExpirationDate,omitempty"`
+	AcceptedDate          *Date                `json:"AcceptedDate,omitempty"`
+	TxnStatus             EstimateTxnStatus    `json:"TxnStatus,omitempty"`
+	DocNumber             string               `json:"DocNumber,omitempty"`
+	CustomerMemo          *EstimateMemo        `json:"CustomerMemo,omitempty"`
+	PrivateNote           string               `json:"PrivateNote,omitempty"`
+	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
+	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
+	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
+	CurrencyRef           *Reference           `json:"CurrencyRef,omitempty"`
+	ExchangeRate          float64              `json:"ExchangeRate,omitempty"`
+	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
+	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
+	TotalAmt              float64              `json:"TotalAmt,omitempty"`
+	HomeTotalAmt          float64              `json:"HomeTotalAmt,omitempty"`
+	SalesTermRef          *Reference           `json:"SalesTermRef,omitempty"`
+	ClassRef              *Reference           `json:"ClassRef,omitempty"`
+	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
+	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
+	BillAddr              *PhysicalAddress     `json:"BillAddr,omitempty"`
+	ShipAddr              *PhysicalAddress     `json:"ShipAddr,omitempty"`
+	ShipFromAddr          *PhysicalAddress     `json:"ShipFromAddr,omitempty"`
+	ShipDate              *Date                `json:"ShipDate,omitempty"`
+	ShipMethodRef         *Reference           `json:"ShipMethodRef,omitempty"`
+	LinkedTxn             []LinkedTxn          `json:"LinkedTxn,omitempty"`
+	MetaData              *MetaData            `json:"MetaData,omitempty"`
+	Domain                string               `json:"domain,omitempty"`
+	Sparse                *bool                `json:"sparse,omitempty"`
 }
 
 // CreateEstimateRequest represents the documented create estimate payload.
@@ -75,67 +75,67 @@ type CreateEstimateRequest struct {
 	// CustomerRef is required.
 	CustomerRef Reference `json:"CustomerRef"`
 	// Line is required.
-	Line                  []EstimateLine        `json:"Line"`
-	TxnDate               *Date                 `json:"TxnDate,omitempty"`
-	ExpirationDate        *Date                 `json:"ExpirationDate,omitempty"`
-	AcceptedDate          *Date                 `json:"AcceptedDate,omitempty"`
-	TxnStatus             EstimateTxnStatus     `json:"TxnStatus,omitempty"`
-	DocNumber             string                `json:"DocNumber,omitempty"`
-	CustomerMemo          *EstimateMemo         `json:"CustomerMemo,omitempty"`
-	PrivateNote           string                `json:"PrivateNote,omitempty"`
-	BillEmail             *EmailAddress         `json:"BillEmail,omitempty"`
-	EmailStatus           EmailStatus           `json:"EmailStatus,omitempty"`
-	PrintStatus           PrintStatus           `json:"PrintStatus,omitempty"`
-	CurrencyRef           *Reference            `json:"CurrencyRef,omitempty"`
-	ExchangeRate          float64               `json:"ExchangeRate,omitempty"`
-	GlobalTaxCalculation  GlobalTaxCalculation  `json:"GlobalTaxCalculation,omitempty"`
-	TxnTaxDetail          *EstimateTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
-	ApplyTaxAfterDiscount *bool                 `json:"ApplyTaxAfterDiscount,omitempty"`
-	SalesTermRef          *Reference            `json:"SalesTermRef,omitempty"`
-	ClassRef              *Reference            `json:"ClassRef,omitempty"`
-	DepartmentRef         *Reference            `json:"DepartmentRef,omitempty"`
-	ProjectRef            *Reference            `json:"ProjectRef,omitempty"`
-	BillAddr              *PhysicalAddress      `json:"BillAddr,omitempty"`
-	ShipAddr              *PhysicalAddress      `json:"ShipAddr,omitempty"`
-	ShipFromAddr          *PhysicalAddress      `json:"ShipFromAddr,omitempty"`
-	ShipDate              *Date                 `json:"ShipDate,omitempty"`
-	ShipMethodRef         *Reference            `json:"ShipMethodRef,omitempty"`
-	LinkedTxn             []LinkedTxn           `json:"LinkedTxn,omitempty"`
+	Line                  []EstimateLine       `json:"Line"`
+	TxnDate               *Date                `json:"TxnDate,omitempty"`
+	ExpirationDate        *Date                `json:"ExpirationDate,omitempty"`
+	AcceptedDate          *Date                `json:"AcceptedDate,omitempty"`
+	TxnStatus             EstimateTxnStatus    `json:"TxnStatus,omitempty"`
+	DocNumber             string               `json:"DocNumber,omitempty"`
+	CustomerMemo          *EstimateMemo        `json:"CustomerMemo,omitempty"`
+	PrivateNote           string               `json:"PrivateNote,omitempty"`
+	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
+	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
+	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
+	CurrencyRef           *Reference           `json:"CurrencyRef,omitempty"`
+	ExchangeRate          float64              `json:"ExchangeRate,omitempty"`
+	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
+	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
+	SalesTermRef          *Reference           `json:"SalesTermRef,omitempty"`
+	ClassRef              *Reference           `json:"ClassRef,omitempty"`
+	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
+	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
+	BillAddr              *PhysicalAddress     `json:"BillAddr,omitempty"`
+	ShipAddr              *PhysicalAddress     `json:"ShipAddr,omitempty"`
+	ShipFromAddr          *PhysicalAddress     `json:"ShipFromAddr,omitempty"`
+	ShipDate              *Date                `json:"ShipDate,omitempty"`
+	ShipMethodRef         *Reference           `json:"ShipMethodRef,omitempty"`
+	LinkedTxn             []LinkedTxn          `json:"LinkedTxn,omitempty"`
 }
 
 // SparseUpdateEstimateRequest represents the documented sparse update payload.
 type SparseUpdateEstimateRequest struct {
-	ID                    string                `json:"Id"`
-	SyncToken             string                `json:"SyncToken"`
-	Sparse                bool                  `json:"sparse"`
-	CustomerRef           *Reference            `json:"CustomerRef,omitempty"`
-	Line                  []EstimateLine        `json:"Line,omitempty"`
-	TxnDate               *Date                 `json:"TxnDate,omitempty"`
-	ExpirationDate        *Date                 `json:"ExpirationDate,omitempty"`
-	AcceptedDate          *Date                 `json:"AcceptedDate,omitempty"`
-	TxnStatus             EstimateTxnStatus     `json:"TxnStatus,omitempty"`
-	DocNumber             string                `json:"DocNumber,omitempty"`
-	CustomerMemo          *EstimateMemo         `json:"CustomerMemo,omitempty"`
-	PrivateNote           string                `json:"PrivateNote,omitempty"`
-	BillEmail             *EmailAddress         `json:"BillEmail,omitempty"`
-	EmailStatus           EmailStatus           `json:"EmailStatus,omitempty"`
-	PrintStatus           PrintStatus           `json:"PrintStatus,omitempty"`
-	CurrencyRef           *Reference            `json:"CurrencyRef,omitempty"`
-	ExchangeRate          float64               `json:"ExchangeRate,omitempty"`
-	GlobalTaxCalculation  GlobalTaxCalculation  `json:"GlobalTaxCalculation,omitempty"`
-	TxnTaxDetail          *EstimateTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
-	ApplyTaxAfterDiscount *bool                 `json:"ApplyTaxAfterDiscount,omitempty"`
-	SalesTermRef          *Reference            `json:"SalesTermRef,omitempty"`
-	ClassRef              *Reference            `json:"ClassRef,omitempty"`
-	DepartmentRef         *Reference            `json:"DepartmentRef,omitempty"`
-	ProjectRef            *Reference            `json:"ProjectRef,omitempty"`
-	BillAddr              *PhysicalAddress      `json:"BillAddr,omitempty"`
-	ShipAddr              *PhysicalAddress      `json:"ShipAddr,omitempty"`
-	ShipFromAddr          *PhysicalAddress      `json:"ShipFromAddr,omitempty"`
-	ShipDate              *Date                 `json:"ShipDate,omitempty"`
-	ShipMethodRef         *Reference            `json:"ShipMethodRef,omitempty"`
-	LinkedTxn             []LinkedTxn           `json:"LinkedTxn,omitempty"`
-	Domain                string                `json:"domain,omitempty"`
+	ID                    string               `json:"Id"`
+	SyncToken             string               `json:"SyncToken"`
+	Sparse                bool                 `json:"sparse"`
+	CustomerRef           *Reference           `json:"CustomerRef,omitempty"`
+	Line                  []EstimateLine       `json:"Line,omitempty"`
+	TxnDate               *Date                `json:"TxnDate,omitempty"`
+	ExpirationDate        *Date                `json:"ExpirationDate,omitempty"`
+	AcceptedDate          *Date                `json:"AcceptedDate,omitempty"`
+	TxnStatus             EstimateTxnStatus    `json:"TxnStatus,omitempty"`
+	DocNumber             string               `json:"DocNumber,omitempty"`
+	CustomerMemo          *EstimateMemo        `json:"CustomerMemo,omitempty"`
+	PrivateNote           string               `json:"PrivateNote,omitempty"`
+	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
+	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
+	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
+	CurrencyRef           *Reference           `json:"CurrencyRef,omitempty"`
+	ExchangeRate          float64              `json:"ExchangeRate,omitempty"`
+	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
+	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
+	SalesTermRef          *Reference           `json:"SalesTermRef,omitempty"`
+	ClassRef              *Reference           `json:"ClassRef,omitempty"`
+	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
+	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
+	BillAddr              *PhysicalAddress     `json:"BillAddr,omitempty"`
+	ShipAddr              *PhysicalAddress     `json:"ShipAddr,omitempty"`
+	ShipFromAddr          *PhysicalAddress     `json:"ShipFromAddr,omitempty"`
+	ShipDate              *Date                `json:"ShipDate,omitempty"`
+	ShipMethodRef         *Reference           `json:"ShipMethodRef,omitempty"`
+	LinkedTxn             []LinkedTxn          `json:"LinkedTxn,omitempty"`
+	Domain                string               `json:"domain,omitempty"`
 }
 
 // EstimateMemo represents a QuickBooks estimate memo object.
@@ -154,7 +154,7 @@ type EstimateLine struct {
 	GroupLineDetail       *EstimateGroupLineDetail       `json:"GroupLineDetail,omitempty"`
 	DescriptionLineDetail *EstimateDescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
 	SubTotalLineDetail    *EstimateSubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
-	TaxLineDetail         *EstimateTaxLineDetail         `json:"TaxLineDetail,omitempty"`
+	TaxLineDetail         *TaxLineDetail                 `json:"TaxLineDetail,omitempty"`
 }
 
 // EstimateSalesItemLineDetail represents sales-item estimate line details.
@@ -185,27 +185,3 @@ type EstimateDescriptionLineDetail struct {
 
 // EstimateSubTotalLineDetail represents subtotal estimate line details.
 type EstimateSubTotalLineDetail struct{}
-
-// EstimateTxnTaxDetail represents estimate-level tax details.
-type EstimateTxnTaxDetail struct {
-	TxnTaxCodeRef *Reference        `json:"TxnTaxCodeRef,omitempty"`
-	TotalTax      float64           `json:"TotalTax,omitempty"`
-	TaxLine       []EstimateTaxLine `json:"TaxLine,omitempty"`
-}
-
-// EstimateTaxLine represents an estimate tax line.
-type EstimateTaxLine struct {
-	DetailType    EstimateLineDetailType `json:"DetailType,omitempty"`
-	TaxLineDetail EstimateTaxLineDetail  `json:"TaxLineDetail"`
-	Amount        float64                `json:"Amount,omitempty"`
-}
-
-// EstimateTaxLineDetail represents estimate tax line details.
-type EstimateTaxLineDetail struct {
-	TaxRateRef          *Reference `json:"TaxRateRef,omitempty"`
-	NetAmountTaxable    float64    `json:"NetAmountTaxable,omitempty"`
-	PercentBased        *bool      `json:"PercentBased,omitempty"`
-	TaxInclusiveAmount  float64    `json:"TaxInclusiveAmount,omitempty"`
-	OverrideDeltaAmount float64    `json:"OverrideDeltaAmount,omitempty"`
-	TaxPercent          float64    `json:"TaxPercent,omitempty"`
-}

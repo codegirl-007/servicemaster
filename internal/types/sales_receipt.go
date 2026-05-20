@@ -42,7 +42,7 @@ type SalesReceipt struct {
 	PrintStatus           PrintStatus               `json:"PrintStatus,omitempty"`
 	DocNumber             string                    `json:"DocNumber,omitempty"`
 	PrivateNote           string                    `json:"PrivateNote,omitempty"`
-	TxnTaxDetail          *InvoiceTxnTaxDetail      `json:"TxnTaxDetail,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail             `json:"TxnTaxDetail,omitempty"`
 	PaymentMethodRef      *Reference                `json:"PaymentMethodRef,omitempty"`
 	ExchangeRate          float64                   `json:"ExchangeRate,omitempty"`
 	DepartmentRef         *Reference                `json:"DepartmentRef,omitempty"`
@@ -72,7 +72,7 @@ type CreateSalesReceiptRequest struct {
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
-	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	PaymentMethodRef      *Reference           `json:"PaymentMethodRef,omitempty"`
 	ExchangeRate          float64              `json:"ExchangeRate,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
@@ -101,7 +101,7 @@ type SparseUpdateSalesReceiptRequest struct {
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
-	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	PaymentMethodRef      *Reference           `json:"PaymentMethodRef,omitempty"`
 	ExchangeRate          float64              `json:"ExchangeRate,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
@@ -126,7 +126,7 @@ type SalesReceiptLine struct {
 	GroupLineDetail       *InvoiceGroupLineDetail       `json:"GroupLineDetail,omitempty"`
 	DescriptionLineDetail *InvoiceDescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
 	SubTotalLineDetail    *InvoiceSubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
-	TaxLineDetail         *InvoiceTaxLineDetail         `json:"TaxLineDetail,omitempty"`
+	TaxLineDetail         *TaxLineDetail                `json:"TaxLineDetail,omitempty"`
 }
 
 // SalesReceiptDeliveryInfo represents delivery info for a sales receipt.

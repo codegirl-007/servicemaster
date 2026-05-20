@@ -39,7 +39,7 @@ type Invoice struct {
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
 	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
-	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	TotalAmt              float64              `json:"TotalAmt,omitempty"`
@@ -74,7 +74,7 @@ type CreateInvoiceRequest struct {
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
 	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
-	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	Deposit               float64              `json:"Deposit,omitempty"`
@@ -105,7 +105,7 @@ type SparseUpdateInvoiceRequest struct {
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
 	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
-	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	Deposit               float64              `json:"Deposit,omitempty"`
@@ -134,7 +134,7 @@ type InvoiceLine struct {
 	GroupLineDetail       *InvoiceGroupLineDetail       `json:"GroupLineDetail,omitempty"`
 	DescriptionLineDetail *InvoiceDescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
 	SubTotalLineDetail    *InvoiceSubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
-	TaxLineDetail         *InvoiceTaxLineDetail         `json:"TaxLineDetail,omitempty"`
+	TaxLineDetail         *TaxLineDetail                `json:"TaxLineDetail,omitempty"`
 }
 
 // InvoiceSalesItemLineDetail represents sales-item invoice line details.
@@ -166,30 +166,6 @@ type InvoiceDescriptionLineDetail struct {
 
 // InvoiceSubTotalLineDetail represents subtotal invoice line details.
 type InvoiceSubTotalLineDetail struct{}
-
-// InvoiceTxnTaxDetail represents invoice-level tax details.
-type InvoiceTxnTaxDetail struct {
-	TxnTaxCodeRef *Reference       `json:"TxnTaxCodeRef,omitempty"`
-	TotalTax      float64          `json:"TotalTax,omitempty"`
-	TaxLine       []InvoiceTaxLine `json:"TaxLine,omitempty"`
-}
-
-// InvoiceTaxLine represents an invoice tax line.
-type InvoiceTaxLine struct {
-	DetailType    InvoiceLineDetailType `json:"DetailType,omitempty"`
-	TaxLineDetail InvoiceTaxLineDetail  `json:"TaxLineDetail"`
-	Amount        float64               `json:"Amount,omitempty"`
-}
-
-// InvoiceTaxLineDetail represents invoice tax line details.
-type InvoiceTaxLineDetail struct {
-	TaxRateRef          *Reference `json:"TaxRateRef,omitempty"`
-	NetAmountTaxable    float64    `json:"NetAmountTaxable,omitempty"`
-	PercentBased        *bool      `json:"PercentBased,omitempty"`
-	TaxInclusiveAmount  float64    `json:"TaxInclusiveAmount,omitempty"`
-	OverrideDeltaAmount float64    `json:"OverrideDeltaAmount,omitempty"`
-	TaxPercent          float64    `json:"TaxPercent,omitempty"`
-}
 
 // InvoiceLinkedTxn represents transactions linked to an invoice.
 type InvoiceLinkedTxn struct {

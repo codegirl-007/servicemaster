@@ -44,7 +44,7 @@ type CreditMemo struct {
 	DocNumber             string               `json:"DocNumber,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	CustomerMemo          *InvoiceMemo         `json:"CustomerMemo,omitempty"`
-	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	ExchangeRate          float64              `json:"ExchangeRate,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
@@ -64,7 +64,7 @@ type CreateCreditMemoRequest struct {
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
 	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
-	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	CurrencyRef           *Reference           `json:"CurrencyRef,omitempty"`
@@ -90,7 +90,7 @@ type SparseUpdateCreditMemoRequest struct {
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
 	PrintStatus           PrintStatus          `json:"PrintStatus,omitempty"`
-	TxnTaxDetail          *InvoiceTxnTaxDetail `json:"TxnTaxDetail,omitempty"`
+	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	GlobalTaxCalculation  GlobalTaxCalculation `json:"GlobalTaxCalculation,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	CurrencyRef           *Reference           `json:"CurrencyRef,omitempty"`
@@ -112,5 +112,5 @@ type CreditMemoLine struct {
 	GroupLineDetail       *InvoiceGroupLineDetail       `json:"GroupLineDetail,omitempty"`
 	DescriptionLineDetail *InvoiceDescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
 	SubTotalLineDetail    *InvoiceSubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
-	TaxLineDetail         *InvoiceTaxLineDetail         `json:"TaxLineDetail,omitempty"`
+	TaxLineDetail         *TaxLineDetail         `json:"TaxLineDetail,omitempty"`
 }
