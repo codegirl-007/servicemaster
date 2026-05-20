@@ -32,3 +32,27 @@ type LinkedTxn struct {
 	TxnType   string `json:"TxnType,omitempty"`
 	TxnLineID string `json:"TxnLineId,omitempty"`
 }
+
+// TxnTaxDetail represents transaction-level tax details.
+type TxnTaxDetail struct {
+	TxnTaxCodeRef *Reference `json:"TxnTaxCodeRef,omitempty"`
+	TotalTax      float64    `json:"TotalTax,omitempty"`
+	TaxLine       []TaxLine  `json:"TaxLine,omitempty"`
+}
+
+// TaxLine represents a tax line in transaction tax detail
+type TaxLine struct {
+	Amount        float64        `json:"Amount,omitempty"`
+	DetailType    string         `json:"DetailType,omitempty"`
+	TaxLineDetail *TaxLineDetail `json:"TaxLineDetail,omitempty"`
+}
+
+// TaxLineDetail represents tax details where TaxRateRef is optional.
+type TaxLineDetail struct {
+	TaxRateRef          *Reference `json:"TaxRateRef,omitempty"`
+	NetAmountTaxable    float64    `json:"NetAmountTaxable,omitempty"`
+	PercentBased        *bool      `json:"PercentBased,omitempty"`
+	TaxInclusiveAmount  float64    `json:"TaxInclusiveAmount,omitempty"`
+	OverrideDeltaAmount float64    `json:"OverrideDeltaAmount,omitempty"`
+	TaxPercent          float64    `json:"TaxPercent,omitempty"`
+}
