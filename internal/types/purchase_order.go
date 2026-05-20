@@ -47,7 +47,7 @@ type PurchaseOrder struct {
 	ExchangeRate            float64                 `json:"ExchangeRate,omitempty"`
 	ShipAddr                *PhysicalAddress        `json:"ShipAddr,omitempty"`
 	VendorAddr              *PhysicalAddress        `json:"VendorAddr,omitempty"`
-	EmailStatus             SalesReceiptEmailStatus `json:"EmailStatus,omitempty"`
+	EmailStatus             EmailStatus             `json:"EmailStatus,omitempty"`
 	Domain                  string                  `json:"domain,omitempty"`
 	Sparse                  *bool                   `json:"sparse,omitempty"`
 }
@@ -77,7 +77,7 @@ type CreatePurchaseOrderRequest struct {
 	ExchangeRate            float64                 `json:"ExchangeRate,omitempty"`
 	ShipAddr                *PhysicalAddress        `json:"ShipAddr,omitempty"`
 	VendorAddr              *PhysicalAddress        `json:"VendorAddr,omitempty"`
-	EmailStatus             SalesReceiptEmailStatus `json:"EmailStatus,omitempty"`
+	EmailStatus             EmailStatus             `json:"EmailStatus,omitempty"`
 }
 
 // SparseUpdatePurchaseOrderRequest represents the documented sparse update payload.
@@ -107,6 +107,6 @@ type SparseUpdatePurchaseOrderRequest struct {
 	ExchangeRate            float64                 `json:"ExchangeRate,omitempty"`
 	ShipAddr                *PhysicalAddress        `json:"ShipAddr,omitempty"`
 	VendorAddr              *PhysicalAddress        `json:"VendorAddr,omitempty"`
-	EmailStatus             SalesReceiptEmailStatus `json:"EmailStatus,omitempty"`
+	EmailStatus             EmailStatus             `json:"EmailStatus,omitempty"`
 	Domain                  string                  `json:"domain,omitempty"`
 }
