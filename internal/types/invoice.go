@@ -110,17 +110,12 @@ type SparseUpdateInvoiceRequest struct {
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	Deposit               float64              `json:"Deposit,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
-	CustomerMemo          *InvoiceMemo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
 	LinkedTxn             []LinkedTxn          `json:"LinkedTxn,omitempty"`
 	Domain                string               `json:"domain,omitempty"`
-}
-
-// InvoiceMemo represents a QuickBooks invoice memo object.
-type InvoiceMemo struct {
-	Value string `json:"value,omitempty"`
 }
 
 // InvoiceLine represents a QuickBooks invoice line.

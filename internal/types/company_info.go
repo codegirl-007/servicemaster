@@ -91,23 +91,3 @@ type PhysicalAddress struct {
 	CountrySubDivisionCode string `json:"CountrySubDivisionCode,omitempty"`
 }
 
-// EmailAddress represents a QuickBooks email address object.
-type EmailAddress struct {
-	Address string `json:"Address,omitempty"`
-}
-
-// WebSiteAddress represents a QuickBooks website address object.
-type WebSiteAddress struct {
-	URI string `json:"URI,omitempty"`
-}
-
-// TelephoneNumber represents a QuickBooks telephone number object.
-type TelephoneNumber struct {
-	FreeFormNumber string `json:"FreeFormNumber,omitempty"`
-}
-
-// NameValue represents a QuickBooks name/value extension pair.
-type NameValue struct {
-	Name  string `json:"Name"`
-	Value string `json:"Value"`
-}

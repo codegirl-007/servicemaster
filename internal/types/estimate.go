@@ -115,7 +115,7 @@ type SparseUpdateEstimateRequest struct {
 	AcceptedDate          *Date                `json:"AcceptedDate,omitempty"`
 	TxnStatus             EstimateTxnStatus    `json:"TxnStatus,omitempty"`
 	DocNumber             string               `json:"DocNumber,omitempty"`
-	CustomerMemo          *EstimateMemo        `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
@@ -136,11 +136,6 @@ type SparseUpdateEstimateRequest struct {
 	ShipMethodRef         *Reference           `json:"ShipMethodRef,omitempty"`
 	LinkedTxn             []LinkedTxn          `json:"LinkedTxn,omitempty"`
 	Domain                string               `json:"domain,omitempty"`
-}
-
-// EstimateMemo represents a QuickBooks estimate memo object.
-type EstimateMemo struct {
-	Value string `json:"value,omitempty"`
 }
 
 // EstimateLine represents a QuickBooks estimate line.
