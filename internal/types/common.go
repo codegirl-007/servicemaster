@@ -17,6 +17,7 @@ const (
 	EmailStatusEmailSent  EmailStatus = "EmailSent"
 )
 
+// PrintStatus represents the documented QuickBooks print status values.
 type PrintStatus string
 
 const (
