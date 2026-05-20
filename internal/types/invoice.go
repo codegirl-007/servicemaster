@@ -50,7 +50,7 @@ type Invoice struct {
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
-	LinkedTxn             []InvoiceLinkedTxn   `json:"LinkedTxn,omitempty"`
+	LinkedTxn             []LinkedTxn          `json:"LinkedTxn,omitempty"`
 	HomeTotalAmt          float64              `json:"HomeTotalAmt,omitempty"`
 	HomeBalance           float64              `json:"HomeBalance,omitempty"`
 	MetaData              *MetaData            `json:"MetaData,omitempty"`
@@ -83,7 +83,7 @@ type CreateInvoiceRequest struct {
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
-	LinkedTxn             []InvoiceLinkedTxn   `json:"LinkedTxn,omitempty"`
+	LinkedTxn             []LinkedTxn          `json:"LinkedTxn,omitempty"`
 }
 
 // SparseUpdateInvoiceRequest represents the documented sparse update payload.
@@ -114,7 +114,7 @@ type SparseUpdateInvoiceRequest struct {
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
-	LinkedTxn             []InvoiceLinkedTxn   `json:"LinkedTxn,omitempty"`
+	LinkedTxn             []LinkedTxn          `json:"LinkedTxn,omitempty"`
 	Domain                string               `json:"domain,omitempty"`
 }
 

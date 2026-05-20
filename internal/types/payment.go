@@ -31,72 +31,72 @@ type PaymentResponse struct {
 
 // Payment represents a QuickBooks payment object.
 type Payment struct {
-	ID                 string                 `json:"Id"`
-	SyncToken          string                 `json:"SyncToken"`
-	TotalAmt           float64                `json:"TotalAmt,omitempty"`
-	TxnDate            *Date                  `json:"TxnDate,omitempty"`
-	CustomerRef        *Reference             `json:"CustomerRef,omitempty"`
-	Line               []PaymentLine          `json:"Line,omitempty"`
-	PaymentMethodRef   *Reference             `json:"PaymentMethodRef,omitempty"`
-	DepositToAccountRef *Reference            `json:"DepositToAccountRef,omitempty"`
-	PaymentRefNum      string                 `json:"PaymentRefNum,omitempty"`
-	PrivateNote        string                 `json:"PrivateNote,omitempty"`
-	CurrencyRef        *Reference             `json:"CurrencyRef,omitempty"`
-	ExchangeRate       float64                `json:"ExchangeRate,omitempty"`
-	UnappliedAmt       float64                `json:"UnappliedAmt,omitempty"`
-	ProjectRef         *Reference             `json:"ProjectRef,omitempty"`
-	CreditCardPayment  *PaymentCreditCardPayment `json:"CreditCardPayment,omitempty"`
-	TxnSource          string                 `json:"TxnSource,omitempty"`
-	MetaData           *MetaData              `json:"MetaData,omitempty"`
-	Domain             string                 `json:"domain,omitempty"`
-	Sparse             *bool                  `json:"sparse,omitempty"`
+	ID                  string                    `json:"Id"`
+	SyncToken           string                    `json:"SyncToken"`
+	TotalAmt            float64                   `json:"TotalAmt,omitempty"`
+	TxnDate             *Date                     `json:"TxnDate,omitempty"`
+	CustomerRef         *Reference                `json:"CustomerRef,omitempty"`
+	Line                []PaymentLine             `json:"Line,omitempty"`
+	PaymentMethodRef    *Reference                `json:"PaymentMethodRef,omitempty"`
+	DepositToAccountRef *Reference                `json:"DepositToAccountRef,omitempty"`
+	PaymentRefNum       string                    `json:"PaymentRefNum,omitempty"`
+	PrivateNote         string                    `json:"PrivateNote,omitempty"`
+	CurrencyRef         *Reference                `json:"CurrencyRef,omitempty"`
+	ExchangeRate        float64                   `json:"ExchangeRate,omitempty"`
+	UnappliedAmt        float64                   `json:"UnappliedAmt,omitempty"`
+	ProjectRef          *Reference                `json:"ProjectRef,omitempty"`
+	CreditCardPayment   *PaymentCreditCardPayment `json:"CreditCardPayment,omitempty"`
+	TxnSource           string                    `json:"TxnSource,omitempty"`
+	MetaData            *MetaData                 `json:"MetaData,omitempty"`
+	Domain              string                    `json:"domain,omitempty"`
+	Sparse              *bool                     `json:"sparse,omitempty"`
 }
 
 // CreatePaymentRequest represents the documented create payment payload.
 type CreatePaymentRequest struct {
 	// TotalAmt is required.
-	TotalAmt            float64                 `json:"TotalAmt"`
+	TotalAmt float64 `json:"TotalAmt"`
 	// CustomerRef is required.
-	CustomerRef         Reference               `json:"CustomerRef"`
-	TxnDate             *Date                   `json:"TxnDate,omitempty"`
-	Line                []PaymentLine           `json:"Line,omitempty"`
-	PaymentMethodRef    *Reference              `json:"PaymentMethodRef,omitempty"`
-	DepositToAccountRef *Reference              `json:"DepositToAccountRef,omitempty"`
-	PaymentRefNum       string                  `json:"PaymentRefNum,omitempty"`
-	PrivateNote         string                  `json:"PrivateNote,omitempty"`
-	CurrencyRef         *Reference              `json:"CurrencyRef,omitempty"`
-	ExchangeRate        float64                 `json:"ExchangeRate,omitempty"`
-	ProjectRef          *Reference              `json:"ProjectRef,omitempty"`
+	CustomerRef         Reference                 `json:"CustomerRef"`
+	TxnDate             *Date                     `json:"TxnDate,omitempty"`
+	Line                []PaymentLine             `json:"Line,omitempty"`
+	PaymentMethodRef    *Reference                `json:"PaymentMethodRef,omitempty"`
+	DepositToAccountRef *Reference                `json:"DepositToAccountRef,omitempty"`
+	PaymentRefNum       string                    `json:"PaymentRefNum,omitempty"`
+	PrivateNote         string                    `json:"PrivateNote,omitempty"`
+	CurrencyRef         *Reference                `json:"CurrencyRef,omitempty"`
+	ExchangeRate        float64                   `json:"ExchangeRate,omitempty"`
+	ProjectRef          *Reference                `json:"ProjectRef,omitempty"`
 	CreditCardPayment   *PaymentCreditCardPayment `json:"CreditCardPayment,omitempty"`
-	TxnSource           string                  `json:"TxnSource,omitempty"`
+	TxnSource           string                    `json:"TxnSource,omitempty"`
 }
 
 // SparseUpdatePaymentRequest represents the documented sparse update payload.
 type SparseUpdatePaymentRequest struct {
-	ID                  string                  `json:"Id"`
-	SyncToken           string                  `json:"SyncToken"`
-	Sparse              bool                    `json:"sparse"`
-	TotalAmt            float64                 `json:"TotalAmt,omitempty"`
-	TxnDate             *Date                   `json:"TxnDate,omitempty"`
-	CustomerRef         *Reference              `json:"CustomerRef,omitempty"`
-	Line                []PaymentLine           `json:"Line,omitempty"`
-	PaymentMethodRef    *Reference              `json:"PaymentMethodRef,omitempty"`
-	DepositToAccountRef *Reference              `json:"DepositToAccountRef,omitempty"`
-	PaymentRefNum       string                  `json:"PaymentRefNum,omitempty"`
-	PrivateNote         string                  `json:"PrivateNote,omitempty"`
-	CurrencyRef         *Reference              `json:"CurrencyRef,omitempty"`
-	ExchangeRate        float64                 `json:"ExchangeRate,omitempty"`
-	ProjectRef          *Reference              `json:"ProjectRef,omitempty"`
+	ID                  string                    `json:"Id"`
+	SyncToken           string                    `json:"SyncToken"`
+	Sparse              bool                      `json:"sparse"`
+	TotalAmt            float64                   `json:"TotalAmt,omitempty"`
+	TxnDate             *Date                     `json:"TxnDate,omitempty"`
+	CustomerRef         *Reference                `json:"CustomerRef,omitempty"`
+	Line                []PaymentLine             `json:"Line,omitempty"`
+	PaymentMethodRef    *Reference                `json:"PaymentMethodRef,omitempty"`
+	DepositToAccountRef *Reference                `json:"DepositToAccountRef,omitempty"`
+	PaymentRefNum       string                    `json:"PaymentRefNum,omitempty"`
+	PrivateNote         string                    `json:"PrivateNote,omitempty"`
+	CurrencyRef         *Reference                `json:"CurrencyRef,omitempty"`
+	ExchangeRate        float64                   `json:"ExchangeRate,omitempty"`
+	ProjectRef          *Reference                `json:"ProjectRef,omitempty"`
 	CreditCardPayment   *PaymentCreditCardPayment `json:"CreditCardPayment,omitempty"`
-	TxnSource           string                  `json:"TxnSource,omitempty"`
-	Domain              string                  `json:"domain,omitempty"`
+	TxnSource           string                    `json:"TxnSource,omitempty"`
+	Domain              string                    `json:"domain,omitempty"`
 }
 
 // PaymentLine represents an applied payment line.
 type PaymentLine struct {
-	Amount    float64            `json:"Amount,omitempty"`
-	LinkedTxn []PaymentLinkedTxn `json:"LinkedTxn,omitempty"`
-	LineEx    *PaymentLineEx     `json:"LineEx,omitempty"`
+	Amount    float64        `json:"Amount,omitempty"`
+	LinkedTxn []LinkedTxn    `json:"LinkedTxn,omitempty"`
+	LineEx    *PaymentLineEx `json:"LineEx,omitempty"`
 }
 
 // PaymentLinkedTxn represents a transaction linked to a payment line.

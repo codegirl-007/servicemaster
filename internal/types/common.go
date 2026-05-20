@@ -25,3 +25,10 @@ const (
 	PrintStatusNeedToPrint   PrintStatus = "NeedToPrint"
 	PrintStatusPrintComplete PrintStatus = "PrintComplete"
 )
+
+// LinkedTxn represents a transaction linked to another QuickBooks entity.
+type LinkedTxn struct {
+	TxnID     string `json:"TxnId,omitempty"`
+	TxnType   string `json:"TxnType,omitempty"`
+	TxnLineID string `json:"TxnLineId,omitempty"`
+}

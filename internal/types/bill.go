@@ -25,8 +25,8 @@ const (
 type GlobalTaxCalculation string
 
 const (
-	GlobalTaxCalculationTaxExcluded  GlobalTaxCalculation = "TaxExcluded"
-	GlobalTaxCalculationTaxInclusive GlobalTaxCalculation = "TaxInclusive"
+	GlobalTaxCalculationTaxExcluded   GlobalTaxCalculation = "TaxExcluded"
+	GlobalTaxCalculationTaxInclusive  GlobalTaxCalculation = "TaxInclusive"
 	GlobalTaxCalculationNotApplicable GlobalTaxCalculation = "NotApplicable"
 )
 
@@ -43,10 +43,10 @@ const (
 type TransactionLocationType string
 
 const (
-	TransactionLocationTypeWithinFrance      TransactionLocationType = "WithinFrance"
-	TransactionLocationTypeFranceOverseas    TransactionLocationType = "FranceOverseas"
+	TransactionLocationTypeWithinFrance        TransactionLocationType = "WithinFrance"
+	TransactionLocationTypeFranceOverseas      TransactionLocationType = "FranceOverseas"
 	TransactionLocationTypeOutsideFranceWithEU TransactionLocationType = "OutsideFranceWithEU"
-	TransactionLocationTypeOutsideEU         TransactionLocationType = "OutsideEU"
+	TransactionLocationTypeOutsideEU           TransactionLocationType = "OutsideEU"
 )
 
 // BillResponse represents the QuickBooks bill response envelope.
@@ -57,29 +57,29 @@ type BillResponse struct {
 
 // Bill represents a QuickBooks bill object.
 type Bill struct {
-	ID                      string                 `json:"Id"`
-	VendorRef               Reference              `json:"VendorRef"`
-	Line                    []BillLine             `json:"Line"`
-	SyncToken               string                 `json:"SyncToken"`
-	CurrencyRef             *Reference             `json:"CurrencyRef,omitempty"`
-	GlobalTaxCalculation    GlobalTaxCalculation   `json:"GlobalTaxCalculation,omitempty"`
-	HomeBalance             float64                `json:"HomeBalance,omitempty"`
-	RecurDataRef            *Reference             `json:"RecurDataRef,omitempty"`
-	Balance                 float64                `json:"Balance,omitempty"`
-	TxnDate                 *Date                  `json:"TxnDate,omitempty"`
-	APAccountRef            *Reference             `json:"APAccountRef,omitempty"`
-	SalesTermRef            *Reference             `json:"SalesTermRef,omitempty"`
-	LinkedTxn               []BillLinkedTxn        `json:"LinkedTxn,omitempty"`
-	TotalAmt                float64                `json:"TotalAmt,omitempty"`
+	ID                      string                  `json:"Id"`
+	VendorRef               Reference               `json:"VendorRef"`
+	Line                    []BillLine              `json:"Line"`
+	SyncToken               string                  `json:"SyncToken"`
+	CurrencyRef             *Reference              `json:"CurrencyRef,omitempty"`
+	GlobalTaxCalculation    GlobalTaxCalculation    `json:"GlobalTaxCalculation,omitempty"`
+	HomeBalance             float64                 `json:"HomeBalance,omitempty"`
+	RecurDataRef            *Reference              `json:"RecurDataRef,omitempty"`
+	Balance                 float64                 `json:"Balance,omitempty"`
+	TxnDate                 *Date                   `json:"TxnDate,omitempty"`
+	APAccountRef            *Reference              `json:"APAccountRef,omitempty"`
+	SalesTermRef            *Reference              `json:"SalesTermRef,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
+	TotalAmt                float64                 `json:"TotalAmt,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
-	DueDate                 *Date                  `json:"DueDate,omitempty"`
-	MetaData                *MetaData              `json:"MetaData,omitempty"`
-	DocNumber               string                 `json:"DocNumber,omitempty"`
-	PrivateNote             string                 `json:"PrivateNote,omitempty"`
-	TxnTaxDetail            *BillTxnTaxDetail      `json:"TxnTaxDetail,omitempty"`
-	ExchangeRate            float64                `json:"ExchangeRate,omitempty"`
-	DepartmentRef           *Reference             `json:"DepartmentRef,omitempty"`
-	IncludeInAnnualTPAR     *bool                  `json:"IncludeInAnnualTPAR,omitempty"`
+	DueDate                 *Date                   `json:"DueDate,omitempty"`
+	MetaData                *MetaData               `json:"MetaData,omitempty"`
+	DocNumber               string                  `json:"DocNumber,omitempty"`
+	PrivateNote             string                  `json:"PrivateNote,omitempty"`
+	TxnTaxDetail            *BillTxnTaxDetail       `json:"TxnTaxDetail,omitempty"`
+	ExchangeRate            float64                 `json:"ExchangeRate,omitempty"`
+	DepartmentRef           *Reference              `json:"DepartmentRef,omitempty"`
+	IncludeInAnnualTPAR     *bool                   `json:"IncludeInAnnualTPAR,omitempty"`
 }
 
 // CreateBillRequest represents the documented create bill payload.
@@ -87,45 +87,45 @@ type CreateBillRequest struct {
 	// VendorRef is required.
 	VendorRef Reference `json:"VendorRef"`
 	// Line is required.
-	Line                    []BillLine             `json:"Line"`
-	TxnDate                 *Date                  `json:"TxnDate,omitempty"`
-	DueDate                 *Date                  `json:"DueDate,omitempty"`
-	APAccountRef            *Reference             `json:"APAccountRef,omitempty"`
-	SalesTermRef            *Reference             `json:"SalesTermRef,omitempty"`
-	DocNumber               string                 `json:"DocNumber,omitempty"`
-	PrivateNote             string                 `json:"PrivateNote,omitempty"`
-	CurrencyRef             *Reference             `json:"CurrencyRef,omitempty"`
-	ExchangeRate            float64                `json:"ExchangeRate,omitempty"`
-	DepartmentRef           *Reference             `json:"DepartmentRef,omitempty"`
-	GlobalTaxCalculation    GlobalTaxCalculation   `json:"GlobalTaxCalculation,omitempty"`
-	TxnTaxDetail            *BillTxnTaxDetail      `json:"TxnTaxDetail,omitempty"`
+	Line                    []BillLine              `json:"Line"`
+	TxnDate                 *Date                   `json:"TxnDate,omitempty"`
+	DueDate                 *Date                   `json:"DueDate,omitempty"`
+	APAccountRef            *Reference              `json:"APAccountRef,omitempty"`
+	SalesTermRef            *Reference              `json:"SalesTermRef,omitempty"`
+	DocNumber               string                  `json:"DocNumber,omitempty"`
+	PrivateNote             string                  `json:"PrivateNote,omitempty"`
+	CurrencyRef             *Reference              `json:"CurrencyRef,omitempty"`
+	ExchangeRate            float64                 `json:"ExchangeRate,omitempty"`
+	DepartmentRef           *Reference              `json:"DepartmentRef,omitempty"`
+	GlobalTaxCalculation    GlobalTaxCalculation    `json:"GlobalTaxCalculation,omitempty"`
+	TxnTaxDetail            *BillTxnTaxDetail       `json:"TxnTaxDetail,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
-	IncludeInAnnualTPAR     *bool                  `json:"IncludeInAnnualTPAR,omitempty"`
+	IncludeInAnnualTPAR     *bool                   `json:"IncludeInAnnualTPAR,omitempty"`
 }
 
 // BillLine represents a bill line.
 type BillLine struct {
-	ID                            string                          `json:"Id,omitempty"`
-	Amount                        float64                         `json:"Amount"`
-	DetailType                    BillLineDetailType              `json:"DetailType"`
-	LinkedTxn                     []BillLinkedTxn                 `json:"LinkedTxn,omitempty"`
-	Description                   string                          `json:"Description,omitempty"`
-	LineNum                       float64                         `json:"LineNum,omitempty"`
+	ID                            string                             `json:"Id,omitempty"`
+	Amount                        float64                            `json:"Amount"`
+	DetailType                    BillLineDetailType                 `json:"DetailType"`
+	LinkedTxn                     []LinkedTxn                        `json:"LinkedTxn,omitempty"`
+	Description                   string                             `json:"Description,omitempty"`
+	LineNum                       float64                            `json:"LineNum,omitempty"`
 	AccountBasedExpenseLineDetail *BillAccountBasedExpenseLineDetail `json:"AccountBasedExpenseLineDetail,omitempty"`
-	ItemBasedExpenseLineDetail    *BillItemBasedExpenseLineDetail `json:"ItemBasedExpenseLineDetail,omitempty"`
-	TaxLineDetail                 *BillTaxLineDetail              `json:"TaxLineDetail,omitempty"`
+	ItemBasedExpenseLineDetail    *BillItemBasedExpenseLineDetail    `json:"ItemBasedExpenseLineDetail,omitempty"`
+	TaxLineDetail                 *BillTaxLineDetail                 `json:"TaxLineDetail,omitempty"`
 }
 
 // BillAccountBasedExpenseLineDetail represents account-based bill line details.
 type BillAccountBasedExpenseLineDetail struct {
-	AccountRef       Reference       `json:"AccountRef"`
-	TaxAmount        float64         `json:"TaxAmount,omitempty"`
-	TaxInclusiveAmt  float64         `json:"TaxInclusiveAmt,omitempty"`
-	ClassRef         *Reference      `json:"ClassRef,omitempty"`
-	TaxCodeRef       *Reference      `json:"TaxCodeRef,omitempty"`
-	MarkupInfo       *BillMarkupInfo `json:"MarkupInfo,omitempty"`
-	BillableStatus   BillableStatus  `json:"BillableStatus,omitempty"`
-	CustomerRef      *Reference      `json:"CustomerRef,omitempty"`
+	AccountRef      Reference       `json:"AccountRef"`
+	TaxAmount       float64         `json:"TaxAmount,omitempty"`
+	TaxInclusiveAmt float64         `json:"TaxInclusiveAmt,omitempty"`
+	ClassRef        *Reference      `json:"ClassRef,omitempty"`
+	TaxCodeRef      *Reference      `json:"TaxCodeRef,omitempty"`
+	MarkupInfo      *BillMarkupInfo `json:"MarkupInfo,omitempty"`
+	BillableStatus  BillableStatus  `json:"BillableStatus,omitempty"`
+	CustomerRef     *Reference      `json:"CustomerRef,omitempty"`
 }
 
 // BillItemBasedExpenseLineDetail represents item-based bill line details.
@@ -149,18 +149,11 @@ type BillMarkupInfo struct {
 	MarkUpIncomeAccountRef *Reference `json:"MarkUpIncomeAccountRef,omitempty"`
 }
 
-// BillLinkedTxn represents a transaction linked to a bill or bill line.
-type BillLinkedTxn struct {
-	TxnID     string            `json:"TxnId"`
-	TxnType   BillLinkedTxnType `json:"TxnType"`
-	TxnLineID string            `json:"TxnLineId,omitempty"`
-}
-
 // BillTxnTaxDetail represents bill-level tax details.
 type BillTxnTaxDetail struct {
-	TxnTaxCodeRef *Reference     `json:"TxnTaxCodeRef,omitempty"`
-	TotalTax      float64        `json:"TotalTax,omitempty"`
-	TaxLine       []BillTaxLine  `json:"TaxLine,omitempty"`
+	TxnTaxCodeRef *Reference    `json:"TxnTaxCodeRef,omitempty"`
+	TotalTax      float64       `json:"TotalTax,omitempty"`
+	TaxLine       []BillTaxLine `json:"TaxLine,omitempty"`
 }
 
 // BillTaxLine represents a tax line in bill tax details.

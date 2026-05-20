@@ -29,10 +29,10 @@ type Purchase struct {
 	TotalAmt                float64                 `json:"TotalAmt,omitempty"`
 	RecurDataRef            *Reference              `json:"RecurDataRef,omitempty"`
 	TxnDate                 *Date                   `json:"TxnDate,omitempty"`
-	PrintStatus             InvoicePrintStatus      `json:"PrintStatus,omitempty"`
+	PrintStatus             PrintStatus             `json:"PrintStatus,omitempty"`
 	RemitToAddr             *PhysicalAddress        `json:"RemitToAddr,omitempty"`
 	TxnSource               string                  `json:"TxnSource,omitempty"`
-	LinkedTxn               []BillLinkedTxn         `json:"LinkedTxn,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
 	GlobalTaxCalculation    GlobalTaxCalculation    `json:"GlobalTaxCalculation,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
 	MetaData                *MetaData               `json:"MetaData,omitempty"`
@@ -55,9 +55,9 @@ type CreatePurchaseRequest struct {
 	Line                    []BillLine              `json:"Line"`
 	TxnDate                 *Date                   `json:"TxnDate,omitempty"`
 	CurrencyRef             *Reference              `json:"CurrencyRef,omitempty"`
-	PrintStatus             InvoicePrintStatus      `json:"PrintStatus,omitempty"`
+	PrintStatus             PrintStatus             `json:"PrintStatus,omitempty"`
 	TxnSource               string                  `json:"TxnSource,omitempty"`
-	LinkedTxn               []BillLinkedTxn         `json:"LinkedTxn,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
 	GlobalTaxCalculation    GlobalTaxCalculation    `json:"GlobalTaxCalculation,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
 	DocNumber               string                  `json:"DocNumber,omitempty"`
@@ -80,9 +80,9 @@ type SparseUpdatePurchaseRequest struct {
 	AccountRef              *Reference              `json:"AccountRef,omitempty"`
 	TxnDate                 *Date                   `json:"TxnDate,omitempty"`
 	CurrencyRef             *Reference              `json:"CurrencyRef,omitempty"`
-	PrintStatus             InvoicePrintStatus      `json:"PrintStatus,omitempty"`
+	PrintStatus             PrintStatus             `json:"PrintStatus,omitempty"`
 	TxnSource               string                  `json:"TxnSource,omitempty"`
-	LinkedTxn               []BillLinkedTxn         `json:"LinkedTxn,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
 	GlobalTaxCalculation    GlobalTaxCalculation    `json:"GlobalTaxCalculation,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
 	DocNumber               string                  `json:"DocNumber,omitempty"`

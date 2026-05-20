@@ -33,7 +33,7 @@ type PurchaseOrder struct {
 	POEmail                 *EmailAddress           `json:"POEmail,omitempty"`
 	ClassRef                *Reference              `json:"ClassRef,omitempty"`
 	SalesTermRef            *Reference              `json:"SalesTermRef,omitempty"`
-	LinkedTxn               []BillLinkedTxn         `json:"LinkedTxn,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
 	Memo                    string                  `json:"Memo,omitempty"`
 	POStatus                PurchaseOrderStatus     `json:"POStatus,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
@@ -64,7 +64,7 @@ type CreatePurchaseOrderRequest struct {
 	POEmail                 *EmailAddress           `json:"POEmail,omitempty"`
 	ClassRef                *Reference              `json:"ClassRef,omitempty"`
 	SalesTermRef            *Reference              `json:"SalesTermRef,omitempty"`
-	LinkedTxn               []BillLinkedTxn         `json:"LinkedTxn,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
 	Memo                    string                  `json:"Memo,omitempty"`
 	POStatus                PurchaseOrderStatus     `json:"POStatus,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
@@ -94,7 +94,7 @@ type SparseUpdatePurchaseOrderRequest struct {
 	POEmail                 *EmailAddress           `json:"POEmail,omitempty"`
 	ClassRef                *Reference              `json:"ClassRef,omitempty"`
 	SalesTermRef            *Reference              `json:"SalesTermRef,omitempty"`
-	LinkedTxn               []BillLinkedTxn         `json:"LinkedTxn,omitempty"`
+	LinkedTxn               []LinkedTxn             `json:"LinkedTxn,omitempty"`
 	Memo                    string                  `json:"Memo,omitempty"`
 	POStatus                PurchaseOrderStatus     `json:"POStatus,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
