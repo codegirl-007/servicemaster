@@ -7,3 +7,12 @@ import "time"
 type Date struct {
 	time.Time
 }
+
+// EmailStatus represents the documented QuickBooks email delivery status values.
+type EmailStatus string
+
+const (
+	EmailStatusNotSet     EmailStatus = "NotSet"
+	EmailStatusNeedToSend EmailStatus = "NeedToSend"
+	EmailStatusEmailSent  EmailStatus = "EmailSent"
+)
