@@ -76,3 +76,28 @@ type BillPaymentCheck struct {
 type BillPaymentCreditCard struct {
 	CCAccountRef Reference `json:"CCAccountRef"`
 }
+
+// VoidBillPaymentRequest represents the documented void bill payment payload.
+type VoidBillPaymentRequest struct {
+	ID        string `json:"Id"`
+	SyncToken string `json:"SyncToken"`
+	Sparse    bool   `json:"sparse"`
+}
+
+// VoidBillPaymentResponse represents the QuickBooks voided bill payment response envelope.
+type VoidBillPaymentResponse struct {
+	BillPayment BillPayment `json:"BillPayment"`
+	Time        time.Time   `json:"time"`
+}
+
+// DeleteBillPaymentRequest represents the documented delete bill payment payload.
+type DeleteBillPaymentRequest struct {
+	ID        string `json:"Id"`
+	SyncToken string `json:"SyncToken"`
+}
+
+// BillPaymentDeleteResponse represents the QuickBooks deleted bill payment response envelope.
+type BillPaymentDeleteResponse struct {
+	BillPayment DeletedEntity `json:"BillPayment"`
+	Time        time.Time     `json:"time"`
+}
