@@ -1,3 +1,4 @@
+// Tests document intended client behavior for reviewers; they are not a spec.
 package qbo_test
 
 import (
@@ -12,6 +13,7 @@ import (
 	"servicemaster/internal/types"
 )
 
+// Verifies the transport layer attaches OAuth Bearer tokens on every request.
 func TestClient_Do_SendsBearerToken(t *testing.T) {
 	t.Parallel()
 
@@ -42,6 +44,7 @@ func TestClient_Do_SendsBearerToken(t *testing.T) {
 	}
 }
 
+// Verifies 429 is retried (cooperative backoff) while 401 is not (see DESIGN.md).
 func TestClient_Do_RetriesRateLimit(t *testing.T) {
 	t.Parallel()
 
@@ -78,6 +81,7 @@ func TestClient_Do_RetriesRateLimit(t *testing.T) {
 	}
 }
 
+// Expired tokens must surface to the token service, not loop here.
 func TestClient_Do_DoesNotRetryUnauthorized(t *testing.T) {
 	t.Parallel()
 
@@ -123,6 +127,7 @@ func TestClient_Do_DoesNotRetryUnauthorized(t *testing.T) {
 	}
 }
 
+// End-to-end pagination: STARTPOSITION advances by prior page totalCount.
 func TestClient_QueryPages(t *testing.T) {
 	t.Parallel()
 

@@ -8,14 +8,22 @@ import (
 	"time"
 )
 
-// RetryPolicy defines which HTTP statuses are retried and how long to wait.
+// RetryPolicy defines HTTP-layer retry behavior only.
+//
+// This is separate from import-batch retries on purpose:
+//   - HTTP retries are fast and idempotent for GET /query.
+//   - Batch retries resume from a saved startPosition and may span minutes.
+//
+// Mixing both into one counter causes double-retries (transport + job) and
+// makes failures hard to reason about in audit logs.
 type RetryPolicy struct {
 	MaxAttempts int
 	BaseDelay   time.Duration
 	MaxDelay    time.Duration
 }
 
-// DefaultRetryPolicy is the recommended starting point for import workloads.
+// DefaultRetryPolicy is tuned for bulk import: a few quick retries, then let
+// the job scheduler back off cooperatively on sustained 429s.
 var DefaultRetryPolicy = RetryPolicy{
 	MaxAttempts: 3,
 	BaseDelay:   500 * time.Millisecond,
@@ -36,6 +44,11 @@ func (p RetryPolicy) normalized() RetryPolicy {
 	return p
 }
 
+// shouldRetry encodes the retry boundary table from DESIGN.md.
+//
+// We intentionally exclude 401: the access token may be expired but refresh is
+// a state transition (DB write + connection event), not "send the same Bearer
+// token again and hope."
 func (p RetryPolicy) shouldRetry(statusCode int, attempt int) bool {
 	if attempt >= p.normalized().MaxAttempts {
 		return false
@@ -57,6 +70,9 @@ func (p RetryPolicy) shouldRetry(statusCode int, attempt int) bool {
 func (p RetryPolicy) delay(attempt int, retryAfter string) time.Duration {
 	p = p.normalized()
 
+	// Prefer Intuit's Retry-After when it is a positive integer of seconds.
+	// Ignore zero/invalid values and fall back to exponential backoff so we
+	// do not busy-loop when the header is "0".
 	if retryAfter != "" {
 		if seconds, err := strconv.Atoi(retryAfter); err == nil && seconds > 0 {
 			delay := time.Duration(seconds) * time.Second
@@ -68,12 +84,14 @@ func (p RetryPolicy) delay(attempt int, retryAfter string) time.Duration {
 		}
 	}
 
+	// attempt is 1-based in Do's loop; shift gives 500ms, 1s, 2s before cap.
 	delay := p.BaseDelay << (attempt - 1)
 	if delay > p.MaxDelay {
 		delay = p.MaxDelay
 	}
 
-	// Add up to 20% jitter to reduce synchronized retries across workers.
+	// Jitter spreads retries when multiple tenants import concurrently and hit
+	// 429 together (thundering herd on our side, not just Intuit's).
 	jitterWindow := delay / 5
 	if jitterWindow <= 0 {
 		return delay
@@ -89,6 +107,7 @@ func (p RetryPolicy) wait(ctx context.Context, attempt int, retryAfter string) e
 
 	select {
 	case <-ctx.Done():
+		// Respect import job cancellation during backoff.
 		return ctx.Err()
 	case <-timer.C:
 		return nil

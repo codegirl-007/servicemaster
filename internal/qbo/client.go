@@ -16,9 +16,15 @@ const (
 )
 
 // Config configures a QuickBooks API client for one realm (company).
+//
+// One Client instance maps to one connected QBO company (realm). Import workers
+// should construct a client per connection, not share one client across tenants.
 type Config struct {
-	BaseURL      string
-	RealmID      string
+	// BaseURL is the company API root, e.g. SandboxBaseURL(realmID).
+	BaseURL string
+	// RealmID is Intuit's company identifier from the OAuth callback.
+	RealmID string
+	// MinorVersion pins API behavior; 0 means omit the query param.
 	MinorVersion int
 	HTTPClient   *http.Client
 	TokenSource  TokenSource
@@ -26,6 +32,10 @@ type Config struct {
 }
 
 // Client performs authenticated QuickBooks Online API v3 requests.
+//
+// Methods are intentionally low-level (Do, Query, QueryPages). Typed helpers
+// like GetCustomer(id) multiply quickly and belong in import packages once we
+// know which endpoints jobs actually call.
 type Client struct {
 	baseURL      string
 	realmID      string
@@ -76,8 +86,15 @@ func SandboxBaseURL(realmID string) string {
 
 // Do executes an authenticated HTTP request with retry boundaries.
 //
-// The caller owns closing resp.Body on success. On error, the body is drained
-// and closed internally.
+// Design choices:
+//   - Token is fetched once per Do call, not per retry attempt. If refresh
+//     mid-flight becomes necessary, the TokenSource implementation should
+//     return the refreshed token on a second AccessToken call and the caller
+//     can retry the whole Do after handling ErrUnauthorized.
+//   - Request body is not reset between retries; Do is primarily used for GET
+//     /query today. POST helpers should rebuild the body per attempt later.
+//   - Response body is always fully read and returned so query helpers can
+//     parse JSON without holding the live *http.Response.
 func (c *Client) Do(ctx context.Context, method, path string, query url.Values, body io.Reader) (*http.Response, []byte, error) {
 	token, err := c.tokenSource.AccessToken(ctx)
 	if err != nil {
@@ -105,6 +122,8 @@ func (c *Client) Do(ctx context.Context, method, path string, query url.Values, 
 
 		resp, err := c.httpClient.Do(req)
 		if err != nil {
+			// Network failures are not retried here; the import job decides
+			// whether to reschedule the batch with the same idempotency key.
 			return nil, nil, fmt.Errorf("qbo: http request: %w", err)
 		}
 
@@ -130,15 +149,22 @@ func (c *Client) Do(ctx context.Context, method, path string, query url.Values, 
 		}
 	}
 
+	// All attempts exhausted (typically repeated 429 or 5xx).
 	return nil, nil, lastErr
 }
 
-// Query runs a QuickBooks SQL query and returns the first page.
+// Query runs a QuickBooks SQL query and returns only the first page.
+//
+// Prefer QueryPages for import jobs that need the full result set. Query exists
+// for probes (COUNT(*), connectivity checks) and tests.
 func (c *Client) Query(ctx context.Context, sql string) (QueryPage, error) {
 	return c.queryPage(ctx, sql, 1, defaultPageSize)
 }
 
 // QueryPages returns an iterator over all pages for a base SQL query.
+//
+// Pass the SQL *without* pagination clauses, e.g. "SELECT * FROM Customer".
+// pageSize <= 0 defaults to defaultPageSize (100).
 func (c *Client) QueryPages(ctx context.Context, sql string, pageSize int) (*PageIterator, error) {
 	if strings.TrimSpace(sql) == "" {
 		return nil, fmt.Errorf("qbo: query is required")
@@ -152,7 +178,7 @@ func (c *Client) QueryPages(ctx context.Context, sql string, pageSize int) (*Pag
 		client:        c,
 		baseQuery:     sql,
 		pageSize:      pageSize,
-		startPosition: 1,
+		startPosition: 1, // QBO STARTPOSITION is 1-based.
 	}, nil
 }
 
@@ -178,6 +204,7 @@ func (c *Client) buildURL(path string, query url.Values) (string, error) {
 		path = "/" + path
 	}
 
+	// baseURL already includes /v3/company/{realmId} from ProductionBaseURL.
 	endpoint := c.baseURL + path
 	if len(query) == 0 {
 		return endpoint, nil
@@ -193,6 +220,10 @@ func (c *Client) buildURL(path string, query url.Values) (string, error) {
 }
 
 // DecodeEntities unmarshals one entity key from a query page into dest.
+//
+// dest must be a pointer to a slice of the appropriate types.* struct, e.g.
+// new([]types.Customer). Keeping decode here avoids N duplicate Unmarshal
+// blocks in every import job.
 func DecodeEntities(page QueryPage, entityKey string, dest any) error {
 	raw, ok := page.Entities[entityKey]
 	if !ok {
