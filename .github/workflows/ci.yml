@@ -17,3 +17,55 @@ jobs:
           go-version-file: go.mod
       - run: make vet
       - run: make test
+
+  smoke-test:
+    name: Smoke Test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: servicemaster
+          POSTGRES_PASSWORD: servicemaster
+          POSTGRES_DB: servicemaster_dev
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+      - name: Install goose
+        run: go install github.com/pressly/goose/v3/cmd/goose@latest
+      - name: Generate token encryption key
+        run: echo "TOKEN_ENCRYPTION_KEY_BASE64=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
+      - name: Set database URL
+        run: echo "DATABASE_URL=postgres://servicemaster:servicemaster@localhost:5432/servicemaster_dev?sslmode=disable" >> "$GITHUB_ENV"
+      - name: Run migrations
+        run: make migrate-up
+      - name: Build server
+        run: go build -o api ./cmd/api
+      - name: Start server
+        run: |
+          ./api &
+          echo "SERVER_PID=$!" >> "$GITHUB_ENV"
+      - name: Wait for server and check endpoints
+        run: |
+          for i in {1..30}; do
+            if curl -sf http://localhost:8080/healthz >/dev/null && curl -sf http://localhost:8080/readyz >/dev/null; then
+              echo "Server is healthy and ready"
+              exit 0
+            fi
+            echo "Waiting for server... ($i/30)"
+            sleep 1
+          done
+          echo "Server failed to become healthy"
+          exit 1
+      - name: Stop server
+        if: always()
+        run: kill "$SERVER_PID" || true
