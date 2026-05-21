@@ -46,7 +46,7 @@ type Invoice struct {
 	Balance               float64              `json:"Balance,omitempty"`
 	Deposit               float64              `json:"Deposit,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
-	CustomerMemo          *Memo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
@@ -79,7 +79,7 @@ type CreateInvoiceRequest struct {
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	Deposit               float64              `json:"Deposit,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
-	CustomerMemo          *Memo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
@@ -120,47 +120,17 @@ type SparseUpdateInvoiceRequest struct {
 
 // InvoiceLine represents a QuickBooks invoice line.
 type InvoiceLine struct {
-	ID                    string                        `json:"Id,omitempty"`
-	LineNum               float64                       `json:"LineNum,omitempty"`
-	Amount                float64                       `json:"Amount,omitempty"`
-	Description           string                        `json:"Description,omitempty"`
-	DetailType            InvoiceLineDetailType         `json:"DetailType,omitempty"`
-	SalesItemLineDetail   *InvoiceSalesItemLineDetail   `json:"SalesItemLineDetail,omitempty"`
-	GroupLineDetail       *InvoiceGroupLineDetail       `json:"GroupLineDetail,omitempty"`
-	DescriptionLineDetail *InvoiceDescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
-	SubTotalLineDetail    *InvoiceSubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
-	TaxLineDetail         *TaxLineDetail                `json:"TaxLineDetail,omitempty"`
+	ID                    string                 `json:"Id,omitempty"`
+	LineNum               float64                `json:"LineNum,omitempty"`
+	Amount                float64                `json:"Amount,omitempty"`
+	Description           string                 `json:"Description,omitempty"`
+	DetailType            InvoiceLineDetailType  `json:"DetailType,omitempty"`
+	SalesItemLineDetail   *SalesItemLineDetail   `json:"SalesItemLineDetail,omitempty"`
+	GroupLineDetail       *GroupLineDetail       `json:"GroupLineDetail,omitempty"`
+	DescriptionLineDetail *DescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
+	SubTotalLineDetail    *SubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
+	TaxLineDetail         *TaxLineDetail         `json:"TaxLineDetail,omitempty"`
 }
-
-// InvoiceSalesItemLineDetail represents sales-item invoice line details.
-type InvoiceSalesItemLineDetail struct {
-	ItemRef         *Reference `json:"ItemRef,omitempty"`
-	ClassRef        *Reference `json:"ClassRef,omitempty"`
-	TaxCodeRef      *Reference `json:"TaxCodeRef,omitempty"`
-	ServiceDate     *Date      `json:"ServiceDate,omitempty"`
-	Qty             float64    `json:"Qty,omitempty"`
-	UnitPrice       float64    `json:"UnitPrice,omitempty"`
-	TaxInclusiveAmt float64    `json:"TaxInclusiveAmt,omitempty"`
-	DiscountAmt     float64    `json:"DiscountAmt,omitempty"`
-	DiscountRate    float64    `json:"DiscountRate,omitempty"`
-	ItemAccountRef  *Reference `json:"ItemAccountRef,omitempty"`
-}
-
-// InvoiceGroupLineDetail represents grouped invoice line details.
-type InvoiceGroupLineDetail struct {
-	GroupItemRef *Reference    `json:"GroupItemRef,omitempty"`
-	Quantity     float64       `json:"Quantity,omitempty"`
-	Line         []InvoiceLine `json:"Line,omitempty"`
-}
-
-// InvoiceDescriptionLineDetail represents descriptive invoice line details.
-type InvoiceDescriptionLineDetail struct {
-	TaxCodeRef  *Reference `json:"TaxCodeRef,omitempty"`
-	ServiceDate *Date      `json:"ServiceDate,omitempty"`
-}
-
-// InvoiceSubTotalLineDetail represents subtotal invoice line details.
-type InvoiceSubTotalLineDetail struct{}
 
 // InvoiceLinkedTxn represents transactions linked to an invoice.
 type InvoiceLinkedTxn struct {

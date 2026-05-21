@@ -117,16 +117,16 @@ type SparseUpdateSalesReceiptRequest struct {
 
 // SalesReceiptLine represents a QuickBooks sales receipt line.
 type SalesReceiptLine struct {
-	ID                    string                        `json:"Id,omitempty"`
-	LineNum               float64                       `json:"LineNum,omitempty"`
-	Amount                float64                       `json:"Amount,omitempty"`
-	Description           string                        `json:"Description,omitempty"`
-	DetailType            SalesReceiptLineDetailType    `json:"DetailType,omitempty"`
-	SalesItemLineDetail   *InvoiceSalesItemLineDetail   `json:"SalesItemLineDetail,omitempty"`
-	GroupLineDetail       *InvoiceGroupLineDetail       `json:"GroupLineDetail,omitempty"`
-	DescriptionLineDetail *InvoiceDescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
-	SubTotalLineDetail    *InvoiceSubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
-	TaxLineDetail         *TaxLineDetail                `json:"TaxLineDetail,omitempty"`
+	ID                    string                     `json:"Id,omitempty"`
+	LineNum               float64                    `json:"LineNum,omitempty"`
+	Amount                float64                    `json:"Amount,omitempty"`
+	Description           string                     `json:"Description,omitempty"`
+	DetailType            SalesReceiptLineDetailType `json:"DetailType,omitempty"`
+	SalesItemLineDetail   *SalesItemLineDetail       `json:"SalesItemLineDetail,omitempty"`
+	GroupLineDetail       *GroupLineDetail           `json:"GroupLineDetail,omitempty"`
+	DescriptionLineDetail *DescriptionLineDetail     `json:"DescriptionLineDetail,omitempty"`
+	SubTotalLineDetail    *SubTotalLineDetail        `json:"SubTotalLineDetail,omitempty"`
+	TaxLineDetail         *TaxLineDetail             `json:"TaxLineDetail,omitempty"`
 }
 
 // SalesReceiptDeliveryInfo represents delivery info for a sales receipt.
