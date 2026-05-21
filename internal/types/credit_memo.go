@@ -43,7 +43,7 @@ type CreditMemo struct {
 	SalesTermRef          *Reference           `json:"SalesTermRef,omitempty"`
 	DocNumber             string               `json:"DocNumber,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
-	CustomerMemo          *InvoiceMemo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo         `json:"CustomerMemo,omitempty"`
 	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	ExchangeRate          float64              `json:"ExchangeRate,omitempty"`
@@ -59,7 +59,7 @@ type CreateCreditMemoRequest struct {
 	Line                  []CreditMemoLine     `json:"Line"`
 	TxnDate               *Date                `json:"TxnDate,omitempty"`
 	DocNumber             string               `json:"DocNumber,omitempty"`
-	CustomerMemo          *InvoiceMemo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
@@ -85,7 +85,7 @@ type SparseUpdateCreditMemoRequest struct {
 	Line                  []CreditMemoLine     `json:"Line,omitempty"`
 	TxnDate               *Date                `json:"TxnDate,omitempty"`
 	DocNumber             string               `json:"DocNumber,omitempty"`
-	CustomerMemo          *InvoiceMemo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
@@ -112,5 +112,5 @@ type CreditMemoLine struct {
 	GroupLineDetail       *InvoiceGroupLineDetail       `json:"GroupLineDetail,omitempty"`
 	DescriptionLineDetail *InvoiceDescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
 	SubTotalLineDetail    *InvoiceSubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
-	TaxLineDetail         *TaxLineDetail         `json:"TaxLineDetail,omitempty"`
+	TaxLineDetail         *TaxLineDetail                `json:"TaxLineDetail,omitempty"`
 }

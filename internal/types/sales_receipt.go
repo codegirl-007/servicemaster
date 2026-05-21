@@ -48,7 +48,7 @@ type SalesReceipt struct {
 	DepartmentRef         *Reference                `json:"DepartmentRef,omitempty"`
 	DepositToAccountRef   *Reference                `json:"DepositToAccountRef,omitempty"`
 	PaymentRefNum         string                    `json:"PaymentRefNum,omitempty"`
-	CustomerMemo          *InvoiceMemo              `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                     `json:"CustomerMemo,omitempty"`
 	ApplyTaxAfterDiscount *bool                     `json:"ApplyTaxAfterDiscount,omitempty"`
 	BillAddr              *PhysicalAddress          `json:"BillAddr,omitempty"`
 	ShipAddr              *PhysicalAddress          `json:"ShipAddr,omitempty"`
@@ -78,7 +78,7 @@ type CreateSalesReceiptRequest struct {
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	DepositToAccountRef   *Reference           `json:"DepositToAccountRef,omitempty"`
 	PaymentRefNum         string               `json:"PaymentRefNum,omitempty"`
-	CustomerMemo          *InvoiceMemo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	BillAddr              *PhysicalAddress     `json:"BillAddr,omitempty"`
 	ShipAddr              *PhysicalAddress     `json:"ShipAddr,omitempty"`
@@ -107,7 +107,7 @@ type SparseUpdateSalesReceiptRequest struct {
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	DepositToAccountRef   *Reference           `json:"DepositToAccountRef,omitempty"`
 	PaymentRefNum         string               `json:"PaymentRefNum,omitempty"`
-	CustomerMemo          *InvoiceMemo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	BillAddr              *PhysicalAddress     `json:"BillAddr,omitempty"`
 	ShipAddr              *PhysicalAddress     `json:"ShipAddr,omitempty"`

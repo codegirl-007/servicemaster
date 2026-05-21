@@ -43,7 +43,7 @@ type Estimate struct {
 	AcceptedDate          *Date                `json:"AcceptedDate,omitempty"`
 	TxnStatus             EstimateTxnStatus    `json:"TxnStatus,omitempty"`
 	DocNumber             string               `json:"DocNumber,omitempty"`
-	CustomerMemo          *EstimateMemo        `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo        `json:"CustomerMemo,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
@@ -81,7 +81,7 @@ type CreateEstimateRequest struct {
 	AcceptedDate          *Date                `json:"AcceptedDate,omitempty"`
 	TxnStatus             EstimateTxnStatus    `json:"TxnStatus,omitempty"`
 	DocNumber             string               `json:"DocNumber,omitempty"`
-	CustomerMemo          *EstimateMemo        `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo        `json:"CustomerMemo,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`

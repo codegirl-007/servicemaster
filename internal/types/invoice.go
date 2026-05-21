@@ -46,7 +46,7 @@ type Invoice struct {
 	Balance               float64              `json:"Balance,omitempty"`
 	Deposit               float64              `json:"Deposit,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
-	CustomerMemo          *InvoiceMemo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo         `json:"CustomerMemo,omitempty"`
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
@@ -79,7 +79,7 @@ type CreateInvoiceRequest struct {
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	Deposit               float64              `json:"Deposit,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
-	CustomerMemo          *InvoiceMemo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo         `json:"CustomerMemo,omitempty"`
 	ClassRef              *Reference           `json:"ClassRef,omitempty"`
 	DepartmentRef         *Reference           `json:"DepartmentRef,omitempty"`
 	ProjectRef            *Reference           `json:"ProjectRef,omitempty"`
