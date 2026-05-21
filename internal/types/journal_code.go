@@ -28,7 +28,7 @@ type JournalCode struct {
 	Name        string             `json:"Name,omitempty"`
 	SyncToken   string             `json:"SyncToken,omitempty"`
 	Description string             `json:"Description,omitempty"`
-	CustomField []JournalCodeField `json:"CustomField,omitempty"`
+	CustomField []CustomField `json:"CustomField,omitempty"`
 	Type        JournalCodeType    `json:"Type,omitempty"`
 	MetaData    *MetaData          `json:"MetaData,omitempty"`
 	Active      *bool              `json:"Active,omitempty"`
@@ -41,12 +41,4 @@ type CreateJournalCodeRequest struct {
 	// Name is required.
 	Name string          `json:"Name"`
 	Type JournalCodeType `json:"Type,omitempty"`
-}
-
-// JournalCodeField represents a custom field on a journal code object.
-type JournalCodeField struct {
-	DefinitionID string `json:"DefinitionId,omitempty"`
-	Type         string `json:"Type,omitempty"`
-	StringValue  string `json:"StringValue,omitempty"`
-	Name         string `json:"Name,omitempty"`
 }

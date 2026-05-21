@@ -59,10 +59,3 @@ type SparseUpdateCreditCardPaymentRequest struct {
 	CheckNum             string      `json:"CheckNum,omitempty"`
 	Domain               string      `json:"domain,omitempty"`
 }
-
-// DeletedEntity represents a deleted QBO entity response body.
-type DeletedEntity struct {
-	Status string `json:"status,omitempty"`
-	Domain string `json:"domain,omitempty"`
-	ID     string `json:"Id,omitempty"`
-}

@@ -15,7 +15,7 @@ type CompanyCurrency struct {
 	Code        string                 `json:"Code,omitempty"`
 	SyncToken   string                 `json:"SyncToken,omitempty"`
 	Name        string                 `json:"Name,omitempty"`
-	CustomField []CompanyCurrencyField `json:"CustomField,omitempty"`
+	CustomField []CustomField `json:"CustomField,omitempty"`
 	Active      *bool                  `json:"Active,omitempty"`
 	MetaData    *MetaData              `json:"MetaData,omitempty"`
 	Domain      string                 `json:"domain,omitempty"`
@@ -26,12 +26,4 @@ type CompanyCurrency struct {
 type CreateCompanyCurrencyRequest struct {
 	// Code is required.
 	Code string `json:"Code"`
-}
-
-// CompanyCurrencyField represents a custom field on a company currency object.
-type CompanyCurrencyField struct {
-	DefinitionID string `json:"DefinitionId,omitempty"`
-	Type         string `json:"Type,omitempty"`
-	StringValue  string `json:"StringValue,omitempty"`
-	Name         string `json:"Name,omitempty"`
 }

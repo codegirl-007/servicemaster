@@ -15,7 +15,7 @@ type ExchangeRate struct {
 	AsOfDate           *Date               `json:"AsOfDate,omitempty"`
 	SourceCurrencyCode string              `json:"SourceCurrencyCode,omitempty"`
 	Rate               float64             `json:"Rate,omitempty"`
-	CustomField        []ExchangeRateField `json:"CustomField,omitempty"`
+	CustomField        []CustomField `json:"CustomField,omitempty"`
 	TargetCurrencyCode string              `json:"TargetCurrencyCode,omitempty"`
 	MetaData           *MetaData           `json:"MetaData,omitempty"`
 	Domain             string              `json:"domain,omitempty"`
@@ -33,12 +33,4 @@ type UpdateExchangeRateRequest struct {
 	// Rate is required for update.
 	Rate               float64 `json:"Rate"`
 	TargetCurrencyCode string  `json:"TargetCurrencyCode,omitempty"`
-}
-
-// ExchangeRateField represents a custom field on an exchange rate object.
-type ExchangeRateField struct {
-	DefinitionID string `json:"DefinitionId,omitempty"`
-	Type         string `json:"Type,omitempty"`
-	StringValue  string `json:"StringValue,omitempty"`
-	Name         string `json:"Name,omitempty"`
 }
