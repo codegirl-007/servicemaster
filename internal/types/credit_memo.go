@@ -43,7 +43,7 @@ type CreditMemo struct {
 	SalesTermRef          *Reference           `json:"SalesTermRef,omitempty"`
 	DocNumber             string               `json:"DocNumber,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
-	CustomerMemo          *Memo         `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	TxnTaxDetail          *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	ApplyTaxAfterDiscount *bool                `json:"ApplyTaxAfterDiscount,omitempty"`
 	ExchangeRate          float64              `json:"ExchangeRate,omitempty"`
@@ -103,14 +103,14 @@ type SparseUpdateCreditMemoRequest struct {
 
 // CreditMemoLine represents a QuickBooks credit memo line.
 type CreditMemoLine struct {
-	ID                    string                        `json:"Id,omitempty"`
-	LineNum               float64                       `json:"LineNum,omitempty"`
-	Amount                float64                       `json:"Amount,omitempty"`
-	Description           string                        `json:"Description,omitempty"`
-	DetailType            CreditMemoLineDetailType      `json:"DetailType,omitempty"`
-	SalesItemLineDetail   *InvoiceSalesItemLineDetail   `json:"SalesItemLineDetail,omitempty"`
-	GroupLineDetail       *InvoiceGroupLineDetail       `json:"GroupLineDetail,omitempty"`
-	DescriptionLineDetail *InvoiceDescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
-	SubTotalLineDetail    *InvoiceSubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
-	TaxLineDetail         *TaxLineDetail                `json:"TaxLineDetail,omitempty"`
+	ID                    string                   `json:"Id,omitempty"`
+	LineNum               float64                  `json:"LineNum,omitempty"`
+	Amount                float64                  `json:"Amount,omitempty"`
+	Description           string                   `json:"Description,omitempty"`
+	DetailType            CreditMemoLineDetailType `json:"DetailType,omitempty"`
+	SalesItemLineDetail   *SalesItemLineDetail     `json:"SalesItemLineDetail,omitempty"`
+	GroupLineDetail       *GroupLineDetail         `json:"GroupLineDetail,omitempty"`
+	DescriptionLineDetail *DescriptionLineDetail   `json:"DescriptionLineDetail,omitempty"`
+	SubTotalLineDetail    *SubTotalLineDetail      `json:"SubTotalLineDetail,omitempty"`
+	TaxLineDetail         *TaxLineDetail           `json:"TaxLineDetail,omitempty"`
 }

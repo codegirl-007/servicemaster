@@ -43,7 +43,7 @@ type Estimate struct {
 	AcceptedDate          *Date                `json:"AcceptedDate,omitempty"`
 	TxnStatus             EstimateTxnStatus    `json:"TxnStatus,omitempty"`
 	DocNumber             string               `json:"DocNumber,omitempty"`
-	CustomerMemo          *Memo        `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
@@ -81,7 +81,7 @@ type CreateEstimateRequest struct {
 	AcceptedDate          *Date                `json:"AcceptedDate,omitempty"`
 	TxnStatus             EstimateTxnStatus    `json:"TxnStatus,omitempty"`
 	DocNumber             string               `json:"DocNumber,omitempty"`
-	CustomerMemo          *Memo        `json:"CustomerMemo,omitempty"`
+	CustomerMemo          *Memo                `json:"CustomerMemo,omitempty"`
 	PrivateNote           string               `json:"PrivateNote,omitempty"`
 	BillEmail             *EmailAddress        `json:"BillEmail,omitempty"`
 	EmailStatus           EmailStatus          `json:"EmailStatus,omitempty"`
@@ -140,29 +140,16 @@ type SparseUpdateEstimateRequest struct {
 
 // EstimateLine represents a QuickBooks estimate line.
 type EstimateLine struct {
-	ID                    string                         `json:"Id,omitempty"`
-	LineNum               float64                        `json:"LineNum,omitempty"`
-	Description           string                         `json:"Description,omitempty"`
-	Amount                float64                        `json:"Amount,omitempty"`
-	DetailType            EstimateLineDetailType         `json:"DetailType,omitempty"`
-	SalesItemLineDetail   *EstimateSalesItemLineDetail   `json:"SalesItemLineDetail,omitempty"`
-	GroupLineDetail       *EstimateGroupLineDetail       `json:"GroupLineDetail,omitempty"`
-	DescriptionLineDetail *EstimateDescriptionLineDetail `json:"DescriptionLineDetail,omitempty"`
-	SubTotalLineDetail    *EstimateSubTotalLineDetail    `json:"SubTotalLineDetail,omitempty"`
-	TaxLineDetail         *TaxLineDetail                 `json:"TaxLineDetail,omitempty"`
-}
-
-// EstimateSalesItemLineDetail represents sales-item estimate line details.
-type EstimateSalesItemLineDetail struct {
-	ItemRef         *Reference `json:"ItemRef,omitempty"`
-	Qty             float64    `json:"Qty,omitempty"`
-	UnitPrice       float64    `json:"UnitPrice,omitempty"`
-	TaxCodeRef      *Reference `json:"TaxCodeRef,omitempty"`
-	ServiceDate     *Date      `json:"ServiceDate,omitempty"`
-	ClassRef        *Reference `json:"ClassRef,omitempty"`
-	TaxInclusiveAmt float64    `json:"TaxInclusiveAmt,omitempty"`
-	DiscountAmt     float64    `json:"DiscountAmt,omitempty"`
-	DiscountRate    float64    `json:"DiscountRate,omitempty"`
+	ID                    string                   `json:"Id,omitempty"`
+	LineNum               float64                  `json:"LineNum,omitempty"`
+	Description           string                   `json:"Description,omitempty"`
+	Amount                float64                  `json:"Amount,omitempty"`
+	DetailType            EstimateLineDetailType   `json:"DetailType,omitempty"`
+	SalesItemLineDetail   *SalesItemLineDetail     `json:"SalesItemLineDetail,omitempty"`
+	GroupLineDetail       *EstimateGroupLineDetail `json:"GroupLineDetail,omitempty"`
+	DescriptionLineDetail *DescriptionLineDetail   `json:"DescriptionLineDetail,omitempty"`
+	SubTotalLineDetail    *SubTotalLineDetail      `json:"SubTotalLineDetail,omitempty"`
+	TaxLineDetail         *TaxLineDetail           `json:"TaxLineDetail,omitempty"`
 }
 
 // EstimateGroupLineDetail represents grouped estimate line details.
@@ -171,12 +158,3 @@ type EstimateGroupLineDetail struct {
 	Quantity     float64        `json:"Quantity,omitempty"`
 	Line         []EstimateLine `json:"Line,omitempty"`
 }
-
-// EstimateDescriptionLineDetail represents descriptive estimate line details.
-type EstimateDescriptionLineDetail struct {
-	TaxCodeRef  *Reference `json:"TaxCodeRef,omitempty"`
-	ServiceDate *Date      `json:"ServiceDate,omitempty"`
-}
-
-// EstimateSubTotalLineDetail represents subtotal estimate line details.
-type EstimateSubTotalLineDetail struct{}
