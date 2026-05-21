@@ -83,3 +83,18 @@ type NameValue struct {
 	Name  string `json:"Name"`
 	Value string `json:"Value"`
 }
+
+// DeletedEntity represents a deleted QBO entity response body.
+type DeletedEntity struct {
+	Status string `json:"status,omitempty"`
+	Domain string `json:"domain,omitempty"`
+	ID     string `json:"Id,omitempty"`
+}
+
+// CustomField represents a custom field value on a QuickBooks entity.
+type CustomField struct {
+	DefinitionID string `json:"DefinitionId,omitempty"`
+	Type         string `json:"Type,omitempty"`
+	StringValue  string `json:"StringValue,omitempty"`
+	Name         string `json:"Name,omitempty"`
+}

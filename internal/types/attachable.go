@@ -79,7 +79,7 @@ type AttachableRef struct {
 	IncludeOnSend *bool                   `json:"IncludeOnSend,omitempty"`
 	LineInfo      string                  `json:"LineInfo,omitempty"`
 	NoRefOnly     *bool                   `json:"NoRefOnly,omitempty"`
-	CustomField   []AttachableCustomField `json:"CustomField,omitempty"`
+	CustomField   []CustomField `json:"CustomField,omitempty"`
 	Inactive      *bool                   `json:"Inactive,omitempty"`
 	EntityRef     *AttachableEntityRef    `json:"EntityRef,omitempty"`
 }
@@ -89,12 +89,4 @@ type AttachableEntityRef struct {
 	Type  string `json:"type,omitempty"`
 	Value string `json:"value,omitempty"`
 	Name  string `json:"name,omitempty"`
-}
-
-// AttachableCustomField represents a custom field on an attachable reference.
-type AttachableCustomField struct {
-	DefinitionID string `json:"DefinitionId,omitempty"`
-	Type         string `json:"Type,omitempty"`
-	StringValue  string `json:"StringValue,omitempty"`
-	Name         string `json:"Name,omitempty"`
 }
