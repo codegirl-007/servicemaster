@@ -393,3 +393,28 @@ We are not building software for ourselves.
 We are building for busy, non-technical operators who are trying to run real service businesses under pressure.
 
 The product wins if it saves time, reduces chaos, earns trust, and stays simple as customers grow.
+
+## Cursor Cloud specific instructions
+
+### Services
+
+| Service | How to start | Notes |
+|---|---|---|
+| PostgreSQL 16 | `sudo docker start servicemaster-postgres` (or create with `docker run` per README) | Must be running before the API server or migrations |
+| API server | `make run` (from repo root) | Requires `.env` with `DATABASE_URL` and `TOKEN_ENCRYPTION_KEY_BASE64` |
+
+### Quick start
+
+1. Ensure Docker daemon is running: `sudo dockerd &>/dev/null &` (wait ~3s)
+2. Start Postgres: `sudo docker start servicemaster-postgres || sudo docker run --name servicemaster-postgres -e POSTGRES_USER=servicemaster -e POSTGRES_PASSWORD=servicemaster -e POSTGRES_DB=servicemaster_dev -p 5432:5432 -d postgres:16`
+3. Run migrations: `goose -dir db/migrations postgres "$DATABASE_URL" up` (goose is on `$GOPATH/bin`)
+4. Start API: `make run`
+5. Verify: `curl localhost:8080/healthz` → `ok`, `curl localhost:8080/readyz` → `ready`
+
+### Gotchas
+
+- Docker runs inside a Firecracker VM. The daemon needs `fuse-overlayfs` storage driver and `iptables-legacy`. These are configured in `/etc/docker/daemon.json` and via `update-alternatives`.
+- The `.env` file is gitignored. Copy `.env.example` and generate `TOKEN_ENCRYPTION_KEY_BASE64` with `openssl rand -base64 32`.
+- `goose` and `sqlc` are installed via `go install` to `$GOPATH/bin`. Ensure `$GOPATH/bin` is on `$PATH`.
+- CI runs only `make vet` and `make test` (no DB-dependent tests currently).
+- The only test with assertions is in `internal/platform/crypto` (AES-256-GCM round-trip).
