@@ -6,12 +6,13 @@ endif
 MIGRATIONS_DIR := db/migrations
 DB_DRIVER := postgres
 
-.PHONY: help run test sqlc migrate-status migrate-up migrate-down migrate-reset migrate-create
+.PHONY: help run test vet sqlc migrate-status migrate-up migrate-down migrate-reset migrate-create
 
 help:
 	@echo "Available targets:"
 	@echo "  make run                 Run the API server"
 	@echo "  make test                Run Go tests"
+	@echo "  make vet                 Run go vet"
 	@echo "  make sqlc                Generate sqlc code"
 	@echo "  make migrate-status      Show migration status"
 	@echo "  make migrate-up          Apply all pending migrations"
@@ -24,6 +25,9 @@ run:
 
 test:
 	go test ./...
+
+vet:
+	go vet ./...
 
 sqlc:
 	sqlc generate
