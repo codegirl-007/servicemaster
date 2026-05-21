@@ -418,3 +418,9 @@ The product wins if it saves time, reduces chaos, earns trust, and stays simple 
 - `goose` and `sqlc` are installed via `go install` to `$GOPATH/bin`. Ensure `$GOPATH/bin` is on `$PATH`.
 - CI runs only `make vet` and `make test` (no DB-dependent tests currently).
 - The only test with assertions is in `internal/platform/crypto` (AES-256-GCM round-trip).
+
+### Git conventions
+
+- Branch names: lowercase hyphenated description of what the branch does (e.g. `add-cloud-agent-instructions`). No prefixes like `cursor/`, no random suffixes.
+- Commit messages: always lowercase (e.g. `add cursor cloud instructions to agents.md`).
+- PR bodies: leave blank.
