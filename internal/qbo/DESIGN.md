@@ -10,7 +10,7 @@ This package is a **spike** for COD-29. It is not wired into import jobs, OAuth 
 
 Introduce a thin `internal/qbo` HTTP client that:
 
-1. Accepts credentials through a `TokenSource` interface (implemented later by a token service using `store` + `crypto`).
+1. Accepts credentials through a `TokenSource` interface (implemented by an adapter over `internal/qbo/tokens.Service` — see [PR #97](https://github.com/codegirl-007/servicemaster/pull/97)).
 2. Owns request construction, Intuit headers, retry boundaries, and response decoding.
 3. Exposes pagination helpers that append `STARTPOSITION` / `MAXRESULTS` to SQL queries.
 4. Maps HTTP and Fault payloads into typed errors import jobs can branch on.
@@ -27,6 +27,75 @@ Import orchestration (batch creation, staging writes, review tasks) should depen
 | `pagination.go` | Query page decoding and `PageIterator` |
 | `client.go` | HTTP client, `Query`, `QueryPages` |
 | `client_test.go` | `httptest` coverage for auth, retry, pagination, errors |
+| `tokens/` (PR #97, WIP) | Encrypted `Store` / `Load` for `qbo_connection_tokens` — not HTTP |
+
+## Relationship to PR #97 (token service, WIP)
+
+[PR #97](https://github.com/codegirl-007/servicemaster/pull/97) adds `internal/qbo/tokens.Service` with:
+
+- `Store` — encrypt and upsert access/refresh tokens after OAuth callback
+- `Load` — decrypt and return `tokens.Tokens` (includes `Version` for optimistic locking)
+
+**We do not modify PR #97.** This spike (#99) assumes it merges first (or in parallel) and fills the gap *above* persistence:
+
+```
+  OAuth callback ──► tokens.Service.Store
+                            │
+  import job ──► TokenSource adapter ──► tokens.Service.Load (+ refresh when added)
+                            │
+                     qbo.Client.Do / QueryPages
+```
+
+### Division of responsibility
+
+| Concern | Owner | PR |
+|---------|--------|-----|
+| Encrypt tokens, read/write `qbo_connection_tokens` | `tokens.Service` | #97 |
+| Implement `qbo.TokenSource` for `Client` | New adapter (e.g. `tokens.Source`) | After #97 |
+| Intuit OAuth refresh HTTP, bump `version` | Same adapter + connection events | After #97 |
+| HTTP query transport, pagination, retries | `qbo.Client` | #99 (this spike) |
+
+PR #97 today is **persistence only** — no `AccessToken`, no expiry check, no refresh. That is correct: refresh must not live in `Store`/`Load` alone, or import code would bypass the `TokenSource` boundary and call `Load` directly with stale tokens.
+
+### Planned `TokenSource` adapter (not in PR #97)
+
+After #97 merges, a small type in `internal/qbo/tokens` (or `internal/qbo`) should implement `qbo.TokenSource`:
+
+```go
+// Pseudocode — follow-up PR after #97, not part of either open spike.
+type Source struct {
+    svc          *tokens.Service
+    connectionID uuid.UUID
+    refresher    OAuthRefresher // Intuit token endpoint; injected for tests
+}
+
+func (s *Source) AccessToken(ctx context.Context) (string, error) {
+    tok, err := s.svc.Load(ctx, s.connectionID)
+    if err != nil {
+        return "", err
+    }
+    if time.Now().Before(tok.AccessExpiresAt.Add(-refreshSkew)) {
+        return tok.AccessToken, nil
+    }
+    // Use tok.RefreshToken via refresher, then svc.Store with version check.
+    // On failure: return ErrUnauthorized; connection worker sets reconnect_required.
+}
+```
+
+`qbo.Client` stays unchanged: it only calls `TokenSource.AccessToken` once per `Do` (see `client.go` comments).
+
+### Merge order suggestion
+
+1. **#97** — token `Store`/`Load` (WIP: fix compile nits, add tests, no scope creep).
+2. **#99** — client foundation (this spike; do not merge as-is).
+3. **Follow-up** — `tokens.Source` implementing `TokenSource` + OAuth refresh.
+4. **Follow-up** — first import job wiring `Client` + `Source` + staging.
+
+### Gaps to close after both land
+
+- `GetQBOConnectionTokensForUpdate` + `version` check on refresh write (PR #97 uses `Load` only today).
+- Proactive refresh before expiry (skew window), not only reactive 401.
+- Wire `tokens.Encryptor` to `internal/platform/crypto.Encryptor` (same shape, duplicate interface in #97 for now).
 
 ## Auth-aware client shape
 
@@ -45,7 +114,7 @@ type Config struct {
 
 - Access tokens expire; refresh belongs in a dedicated service that updates `qbo_connection_tokens` and bumps `version` for optimistic locking.
 - The client stays stateless and safe to share across goroutines.
-- Tests inject `StaticTokenSource`; production injects a store-backed implementation.
+- Tests inject `StaticTokenSource`; production injects a `TokenSource` adapter over `tokens.Service` (PR #97).
 
 **401 handling boundary:** The client does **not** auto-refresh on 401. It returns `ErrUnauthorized` (or an `APIError` wrapping it). The token service / connection state machine decides whether to refresh, mark `reconnect_required`, or fail the import batch. Mixing refresh into the transport layer creates inconsistent retry behavior and hides audit-relevant connection transitions.
 
@@ -98,7 +167,8 @@ Default: 3 attempts, exponential backoff from 500ms with 20% jitter, capped at 3
 ## What stays outside this package
 
 - OAuth authorization URL and callback handling
-- Token encryption/decryption and DB persistence
+- Token encryption/decryption and DB persistence (**PR #97** `tokens.Service`; not `Client`)
+- OAuth refresh and `TokenSource` adapter (**follow-up** after #97)
 - Import batch lifecycle, staging tables, review queues
 - Mapping `types.Customer` → staging models
 - CDC / change-data-capture cursor management
@@ -119,7 +189,7 @@ Default: 3 attempts, exponential backoff from 500ms with 20% jitter, capped at 3
 
 ## Later version
 
-- Store-backed `TokenSource` with refresh and `version` checks
+- `tokens.Source` implementing `TokenSource` (Load via PR #97 + refresh + `version` checks)
 - MinorVersion from tenant preferences
 - Metrics (request count, 429 rate, latency)
 - Optional request logging with redacted tokens
@@ -129,11 +199,12 @@ Default: 3 attempts, exponential backoff from 500ms with 20% jitter, capped at 3
 ## Example usage (future import job)
 
 ```go
-tokens := token.NewStoreSource(store, encryptor, connectionID)
+tokenSvc := tokens.NewService(queries, encryptor)
+tokenSrc := tokens.NewSource(tokenSvc, connectionID, refresher) // follow-up after PR #97
 client, err := qbo.NewClient(qbo.Config{
     BaseURL:     qbo.SandboxBaseURL(realmID),
     RealmID:     realmID,
-    TokenSource: tokens,
+    TokenSource: tokenSrc,
 })
 iter, err := client.QueryPages(ctx, "SELECT * FROM Customer", 100)
 for iter.Next(ctx) {

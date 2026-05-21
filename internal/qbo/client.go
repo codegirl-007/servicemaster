@@ -19,6 +19,9 @@ const (
 //
 // One Client instance maps to one connected QBO company (realm). Import workers
 // should construct a client per connection, not share one client across tenants.
+//
+// Wire with a TokenSource adapter over internal/qbo/tokens.Service (see PR #97),
+// not with tokens.Service alone — Load does not refresh expired access tokens.
 type Config struct {
 	// BaseURL is the company API root, e.g. SandboxBaseURL(realmID).
 	BaseURL string

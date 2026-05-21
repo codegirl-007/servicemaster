@@ -15,11 +15,17 @@ import "context"
 // We use an interface instead of passing a string because tokens expire mid-import.
 // A long-running customer sync cannot hold one access token for its whole lifetime.
 //
-// Production flow (not implemented here):
-//  1. Read encrypted row from qbo_connection_tokens.
-//  2. If access token is still valid, decrypt and return.
-//  3. If expired, refresh against Intuit, encrypt new tokens, bump version.
-//  4. On refresh failure, mark connection reconnect_required and return ErrUnauthorized.
+// Production persistence lives in internal/qbo/tokens (PR #97, WIP):
+//   - tokens.Service.Store after OAuth callback
+//   - tokens.Service.Load to decrypt tokens.Tokens (includes Version)
+//
+// A separate type should implement TokenSource on top of that service (follow-up
+// PR, not PR #97): check AccessExpiresAt, refresh via Intuit when needed, Store
+// with version guard, return ErrUnauthorized if refresh fails so the connection
+// worker can set reconnect_required.
+//
+// qbo.Client must not call tokens.Service directly — only TokenSource — so HTTP
+// retries never skip the refresh boundary.
 //
 // Keeping refresh out of Client.Do is intentional: transport retries must not
 // silently re-auth, or we get duplicate refresh calls, lost audit events, and
