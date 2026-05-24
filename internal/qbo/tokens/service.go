@@ -102,3 +102,36 @@ func (s *Service) Load(ctx context.Context, connectionID uuid.UUID) (Tokens, err
 	return tokens, nil
 }
 
+func (s *Service) ReplaceIfVersion(
+	ctx context.Context,
+	connectionID uuid.UUID,
+	version int64,
+	accessToken string,
+	refreshToken string,
+	accessExpiresAt time.Time,
+	refreshExpiresAt time.Time,
+) error {
+	encryptedAccessToken, err := s.encryptor.Encrypt([]byte(accessToken))
+	if err != nil {
+		return fmt.Errorf("encrypt access token: %w", err)
+	}
+
+	encryptedRefreshToken, err := s.encryptor.Encrypt([]byte(refreshToken))
+	if err != nil {
+		return fmt.Errorf("encrypt refresh token: %w", err)
+	}
+
+	_, err = s.queries.ReplaceQBOConnectionTokensIfVersion(ctx, store.ReplaceQBOConnectionTokensIfVersionParams{
+		QboConnectionID:  connectionID,
+		Version:          version,
+		AccessToken:      encryptedAccessToken,
+		RefreshToken:     encryptedRefreshToken,
+		AccessExpiresAt:  accessExpiresAt,
+		RefreshExpiresAt: refreshExpiresAt,
+	})
+	if err != nil != nil {
+		return fmt.Errorf("replace qbo connection tokens: %w", err)
+	}
+
+	return nil
+}
