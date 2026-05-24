@@ -2,12 +2,14 @@ package tokens
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"servicemaster/internal/store"
 	"time"
 
-	"github.com/google/uuid"
 	"database/sql"
+
+	"github.com/google/uuid"
 )
 
 type Encryptor interface {
@@ -28,6 +30,8 @@ type Tokens struct {
 	RefreshExpiresAt time.Time
 	Version          int64
 }
+
+var ErrConcurrentRefresh = errors.New("qbo token refresh lost concurrent update")
 
 func NewService(queries *store.Queries, encryptor Encryptor) *Service {
 	return &Service{
@@ -124,12 +128,22 @@ func (s *Service) ReplaceIfVersion(
 	_, err = s.queries.ReplaceQBOConnectionTokensIfVersion(ctx, store.ReplaceQBOConnectionTokensIfVersionParams{
 		QboConnectionID:  connectionID,
 		Version:          version,
-		AccessToken:      encryptedAccessToken,
-		RefreshToken:     encryptedRefreshToken,
-		AccessExpiresAt:  accessExpiresAt,
-		RefreshExpiresAt: refreshExpiresAt,
+		EncryptedAccessToken:      encryptedAccessToken,
+		EncryptedRefreshToken:     encryptedRefreshToken,
+		AccessTokenExpiresAt:  accessExpiresAt,
+		RefreshTokenExpiresAt: sql.NullTime{
+			Time: refreshExpiresAt,
+			Valid: refreshExpiresAt.IsZero(),
+		},
+		TokenType: "bearer",
+		Scope: sql.NullString{},
 	})
-	if err != nil != nil {
+
+	if errors.Is(err, sql.ErrNoRows) {
+		return ErrConcurrentRefresh
+	}
+
+	if err != nil {
 		return fmt.Errorf("replace qbo connection tokens: %w", err)
 	}
 
