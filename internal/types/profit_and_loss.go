@@ -1,24 +1,6 @@
 // Package types contains transport types for external integrations.
 package types
 
-// ProfitAndLossSummarizeColumnBy is an alias for SummarizeColumnBy.
-type ProfitAndLossSummarizeColumnBy = SummarizeColumnBy
-
-const (
-	ProfitAndLossSummarizeColumnByTotal               = SummarizeColumnByTotal
-	ProfitAndLossSummarizeColumnByMonth               = SummarizeColumnByMonth
-	ProfitAndLossSummarizeColumnByWeek                = SummarizeColumnByWeek
-	ProfitAndLossSummarizeColumnByDays                = SummarizeColumnByDays
-	ProfitAndLossSummarizeColumnByQuarter             = SummarizeColumnByQuarter
-	ProfitAndLossSummarizeColumnByYear                = SummarizeColumnByYear
-	ProfitAndLossSummarizeColumnByCustomers           = SummarizeColumnByCustomers
-	ProfitAndLossSummarizeColumnByVendors             = SummarizeColumnByVendors
-	ProfitAndLossSummarizeColumnByClasses             = SummarizeColumnByClasses
-	ProfitAndLossSummarizeColumnByDepartments         = SummarizeColumnByDepartments
-	ProfitAndLossSummarizeColumnByEmployees           = SummarizeColumnByEmployees
-	ProfitAndLossSummarizeColumnByProductsAndServices = SummarizeColumnByProductsAndServices
-)
-
 // ProfitAndLossReport represents the QuickBooks profit and loss report response.
 type ProfitAndLossReport struct {
 	Header  ReportHeader  `json:"Header"`
