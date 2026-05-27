@@ -1,22 +1,22 @@
 // Package types contains transport types for external integrations.
 package types
 
-// ProfitAndLossSummarizeColumnBy represents the documented summarize_column_by values.
-type ProfitAndLossSummarizeColumnBy string
+// ProfitAndLossSummarizeColumnBy is an alias for SummarizeColumnBy.
+type ProfitAndLossSummarizeColumnBy = SummarizeColumnBy
 
 const (
-	ProfitAndLossSummarizeColumnByTotal               ProfitAndLossSummarizeColumnBy = "Total"
-	ProfitAndLossSummarizeColumnByMonth               ProfitAndLossSummarizeColumnBy = "Month"
-	ProfitAndLossSummarizeColumnByWeek                ProfitAndLossSummarizeColumnBy = "Week"
-	ProfitAndLossSummarizeColumnByDays                ProfitAndLossSummarizeColumnBy = "Days"
-	ProfitAndLossSummarizeColumnByQuarter             ProfitAndLossSummarizeColumnBy = "Quarter"
-	ProfitAndLossSummarizeColumnByYear                ProfitAndLossSummarizeColumnBy = "Year"
-	ProfitAndLossSummarizeColumnByCustomers           ProfitAndLossSummarizeColumnBy = "Customers"
-	ProfitAndLossSummarizeColumnByVendors             ProfitAndLossSummarizeColumnBy = "Vendors"
-	ProfitAndLossSummarizeColumnByClasses             ProfitAndLossSummarizeColumnBy = "Classes"
-	ProfitAndLossSummarizeColumnByDepartments         ProfitAndLossSummarizeColumnBy = "Departments"
-	ProfitAndLossSummarizeColumnByEmployees           ProfitAndLossSummarizeColumnBy = "Employees"
-	ProfitAndLossSummarizeColumnByProductsAndServices ProfitAndLossSummarizeColumnBy = "ProductsAndServices"
+	ProfitAndLossSummarizeColumnByTotal               = SummarizeColumnByTotal
+	ProfitAndLossSummarizeColumnByMonth               = SummarizeColumnByMonth
+	ProfitAndLossSummarizeColumnByWeek                = SummarizeColumnByWeek
+	ProfitAndLossSummarizeColumnByDays                = SummarizeColumnByDays
+	ProfitAndLossSummarizeColumnByQuarter             = SummarizeColumnByQuarter
+	ProfitAndLossSummarizeColumnByYear                = SummarizeColumnByYear
+	ProfitAndLossSummarizeColumnByCustomers           = SummarizeColumnByCustomers
+	ProfitAndLossSummarizeColumnByVendors             = SummarizeColumnByVendors
+	ProfitAndLossSummarizeColumnByClasses             = SummarizeColumnByClasses
+	ProfitAndLossSummarizeColumnByDepartments         = SummarizeColumnByDepartments
+	ProfitAndLossSummarizeColumnByEmployees           = SummarizeColumnByEmployees
+	ProfitAndLossSummarizeColumnByProductsAndServices = SummarizeColumnByProductsAndServices
 )
 
 // ProfitAndLossReport represents the QuickBooks profit and loss report response.
@@ -32,7 +32,7 @@ type ProfitAndLossQuery struct {
 	EndDate           *Date
 	DateMacro         ReportDateMacro
 	AccountingMethod  ReportBasis
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	SortOrder         ReportSortOrder
 	Customer          string
 	Vendor            string
