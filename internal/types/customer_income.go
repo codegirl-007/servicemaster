@@ -17,7 +17,7 @@ type CustomerIncomeQuery struct {
 	DateMacro         ReportDateMacro
 	Class             string
 	SortOrder         ReportSortOrder
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	Department        string
 	Vendor            string
 	StartDate         *Date
