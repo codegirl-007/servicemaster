@@ -15,5 +15,5 @@ type InventoryValuationSummaryQuery struct {
 	Item              string
 	ReportDate        *Date
 	SortOrder         ReportSortOrder
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 }
