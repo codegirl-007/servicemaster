@@ -17,7 +17,7 @@ type SalesByDepartmentQuery struct {
 	Class             string
 	Item              string
 	SortOrder         ReportSortOrder
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	Department        string
 	StartDate         *Date
 }
