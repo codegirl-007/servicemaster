@@ -16,7 +16,7 @@ type VendorBalanceQuery struct {
 	APPaid            string
 	ReportDate        *Date
 	SortOrder         ReportSortOrder
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	Department        string
 	Vendor            string
 }
