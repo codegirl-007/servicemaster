@@ -98,3 +98,21 @@ type CustomField struct {
 	StringValue  string `json:"StringValue,omitempty"`
 	Name         string `json:"Name,omitempty"`
 }
+
+// SummarizeColumnBy represents the documented summarize_column_by query parameter values.
+type SummarizeColumnBy string
+
+const (
+	SummarizeColumnByTotal               SummarizeColumnBy = "Total"
+	SummarizeColumnByMonth               SummarizeColumnBy = "Month"
+	SummarizeColumnByWeek                SummarizeColumnBy = "Week"
+	SummarizeColumnByDays                SummarizeColumnBy = "Days"
+	SummarizeColumnByQuarter             SummarizeColumnBy = "Quarter"
+	SummarizeColumnByYear                SummarizeColumnBy = "Year"
+	SummarizeColumnByCustomers           SummarizeColumnBy = "Customers"
+	SummarizeColumnByVendors             SummarizeColumnBy = "Vendors"
+	SummarizeColumnByClasses             SummarizeColumnBy = "Classes"
+	SummarizeColumnByDepartments         SummarizeColumnBy = "Departments"
+	SummarizeColumnByEmployees           SummarizeColumnBy = "Employees"
+	SummarizeColumnByProductsAndServices SummarizeColumnBy = "ProductsAndServices"
+)

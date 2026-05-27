@@ -16,7 +16,7 @@ type SalesByClassSummaryQuery struct {
 	DateMacro         ReportDateMacro
 	Class             string
 	Item              string
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	Department        string
 	StartDate         *Date
 }
