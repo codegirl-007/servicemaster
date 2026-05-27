@@ -76,12 +76,12 @@ type CreateAttachableRequest struct {
 
 // AttachableRef represents a reference from an attachable to another object.
 type AttachableRef struct {
-	IncludeOnSend *bool                   `json:"IncludeOnSend,omitempty"`
-	LineInfo      string                  `json:"LineInfo,omitempty"`
-	NoRefOnly     *bool                   `json:"NoRefOnly,omitempty"`
-	CustomField   []CustomField `json:"CustomField,omitempty"`
-	Inactive      *bool                   `json:"Inactive,omitempty"`
-	EntityRef     *AttachableEntityRef    `json:"EntityRef,omitempty"`
+	IncludeOnSend *bool                `json:"IncludeOnSend,omitempty"`
+	LineInfo      string               `json:"LineInfo,omitempty"`
+	NoRefOnly     *bool                `json:"NoRefOnly,omitempty"`
+	CustomField   []CustomField        `json:"CustomField,omitempty"`
+	Inactive      *bool                `json:"Inactive,omitempty"`
+	EntityRef     *AttachableEntityRef `json:"EntityRef,omitempty"`
 }
 
 // AttachableEntityRef represents the linked object reference for an attachable.

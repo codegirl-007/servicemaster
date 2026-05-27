@@ -62,7 +62,6 @@ type Memo struct {
 	Value string `json:"value,omitempty"`
 }
 
-
 // EmailAddress represents a QuickBooks email address object.
 type EmailAddress struct {
 	Address string `json:"Address,omitempty"`

@@ -11,15 +11,15 @@ type ExchangeRateResponse struct {
 
 // ExchangeRate represents a QuickBooks exchange rate object.
 type ExchangeRate struct {
-	SyncToken          string              `json:"SyncToken,omitempty"`
-	AsOfDate           *Date               `json:"AsOfDate,omitempty"`
-	SourceCurrencyCode string              `json:"SourceCurrencyCode,omitempty"`
-	Rate               float64             `json:"Rate,omitempty"`
+	SyncToken          string        `json:"SyncToken,omitempty"`
+	AsOfDate           *Date         `json:"AsOfDate,omitempty"`
+	SourceCurrencyCode string        `json:"SourceCurrencyCode,omitempty"`
+	Rate               float64       `json:"Rate,omitempty"`
 	CustomField        []CustomField `json:"CustomField,omitempty"`
-	TargetCurrencyCode string              `json:"TargetCurrencyCode,omitempty"`
-	MetaData           *MetaData           `json:"MetaData,omitempty"`
-	Domain             string              `json:"domain,omitempty"`
-	Sparse             *bool               `json:"sparse,omitempty"`
+	TargetCurrencyCode string        `json:"TargetCurrencyCode,omitempty"`
+	MetaData           *MetaData     `json:"MetaData,omitempty"`
+	Domain             string        `json:"domain,omitempty"`
+	Sparse             *bool         `json:"sparse,omitempty"`
 }
 
 // UpdateExchangeRateRequest represents the documented update exchange rate payload.

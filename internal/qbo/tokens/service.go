@@ -41,11 +41,11 @@ func NewService(queries *store.Queries, encryptor Encryptor) *Service {
 }
 
 func (s *Service) Store(
-	ctx context.Context, 
-	connectionID uuid.UUID, 
+	ctx context.Context,
+	connectionID uuid.UUID,
 	tenantID uuid.UUID,
-	accessToken string, 
-	refreshToken string, 
+	accessToken string,
+	refreshToken string,
 	accessExpiresAt time.Time,
 	refreshExpiresAt time.Time) error {
 
@@ -60,13 +60,13 @@ func (s *Service) Store(
 	}
 
 	_, err = s.queries.UpsertQBOConnectionTokens(ctx, store.UpsertQBOConnectionTokensParams{
-		QboConnectionID: connectionID,
-		TenantID: tenantID,
-		EncryptedAccessToken: encryptedAccessToken,
+		QboConnectionID:       connectionID,
+		TenantID:              tenantID,
+		EncryptedAccessToken:  encryptedAccessToken,
 		EncryptedRefreshToken: encryptedRefreshToken,
-		AccessTokenExpiresAt: accessExpiresAt,
+		AccessTokenExpiresAt:  accessExpiresAt,
 		RefreshTokenExpiresAt: sql.NullTime{
-			Time: refreshExpiresAt,
+			Time:  refreshExpiresAt,
 			Valid: true,
 		},
 	})
@@ -79,11 +79,11 @@ func (s *Service) Store(
 }
 
 func (s *Service) Load(ctx context.Context, connectionID uuid.UUID) (Tokens, error) {
-	row, err := s.queries.GetQBOConnectionTokens(ctx, connectionID);
+	row, err := s.queries.GetQBOConnectionTokens(ctx, connectionID)
 	if err != nil {
 		return Tokens{}, fmt.Errorf("GetQBOConnectionTokens: %w", err)
 	}
-	
+
 	accessToken, err := s.encryptor.Decrypt(row.EncryptedAccessToken)
 	if err != nil {
 		return Tokens{}, fmt.Errorf("decrypt access token: %w", err)
@@ -95,12 +95,12 @@ func (s *Service) Load(ctx context.Context, connectionID uuid.UUID) (Tokens, err
 	}
 
 	tokens := Tokens{
-		ConnectionID:    row.QboConnectionID,
-		AccessToken:     string(accessToken),
-		RefreshToken:    string(refreshToken),
-		AccessExpiresAt: row.AccessTokenExpiresAt,
+		ConnectionID:     row.QboConnectionID,
+		AccessToken:      string(accessToken),
+		RefreshToken:     string(refreshToken),
+		AccessExpiresAt:  row.AccessTokenExpiresAt,
 		RefreshExpiresAt: row.RefreshTokenExpiresAt.Time,
-		Version:         row.Version,
+		Version:          row.Version,
 	}
 
 	return tokens, nil
@@ -126,17 +126,17 @@ func (s *Service) ReplaceIfVersion(
 	}
 
 	_, err = s.queries.ReplaceQBOConnectionTokensIfVersion(ctx, store.ReplaceQBOConnectionTokensIfVersionParams{
-		QboConnectionID:  connectionID,
-		Version:          version,
-		EncryptedAccessToken:      encryptedAccessToken,
-		EncryptedRefreshToken:     encryptedRefreshToken,
+		QboConnectionID:       connectionID,
+		Version:               version,
+		EncryptedAccessToken:  encryptedAccessToken,
+		EncryptedRefreshToken: encryptedRefreshToken,
 		AccessTokenExpiresAt:  accessExpiresAt,
 		RefreshTokenExpiresAt: sql.NullTime{
-			Time: refreshExpiresAt,
+			Time:  refreshExpiresAt,
 			Valid: refreshExpiresAt.IsZero(),
 		},
 		TokenType: "bearer",
-		Scope: sql.NullString{},
+		Scope:     sql.NullString{},
 	})
 
 	if errors.Is(err, sql.ErrNoRows) {

@@ -11,15 +11,15 @@ type CompanyCurrencyResponse struct {
 
 // CompanyCurrency represents a QuickBooks company currency object.
 type CompanyCurrency struct {
-	ID          string                 `json:"Id"`
-	Code        string                 `json:"Code,omitempty"`
-	SyncToken   string                 `json:"SyncToken,omitempty"`
-	Name        string                 `json:"Name,omitempty"`
+	ID          string        `json:"Id"`
+	Code        string        `json:"Code,omitempty"`
+	SyncToken   string        `json:"SyncToken,omitempty"`
+	Name        string        `json:"Name,omitempty"`
 	CustomField []CustomField `json:"CustomField,omitempty"`
-	Active      *bool                  `json:"Active,omitempty"`
-	MetaData    *MetaData              `json:"MetaData,omitempty"`
-	Domain      string                 `json:"domain,omitempty"`
-	Sparse      *bool                  `json:"sparse,omitempty"`
+	Active      *bool         `json:"Active,omitempty"`
+	MetaData    *MetaData     `json:"MetaData,omitempty"`
+	Domain      string        `json:"domain,omitempty"`
+	Sparse      *bool         `json:"sparse,omitempty"`
 }
 
 // CreateCompanyCurrencyRequest represents the documented create company currency payload.

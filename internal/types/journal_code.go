@@ -24,16 +24,16 @@ type JournalCodeResponse struct {
 
 // JournalCode represents a QuickBooks journal code object.
 type JournalCode struct {
-	ID          string             `json:"Id"`
-	Name        string             `json:"Name,omitempty"`
-	SyncToken   string             `json:"SyncToken,omitempty"`
-	Description string             `json:"Description,omitempty"`
-	CustomField []CustomField `json:"CustomField,omitempty"`
-	Type        JournalCodeType    `json:"Type,omitempty"`
-	MetaData    *MetaData          `json:"MetaData,omitempty"`
-	Active      *bool              `json:"Active,omitempty"`
-	Domain      string             `json:"domain,omitempty"`
-	Sparse      *bool              `json:"sparse,omitempty"`
+	ID          string          `json:"Id"`
+	Name        string          `json:"Name,omitempty"`
+	SyncToken   string          `json:"SyncToken,omitempty"`
+	Description string          `json:"Description,omitempty"`
+	CustomField []CustomField   `json:"CustomField,omitempty"`
+	Type        JournalCodeType `json:"Type,omitempty"`
+	MetaData    *MetaData       `json:"MetaData,omitempty"`
+	Active      *bool           `json:"Active,omitempty"`
+	Domain      string          `json:"domain,omitempty"`
+	Sparse      *bool           `json:"sparse,omitempty"`
 }
 
 // CreateJournalCodeRequest represents the documented create journal code payload.
