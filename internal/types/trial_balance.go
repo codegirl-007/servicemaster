@@ -14,6 +14,6 @@ type TrialBalanceQuery struct {
 	EndDate           *Date
 	DateMacro         ReportDateMacro
 	SortOrder         ReportSortOrder
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	StartDate         *Date
 }
