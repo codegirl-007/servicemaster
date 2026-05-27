@@ -20,7 +20,7 @@ type GeneralLedgerFRQuery struct {
 	SortBy            string
 	SortOrder         ReportSortOrder
 	StartDate         *Date
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	Department        string
 	Vendor            string
 	Class             string
