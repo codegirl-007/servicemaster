@@ -16,6 +16,6 @@ type CustomerBalanceQuery struct {
 	ARPaid            string
 	ReportDate        *Date
 	SortOrder         ReportSortOrder
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	Department        string
 }
