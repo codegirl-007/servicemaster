@@ -59,11 +59,9 @@ type SparseUpdateTransferRequest struct {
 	Domain         string     `json:"domain,omitempty"`
 }
 
-// DeleteTransferRequest represents the documented delete transfer payload.
-type DeleteTransferRequest struct {
-	ID        string `json:"Id"`
-	SyncToken string `json:"SyncToken"`
-}
+// DeleteTransferRequest is the full transfer object returned from read.
+// QBO requires the complete transfer payload for delete, not just Id and SyncToken.
+type DeleteTransferRequest = Transfer
 
 // TransferDeleteResponse represents the QuickBooks deleted transfer response envelope.
 type TransferDeleteResponse struct {
