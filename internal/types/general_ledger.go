@@ -62,7 +62,7 @@ type GeneralLedgerQuery struct {
 	SortBy            GeneralLedgerQueryColumn
 	SortOrder         ReportSortOrder
 	StartDate         *Date
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	Department        string
 	Vendor            string
 	Class             string
