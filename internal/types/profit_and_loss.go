@@ -1,24 +1,6 @@
 // Package types contains transport types for external integrations.
 package types
 
-// ProfitAndLossSummarizeColumnBy represents the documented summarize_column_by values.
-type ProfitAndLossSummarizeColumnBy string
-
-const (
-	ProfitAndLossSummarizeColumnByTotal               ProfitAndLossSummarizeColumnBy = "Total"
-	ProfitAndLossSummarizeColumnByMonth               ProfitAndLossSummarizeColumnBy = "Month"
-	ProfitAndLossSummarizeColumnByWeek                ProfitAndLossSummarizeColumnBy = "Week"
-	ProfitAndLossSummarizeColumnByDays                ProfitAndLossSummarizeColumnBy = "Days"
-	ProfitAndLossSummarizeColumnByQuarter             ProfitAndLossSummarizeColumnBy = "Quarter"
-	ProfitAndLossSummarizeColumnByYear                ProfitAndLossSummarizeColumnBy = "Year"
-	ProfitAndLossSummarizeColumnByCustomers           ProfitAndLossSummarizeColumnBy = "Customers"
-	ProfitAndLossSummarizeColumnByVendors             ProfitAndLossSummarizeColumnBy = "Vendors"
-	ProfitAndLossSummarizeColumnByClasses             ProfitAndLossSummarizeColumnBy = "Classes"
-	ProfitAndLossSummarizeColumnByDepartments         ProfitAndLossSummarizeColumnBy = "Departments"
-	ProfitAndLossSummarizeColumnByEmployees           ProfitAndLossSummarizeColumnBy = "Employees"
-	ProfitAndLossSummarizeColumnByProductsAndServices ProfitAndLossSummarizeColumnBy = "ProductsAndServices"
-)
-
 // ProfitAndLossReport represents the QuickBooks profit and loss report response.
 type ProfitAndLossReport struct {
 	Header  ReportHeader  `json:"Header"`
@@ -32,7 +14,7 @@ type ProfitAndLossQuery struct {
 	EndDate           *Date
 	DateMacro         ReportDateMacro
 	AccountingMethod  ReportBasis
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	SortOrder         ReportSortOrder
 	Customer          string
 	Vendor            string

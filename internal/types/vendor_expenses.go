@@ -16,7 +16,7 @@ type VendorExpensesQuery struct {
 	DateMacro         ReportDateMacro
 	Class             string
 	SortOrder         ReportSortOrder
-	SummarizeColumnBy ProfitAndLossSummarizeColumnBy
+	SummarizeColumnBy SummarizeColumnBy
 	Department        string
 	AccountingMethod  ReportBasis
 	StartDate         *Date
