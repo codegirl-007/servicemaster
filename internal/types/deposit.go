@@ -17,8 +17,8 @@ const (
 	DepositLinkedTxnTypeTransfer      DepositLinkedTxnType = "Transfer"
 	DepositLinkedTxnTypePayment       DepositLinkedTxnType = "Payment"
 	DepositLinkedTxnTypeSalesReceipt  DepositLinkedTxnType = "SalesReceipt"
-	DepositLinkedTxnTypeRefundReceipt   DepositLinkedTxnType = "RefundReceipt"
-	DepositLinkedTxnTypeJournalEntry    DepositLinkedTxnType = "JournalEntry"
+	DepositLinkedTxnTypeRefundReceipt DepositLinkedTxnType = "RefundReceipt"
+	DepositLinkedTxnTypeJournalEntry  DepositLinkedTxnType = "JournalEntry"
 )
 
 // TaxApplicableOn represents whether tax on a deposit line applies to sales or purchase.
@@ -128,34 +128,34 @@ type DepositDeleteResponse struct {
 
 // DepositLine represents a deposit line.
 type DepositLine struct {
-	ID                string                  `json:"Id,omitempty"`
-	Amount            float64                 `json:"Amount,omitempty"`
-	DetailType        DepositLineDetailType   `json:"DetailType,omitempty"`
-	LinkedTxn         []DepositLinkedTxn      `json:"LinkedTxn,omitempty"`
-	DepositLineDetail *DepositLineDetail      `json:"DepositLineDetail,omitempty"`
-	Description       string                  `json:"Description,omitempty"`
-	LineNum           float64                 `json:"LineNum,omitempty"`
-	CustomField       []CustomField           `json:"CustomField,omitempty"`
-	ProjectRef        *Reference              `json:"ProjectRef,omitempty"`
+	ID                string                `json:"Id,omitempty"`
+	Amount            float64               `json:"Amount,omitempty"`
+	DetailType        DepositLineDetailType `json:"DetailType,omitempty"`
+	LinkedTxn         []DepositLinkedTxn    `json:"LinkedTxn,omitempty"`
+	DepositLineDetail *DepositLineDetail    `json:"DepositLineDetail,omitempty"`
+	Description       string                `json:"Description,omitempty"`
+	LineNum           float64               `json:"LineNum,omitempty"`
+	CustomField       []CustomField         `json:"CustomField,omitempty"`
+	ProjectRef        *Reference            `json:"ProjectRef,omitempty"`
 }
 
 // DepositLinkedTxn represents a transaction linked to a deposit line.
 type DepositLinkedTxn struct {
-	TxnID     string                 `json:"TxnId,omitempty"`
-	TxnType   DepositLinkedTxnType   `json:"TxnType,omitempty"`
-	TxnLineID string                 `json:"TxnLineId,omitempty"`
+	TxnID     string               `json:"TxnId,omitempty"`
+	TxnType   DepositLinkedTxnType `json:"TxnType,omitempty"`
+	TxnLineID string               `json:"TxnLineId,omitempty"`
 }
 
 // DepositLineDetail represents direct deposit line details.
 type DepositLineDetail struct {
-	AccountRef        Reference         `json:"AccountRef"`
-	PaymentMethodRef  *Reference        `json:"PaymentMethodRef,omitempty"`
-	ClassRef          *Reference        `json:"ClassRef,omitempty"`
-	CheckNum          string            `json:"CheckNum,omitempty"`
-	TaxCodeRef        *Reference        `json:"TaxCodeRef,omitempty"`
-	TaxApplicableOn   TaxApplicableOn   `json:"TaxApplicableOn,omitempty"`
-	TxnType           string            `json:"TxnType,omitempty"`
-	Entity            *Reference        `json:"Entity,omitempty"`
+	AccountRef       Reference       `json:"AccountRef"`
+	PaymentMethodRef *Reference      `json:"PaymentMethodRef,omitempty"`
+	ClassRef         *Reference      `json:"ClassRef,omitempty"`
+	CheckNum         string          `json:"CheckNum,omitempty"`
+	TaxCodeRef       *Reference      `json:"TaxCodeRef,omitempty"`
+	TaxApplicableOn  TaxApplicableOn `json:"TaxApplicableOn,omitempty"`
+	TxnType          string          `json:"TxnType,omitempty"`
+	Entity           *Reference      `json:"Entity,omitempty"`
 }
 
 // DepositCashBackInfo represents cash back recorded on a deposit.

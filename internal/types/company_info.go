@@ -90,4 +90,3 @@ type PhysicalAddress struct {
 	Long                   string `json:"Long,omitempty"`
 	CountrySubDivisionCode string `json:"CountrySubDivisionCode,omitempty"`
 }
-
