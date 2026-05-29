@@ -6,6 +6,7 @@ type TransactionListByCustomerQueryColumn string
 
 const (
 	TransactionListByCustomerQueryColumnAccountName  TransactionListByCustomerQueryColumn = "account_name"
+	TransactionListByCustomerQueryColumnAmount       TransactionListByCustomerQueryColumn = "amount"
 	TransactionListByCustomerQueryColumnCreateBy     TransactionListByCustomerQueryColumn = "create_by"
 	TransactionListByCustomerQueryColumnCreateDate   TransactionListByCustomerQueryColumn = "create_date"
 	TransactionListByCustomerQueryColumnCustMsg      TransactionListByCustomerQueryColumn = "cust_msg"
