@@ -115,3 +115,12 @@ const (
 	SummarizeColumnByEmployees           SummarizeColumnBy = "Employees"
 	SummarizeColumnByProductsAndServices SummarizeColumnBy = "ProductsAndServices"
 )
+
+// ReportARPaid represents the arpaid query parameter for AR balance reports.
+type ReportARPaid string
+
+const (
+	ReportARPaidAll    ReportARPaid = "All"
+	ReportARPaidPaid   ReportARPaid = "Paid"
+	ReportARPaidUnpaid ReportARPaid = "Unpaid"
+)
