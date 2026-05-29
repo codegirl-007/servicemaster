@@ -18,21 +18,21 @@ type ReimburseChargeResponse struct {
 
 // ReimburseCharge represents a QuickBooks reimburse charge object.
 type ReimburseCharge struct {
-	ID            string              `json:"Id"`
-	SyncToken     string              `json:"SyncToken,omitempty"`
-	CustomerRef   *Reference          `json:"CustomerRef,omitempty"`
-	Amount        float64             `json:"Amount,omitempty"`
-	Line          []ReimburseChargeLine `json:"Line,omitempty"`
-	CurrencyRef   *Reference          `json:"CurrencyRef,omitempty"`
-	HasBeenInvoiced *bool             `json:"HasBeenInvoiced,omitempty"`
-	HomeTotalAmt  float64             `json:"HomeTotalAmt,omitempty"`
-	PrivateNote   string              `json:"PrivateNote,omitempty"`
-	LinkedTxn     []LinkedTxn         `json:"LinkedTxn,omitempty"`
-	ExchangeRate  float64             `json:"ExchangeRate,omitempty"`
-	TxnDate       *Date               `json:"TxnDate,omitempty"`
-	MetaData      *MetaData           `json:"MetaData,omitempty"`
-	Domain        string              `json:"domain,omitempty"`
-	Sparse        *bool               `json:"sparse,omitempty"`
+	ID              string                `json:"Id"`
+	SyncToken       string                `json:"SyncToken,omitempty"`
+	CustomerRef     *Reference            `json:"CustomerRef,omitempty"`
+	Amount          float64               `json:"Amount,omitempty"`
+	Line            []ReimburseChargeLine `json:"Line,omitempty"`
+	CurrencyRef     *Reference            `json:"CurrencyRef,omitempty"`
+	HasBeenInvoiced *bool                 `json:"HasBeenInvoiced,omitempty"`
+	HomeTotalAmt    float64               `json:"HomeTotalAmt,omitempty"`
+	PrivateNote     string                `json:"PrivateNote,omitempty"`
+	LinkedTxn       []LinkedTxn           `json:"LinkedTxn,omitempty"`
+	ExchangeRate    float64               `json:"ExchangeRate,omitempty"`
+	TxnDate         *Date                 `json:"TxnDate,omitempty"`
+	MetaData        *MetaData             `json:"MetaData,omitempty"`
+	Domain          string                `json:"domain,omitempty"`
+	Sparse          *bool                 `json:"sparse,omitempty"`
 }
 
 // ReimburseChargeLine represents a reimburse charge line.
