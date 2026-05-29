@@ -13,7 +13,7 @@ type VendorBalanceQuery struct {
 	QZURL             *bool
 	AccountingMethod  ReportBasis
 	DateMacro         ReportDateMacro
-	APPaid            string
+	APPaid            ReportAPPaid
 	ReportDate        *Date
 	SortOrder         ReportSortOrder
 	SummarizeColumnBy SummarizeColumnBy
