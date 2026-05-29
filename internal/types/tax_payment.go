@@ -11,9 +11,11 @@ type TaxPaymentResponse struct {
 
 // TaxPayment represents a QuickBooks tax payment object.
 type TaxPayment struct {
-	ID                string     `json:"Id"`
-	SyncToken         string     `json:"SyncToken,omitempty"`
-	Refund            string     `json:"Refund,omitempty"`
+	ID        string `json:"Id"`
+	SyncToken string `json:"SyncToken,omitempty"`
+	Refund    string `json:"Refund,omitempty"`
+	// PaymentDate is the tax payment date on the wire (JSON key PaymentDate).
+	// The attribute table labels this field TxnDate; all documented examples use PaymentDate.
 	PaymentDate       *Date      `json:"PaymentDate,omitempty"`
 	PaymentAccountRef *Reference `json:"PaymentAccountRef,omitempty"`
 	Description       string     `json:"Description,omitempty"`
