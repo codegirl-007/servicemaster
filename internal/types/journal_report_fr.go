@@ -10,7 +10,7 @@ const (
 	JournalReportFRQueryColumnCreditAmt       JournalReportFRQueryColumn = "credit_amt"
 	JournalReportFRQueryColumnCreateBy        JournalReportFRQueryColumn = "create_by"
 	JournalReportFRQueryColumnCreateDate      JournalReportFRQueryColumn = "create_date"
-	JournalReportFRQueryColumnDebtAmt         JournalReportFRQueryColumn = "debt_amt"
+	JournalReportFRQueryColumnDebitAmt        JournalReportFRQueryColumn = "debt_amt"
 	JournalReportFRQueryColumnDocNum          JournalReportFRQueryColumn = "doc_num"
 	JournalReportFRQueryColumnDueDate         JournalReportFRQueryColumn = "due_date"
 	JournalReportFRQueryColumnIsArPaid        JournalReportFRQueryColumn = "is_ar_paid"
