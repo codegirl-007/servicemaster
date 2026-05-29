@@ -133,3 +133,94 @@ const (
 	ReportAPPaidPaid   ReportAPPaid = "Paid"
 	ReportAPPaidUnpaid ReportAPPaid = "Unpaid"
 )
+
+// ReportTransactionType represents the transaction_type query parameter for transaction list reports.
+type ReportTransactionType string
+
+const (
+	ReportTransactionTypeCreditCardCharge             ReportTransactionType = "CreditCardCharge"
+	ReportTransactionTypeCheck                        ReportTransactionType = "Check"
+	ReportTransactionTypeInvoice                      ReportTransactionType = "Invoice"
+	ReportTransactionTypeReceivePayment               ReportTransactionType = "ReceivePayment"
+	ReportTransactionTypeJournalEntry                 ReportTransactionType = "JournalEntry"
+	ReportTransactionTypeBill                         ReportTransactionType = "Bill"
+	ReportTransactionTypeCreditCardCredit             ReportTransactionType = "CreditCardCredit"
+	ReportTransactionTypeVendorCredit                 ReportTransactionType = "VendorCredit"
+	ReportTransactionTypeCredit                       ReportTransactionType = "Credit"
+	ReportTransactionTypeBillPaymentCheck             ReportTransactionType = "BillPaymentCheck"
+	ReportTransactionTypeBillPaymentCreditCard        ReportTransactionType = "BillPaymentCreditCard"
+	ReportTransactionTypeCharge                       ReportTransactionType = "Charge"
+	ReportTransactionTypeTransfer                     ReportTransactionType = "Transfer"
+	ReportTransactionTypeDeposit                      ReportTransactionType = "Deposit"
+	ReportTransactionTypeStatement                    ReportTransactionType = "Statement"
+	ReportTransactionTypeBillableCharge               ReportTransactionType = "BillableCharge"
+	ReportTransactionTypeTimeActivity                 ReportTransactionType = "TimeActivity"
+	ReportTransactionTypeCashPurchase                 ReportTransactionType = "CashPurchase"
+	ReportTransactionTypeSalesReceipt                 ReportTransactionType = "SalesReceipt"
+	ReportTransactionTypeCreditMemo                   ReportTransactionType = "CreditMemo"
+	ReportTransactionTypeCreditRefund                 ReportTransactionType = "CreditRefund"
+	ReportTransactionTypeEstimate                     ReportTransactionType = "Estimate"
+	ReportTransactionTypeInventoryQuantityAdjustment  ReportTransactionType = "InventoryQuantityAdjustment"
+	ReportTransactionTypePurchaseOrder                ReportTransactionType = "PurchaseOrder"
+	ReportTransactionTypeGlobalTaxPayment             ReportTransactionType = "GlobalTaxPayment"
+	ReportTransactionTypeGlobalTaxAdjustment          ReportTransactionType = "GlobalTaxAdjustment"
+	ReportTransactionTypeServiceTaxRefund             ReportTransactionType = "Service Tax Refund"
+	ReportTransactionTypeServiceTaxGrossAdjustment    ReportTransactionType = "Service Tax Gross Adjustment"
+	ReportTransactionTypeServiceTaxReversal           ReportTransactionType = "Service Tax Reversal"
+	ReportTransactionTypeServiceTaxDefer              ReportTransactionType = "Service Tax Defer"
+	ReportTransactionTypeServiceTaxPartialUtilisation ReportTransactionType = "Service Tax Partial Utilisation"
+)
+
+// ReportGroupBy represents the group_by query parameter for transaction list reports.
+type ReportGroupBy string
+
+const (
+	ReportGroupByName            ReportGroupBy = "Name"
+	ReportGroupByAccount         ReportGroupBy = "Account"
+	ReportGroupByTransactionType ReportGroupBy = "Transaction Type"
+	ReportGroupByCustomer        ReportGroupBy = "Customer"
+	ReportGroupByVendor          ReportGroupBy = "Vendor"
+	ReportGroupByEmployee        ReportGroupBy = "Employee"
+	ReportGroupByLocation        ReportGroupBy = "Location"
+	ReportGroupByPaymentMethod   ReportGroupBy = "Payment Method"
+	ReportGroupByDay             ReportGroupBy = "Day"
+	ReportGroupByWeek            ReportGroupBy = "Week"
+	ReportGroupByMonth           ReportGroupBy = "Month"
+	ReportGroupByQuarter         ReportGroupBy = "Quarter"
+	ReportGroupByYear            ReportGroupBy = "Year"
+	ReportGroupByFiscalYear      ReportGroupBy = "Fiscal Year"
+	ReportGroupByFiscalQuarter   ReportGroupBy = "Fiscal Quarter"
+	ReportGroupByNone            ReportGroupBy = "None"
+)
+
+// ReportPaymentMethod represents the payment_method query parameter for transaction list reports.
+type ReportPaymentMethod string
+
+const (
+	ReportPaymentMethodCash            ReportPaymentMethod = "Cash"
+	ReportPaymentMethodCheck           ReportPaymentMethod = "Check"
+	ReportPaymentMethodDinnersClub     ReportPaymentMethod = "Dinners Club"
+	ReportPaymentMethodAmericanExpress ReportPaymentMethod = "American Express"
+	ReportPaymentMethodDiscover        ReportPaymentMethod = "Discover"
+	ReportPaymentMethodMasterCard      ReportPaymentMethod = "MasterCard"
+	ReportPaymentMethodVisa            ReportPaymentMethod = "Visa"
+	ReportPaymentMethodCreditCard      ReportPaymentMethod = "Credit Card"
+)
+
+// ReportPrinted represents the printed query parameter for transaction list reports.
+type ReportPrinted string
+
+const (
+	ReportPrintedPrinted     ReportPrinted = "Printed"
+	ReportPrintedToBePrinted ReportPrinted = "To_be_printed"
+)
+
+// ReportCleared represents the cleared query parameter for transaction list reports.
+type ReportCleared string
+
+const (
+	ReportClearedCleared    ReportCleared = "Cleared"
+	ReportClearedUncleared  ReportCleared = "Uncleared"
+	ReportClearedReconciled ReportCleared = "Reconciled"
+	ReportClearedDeposited  ReportCleared = "Deposited"
+)

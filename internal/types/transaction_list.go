@@ -47,15 +47,15 @@ type TransactionListReport struct {
 // TransactionListQuery represents the supported query parameters for the transaction list report.
 type TransactionListQuery struct {
 	DateMacro         ReportDateMacro
-	PaymentMethod     string
+	PaymentMethod     ReportPaymentMethod
 	DueDateMacro      ReportDateMacro
-	ARPaid            string
+	ARPaid            ReportARPaid
 	BothAmount        string
-	TransactionType   string
+	TransactionType   ReportTransactionType
 	DocNum            string
 	StartModDate      *Date
-	SourceAccountType string
-	GroupBy           string
+	SourceAccountType ReportAccountType
+	GroupBy           ReportGroupBy
 	StartDate         *Date
 	Department        string
 	StartDueDate      *Date
@@ -64,11 +64,11 @@ type TransactionListQuery struct {
 	Vendor            string
 	EndDate           *Date
 	Memo              string
-	APPaid            string
+	APPaid            ReportAPPaid
 	ModDateMacro      ReportDateMacro
-	Printed           string
+	Printed           ReportPrinted
 	CreateDateMacro   ReportDateMacro
-	Cleared           string
+	Cleared           ReportCleared
 	Customer          string
 	QZURL             *bool
 	Term              string
