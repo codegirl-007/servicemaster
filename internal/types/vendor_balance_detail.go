@@ -26,8 +26,10 @@ const (
 	VendorBalanceDetailQueryColumnSubtNegAmount     VendorBalanceDetailQueryColumn = "subt_neg_amount"
 	VendorBalanceDetailQueryColumnCurrency          VendorBalanceDetailQueryColumn = "currency"
 	VendorBalanceDetailQueryColumnExchRate          VendorBalanceDetailQueryColumn = "exch_rate"
-	VendorBalanceDetailQueryColumnNegForeignOpenBal VendorBalanceDetailQueryColumn = "neg_foreign_open_bal"
-	VendorBalanceDetailQueryColumnNegForeignAmount  VendorBalanceDetailQueryColumn = "neg_foreign_amount"
+	VendorBalanceDetailQueryColumnNegForeignOpenBal  VendorBalanceDetailQueryColumn = "neg_foreign_open_bal"
+	VendorBalanceDetailQueryColumnSubtNegHomeOpenBal VendorBalanceDetailQueryColumn = "subt_neg_home_open_bal"
+	VendorBalanceDetailQueryColumnNegForeignAmount   VendorBalanceDetailQueryColumn = "neg_foreign_amount"
+	VendorBalanceDetailQueryColumnSubtNegHomeAmount  VendorBalanceDetailQueryColumn = "subt_neg_home_amount"
 )
 
 // VendorBalanceDetailReport represents the QuickBooks vendor balance detail report response.
