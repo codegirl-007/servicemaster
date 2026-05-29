@@ -1,6 +1,9 @@
 // Package types contains transport types for external integrations.
 package types
 
+// GeneralLedgerFRQueryColumn identifies column values for General Ledger FR sort_by.
+type GeneralLedgerFRQueryColumn = GeneralLedgerQueryColumn
+
 // GeneralLedgerFR represents the QuickBooks General Ledger FR report response.
 type GeneralLedgerFR struct {
 	Header  ReportHeader  `json:"Header"`
@@ -17,7 +20,7 @@ type GeneralLedgerFRQuery struct {
 	EndDate           *Date
 	DateMacro         ReportDateMacro
 	AccountType       ReportAccountType
-	SortBy            string
+	SortBy            GeneralLedgerFRQueryColumn
 	SortOrder         ReportSortOrder
 	StartDate         *Date
 	SummarizeColumnBy SummarizeColumnBy
