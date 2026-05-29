@@ -27,7 +27,7 @@ const (
 	TransactionListWithSplitsQueryColumnNatOpenBal  TransactionListWithSplitsQueryColumn = "nat_open_bal"
 	TransactionListWithSplitsQueryColumnTaxType     TransactionListWithSplitsQueryColumn = "tax_type"
 	TransactionListWithSplitsQueryColumnIsBillable  TransactionListWithSplitsQueryColumn = "is_billable"
-	TransactionListWithSplitsQueryColumnDebtAmt     TransactionListWithSplitsQueryColumn = "debt_amt"
+	TransactionListWithSplitsQueryColumnDebitAmt    TransactionListWithSplitsQueryColumn = "debt_amt"
 	TransactionListWithSplitsQueryColumnCreditAmt   TransactionListWithSplitsQueryColumn = "credit_amt"
 	TransactionListWithSplitsQueryColumnIsCleared   TransactionListWithSplitsQueryColumn = "is_cleared"
 	TransactionListWithSplitsQueryColumnOlbStatus   TransactionListWithSplitsQueryColumn = "olb_status"
