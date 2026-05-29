@@ -124,3 +124,12 @@ const (
 	ReportARPaidPaid   ReportARPaid = "Paid"
 	ReportARPaidUnpaid ReportARPaid = "Unpaid"
 )
+
+// ReportAPPaid represents the appaid query parameter for AP balance reports.
+type ReportAPPaid string
+
+const (
+	ReportAPPaidAll    ReportAPPaid = "All"
+	ReportAPPaidPaid   ReportAPPaid = "Paid"
+	ReportAPPaidUnpaid ReportAPPaid = "Unpaid"
+)
