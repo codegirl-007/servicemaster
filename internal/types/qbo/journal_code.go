@@ -1,0 +1,44 @@
+// Package qbo contains transport types for the QuickBooks Online API.
+package qbo
+
+import "time"
+
+// JournalCodeType represents the documented journal code types.
+type JournalCodeType string
+
+const (
+	JournalCodeTypeExpenses JournalCodeType = "Expenses"
+	JournalCodeTypeSales    JournalCodeType = "Sales"
+	JournalCodeTypeBank     JournalCodeType = "Bank"
+	JournalCodeTypeNouveaux JournalCodeType = "Nouveaux"
+	JournalCodeTypeWages    JournalCodeType = "Wages"
+	JournalCodeTypeCash     JournalCodeType = "Cash"
+	JournalCodeTypeOthers   JournalCodeType = "Others"
+)
+
+// JournalCodeResponse represents the QuickBooks journal code response envelope.
+type JournalCodeResponse struct {
+	JournalCode JournalCode `json:"JournalCode"`
+	Time        time.Time   `json:"time"`
+}
+
+// JournalCode represents a QuickBooks journal code object.
+type JournalCode struct {
+	ID          string          `json:"Id"`
+	Name        string          `json:"Name,omitempty"`
+	SyncToken   string          `json:"SyncToken,omitempty"`
+	Description string          `json:"Description,omitempty"`
+	CustomField []CustomField   `json:"CustomField,omitempty"`
+	Type        JournalCodeType `json:"Type,omitempty"`
+	MetaData    *MetaData       `json:"MetaData,omitempty"`
+	Active      *bool           `json:"Active,omitempty"`
+	Domain      string          `json:"domain,omitempty"`
+	Sparse      *bool           `json:"sparse,omitempty"`
+}
+
+// CreateJournalCodeRequest represents the documented create journal code payload.
+type CreateJournalCodeRequest struct {
+	// Name is required.
+	Name string          `json:"Name"`
+	Type JournalCodeType `json:"Type,omitempty"`
+}

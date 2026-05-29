@@ -1,0 +1,22 @@
+// Package qbo contains transport types for the QuickBooks Online API.
+package qbo
+
+// VendorBalanceReport represents the QuickBooks vendor balance report response.
+type VendorBalanceReport struct {
+	Header  ReportHeader  `json:"Header"`
+	Rows    ReportRows    `json:"Rows"`
+	Columns ReportColumns `json:"Columns"`
+}
+
+// VendorBalanceQuery represents the supported query parameters for the vendor balance report.
+type VendorBalanceQuery struct {
+	QZURL             *bool
+	AccountingMethod  ReportBasis
+	DateMacro         ReportDateMacro
+	APPaid            ReportAPPaid
+	ReportDate        *Date
+	SortOrder         ReportSortOrder
+	SummarizeColumnBy SummarizeColumnBy
+	Department        string
+	Vendor            string
+}
