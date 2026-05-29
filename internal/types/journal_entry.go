@@ -52,7 +52,6 @@ type JournalEntry struct {
 	RecurDataRef            *Reference              `json:"RecurDataRef,omitempty"`
 	TotalAmt                float64                 `json:"TotalAmt,omitempty"`
 	HomeTotalAmt            float64                 `json:"HomeTotalAmt,omitempty"`
-	JournalCodeRef          *Reference              `json:"JournalCodeRef,omitempty"`
 	MetaData                *MetaData               `json:"MetaData,omitempty"`
 	Domain                  string                  `json:"domain,omitempty"`
 	Sparse                  *bool                   `json:"sparse,omitempty"`
@@ -70,7 +69,6 @@ type CreateJournalEntryRequest struct {
 	TxnTaxDetail         *TxnTaxDetail        `json:"TxnTaxDetail,omitempty"`
 	Adjustment           *bool                `json:"Adjustment,omitempty"`
 	TaxRateRef           *Reference           `json:"TaxRateRef,omitempty"`
-	JournalCodeRef       *Reference           `json:"JournalCodeRef,omitempty"`
 }
 
 // UpdateJournalEntryRequest represents the documented full update journal entry payload.
@@ -88,7 +86,6 @@ type UpdateJournalEntryRequest struct {
 	Adjustment              *bool                   `json:"Adjustment,omitempty"`
 	TaxRateRef              *Reference              `json:"TaxRateRef,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
-	JournalCodeRef          *Reference              `json:"JournalCodeRef,omitempty"`
 	Domain                  string                  `json:"domain,omitempty"`
 }
 
@@ -108,7 +105,6 @@ type SparseUpdateJournalEntryRequest struct {
 	Adjustment              *bool                   `json:"Adjustment,omitempty"`
 	TaxRateRef              *Reference              `json:"TaxRateRef,omitempty"`
 	TransactionLocationType TransactionLocationType `json:"TransactionLocationType,omitempty"`
-	JournalCodeRef          *Reference              `json:"JournalCodeRef,omitempty"`
 	Domain                  string                  `json:"domain,omitempty"`
 }
 
@@ -126,28 +122,29 @@ type JournalEntryDeleteResponse struct {
 
 // JournalEntryLine represents a journal entry line.
 type JournalEntryLine struct {
-	ID                      string                     `json:"Id,omitempty"`
-	LineNum                 float64                    `json:"LineNum,omitempty"`
-	Amount                  float64                    `json:"Amount,omitempty"`
-	Description             string                     `json:"Description,omitempty"`
-	DetailType              JournalEntryLineDetailType `json:"DetailType,omitempty"`
-	JournalEntryLineDetail  *JournalEntryLineDetail    `json:"JournalEntryLineDetail,omitempty"`
-	DescriptionLineDetail   *DescriptionLineDetail     `json:"DescriptionLineDetail,omitempty"`
-	ProjectRef              *Reference                 `json:"ProjectRef,omitempty"`
+	ID                     string                     `json:"Id,omitempty"`
+	LineNum                float64                    `json:"LineNum,omitempty"`
+	Amount                 float64                    `json:"Amount,omitempty"`
+	Description            string                     `json:"Description,omitempty"`
+	DetailType             JournalEntryLineDetailType `json:"DetailType,omitempty"`
+	JournalEntryLineDetail *JournalEntryLineDetail    `json:"JournalEntryLineDetail,omitempty"`
+	DescriptionLineDetail  *DescriptionLineDetail     `json:"DescriptionLineDetail,omitempty"`
+	ProjectRef             *Reference                 `json:"ProjectRef,omitempty"`
 }
 
 // JournalEntryLineDetail represents journal entry line details.
 type JournalEntryLineDetail struct {
-	PostingType     PostingType            `json:"PostingType,omitempty"`
-	AccountRef      Reference              `json:"AccountRef"`
-	Entity          *JournalEntryEntity    `json:"Entity,omitempty"`
-	TaxApplicableOn TaxApplicableOn        `json:"TaxApplicableOn,omitempty"`
-	TaxAmount       float64                `json:"TaxAmount,omitempty"`
-	TaxInclusiveAmt float64                `json:"TaxInclusiveAmt,omitempty"`
-	ClassRef        *Reference             `json:"ClassRef,omitempty"`
-	DepartmentRef   *Reference             `json:"DepartmentRef,omitempty"`
-	TaxCodeRef      *Reference             `json:"TaxCodeRef,omitempty"`
-	BillableStatus  BillableStatus         `json:"BillableStatus,omitempty"`
+	PostingType     PostingType         `json:"PostingType,omitempty"`
+	AccountRef      Reference           `json:"AccountRef"`
+	Entity          *JournalEntryEntity `json:"Entity,omitempty"`
+	TaxApplicableOn TaxApplicableOn     `json:"TaxApplicableOn,omitempty"`
+	TaxAmount       float64             `json:"TaxAmount,omitempty"`
+	TaxInclusiveAmt float64             `json:"TaxInclusiveAmt,omitempty"`
+	ClassRef        *Reference          `json:"ClassRef,omitempty"`
+	DepartmentRef   *Reference          `json:"DepartmentRef,omitempty"`
+	TaxCodeRef      *Reference          `json:"TaxCodeRef,omitempty"`
+	BillableStatus  BillableStatus      `json:"BillableStatus,omitempty"`
+	JournalCodeRef  *Reference          `json:"JournalCodeRef,omitempty"`
 }
 
 // JournalEntryEntity represents the party on a journal entry line.
