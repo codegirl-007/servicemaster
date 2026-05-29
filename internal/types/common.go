@@ -224,3 +224,11 @@ const (
 	ReportClearedReconciled ReportCleared = "Reconciled"
 	ReportClearedDeposited  ReportCleared = "Deposited"
 )
+
+// ReportAgingMethod represents the aging_method query parameter for aging reports.
+type ReportAgingMethod string
+
+const (
+	ReportAgingMethodReportDate ReportAgingMethod = "Report_Date"
+	ReportAgingMethodCurrent    ReportAgingMethod = "Current"
+)

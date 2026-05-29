@@ -17,5 +17,5 @@ type APAgingSummaryQuery struct {
 	Department  string
 	ReportDate  *Date
 	SortOrder   ReportSortOrder
-	AgingMethod string
+	AgingMethod ReportAgingMethod
 }
