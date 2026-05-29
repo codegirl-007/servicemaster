@@ -10,7 +10,7 @@ const (
 	JournalReportQueryColumnCreditAmt       JournalReportQueryColumn = "credit_amt"
 	JournalReportQueryColumnCreateBy        JournalReportQueryColumn = "create_by"
 	JournalReportQueryColumnCreateDate      JournalReportQueryColumn = "create_date"
-	JournalReportQueryColumnDebtAmt         JournalReportQueryColumn = "debt_amt"
+	JournalReportQueryColumnDebitAmt        JournalReportQueryColumn = "debt_amt"
 	JournalReportQueryColumnDocNum          JournalReportQueryColumn = "doc_num"
 	JournalReportQueryColumnDueDate         JournalReportQueryColumn = "due_date"
 	JournalReportQueryColumnIsArPaid        JournalReportQueryColumn = "is_ar_paid"
