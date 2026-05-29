@@ -18,6 +18,7 @@ const (
 	TransactionListByVendorQueryColumnLastModBy    TransactionListByVendorQueryColumn = "last_mod_by"
 	TransactionListByVendorQueryColumnMemo         TransactionListByVendorQueryColumn = "memo"
 	TransactionListByVendorQueryColumnName         TransactionListByVendorQueryColumn = "name"
+	TransactionListByVendorQueryColumnNatAmount    TransactionListByVendorQueryColumn = "nat_amount"
 	TransactionListByVendorQueryColumnOtherAccount TransactionListByVendorQueryColumn = "other_account"
 	TransactionListByVendorQueryColumnPmtMthd      TransactionListByVendorQueryColumn = "pmt_mthd"
 	TransactionListByVendorQueryColumnPrinted      TransactionListByVendorQueryColumn = "printed"
