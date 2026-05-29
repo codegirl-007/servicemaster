@@ -34,7 +34,7 @@ const (
 	GeneralLedgerQueryColumnAccountNum      GeneralLedgerQueryColumn = "account_num"
 	GeneralLedgerQueryColumnKlassName       GeneralLedgerQueryColumn = "klass_name"
 	GeneralLedgerQueryColumnDeptName        GeneralLedgerQueryColumn = "dept_name"
-	GeneralLedgerQueryColumnDebtAmt         GeneralLedgerQueryColumn = "debt_amt"
+	GeneralLedgerQueryColumnDebitAmt        GeneralLedgerQueryColumn = "debt_amt"
 	GeneralLedgerQueryColumnCreditAmt       GeneralLedgerQueryColumn = "credit_amt"
 	GeneralLedgerQueryColumnNatOpenBal      GeneralLedgerQueryColumn = "nat_open_bal"
 	GeneralLedgerQueryColumnSubtNatAmount   GeneralLedgerQueryColumn = "subt_nat_amount"
