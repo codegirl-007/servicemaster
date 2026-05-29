@@ -19,7 +19,7 @@ const (
 	ProfitAndLossDetailQueryColumnTaxCode         ProfitAndLossDetailQueryColumn = "tax_code"
 	ProfitAndLossDetailQueryColumnKlassName       ProfitAndLossDetailQueryColumn = "klass_name"
 	ProfitAndLossDetailQueryColumnDeptName        ProfitAndLossDetailQueryColumn = "dept_name"
-	ProfitAndLossDetailQueryColumnDebtAmt         ProfitAndLossDetailQueryColumn = "debt_amt"
+	ProfitAndLossDetailQueryColumnDebitAmt        ProfitAndLossDetailQueryColumn = "debt_amt"
 	ProfitAndLossDetailQueryColumnCreditAmt       ProfitAndLossDetailQueryColumn = "credit_amt"
 	ProfitAndLossDetailQueryColumnNatOpenBal      ProfitAndLossDetailQueryColumn = "nat_open_bal"
 	ProfitAndLossDetailQueryColumnSubtNatAmount   ProfitAndLossDetailQueryColumn = "subt_nat_amount"
