@@ -7,8 +7,9 @@ import "time"
 type RecurType string
 
 const (
-	RecurTypeAutomated RecurType = "Automated"
-	RecurTypeReminded  RecurType = "Reminded"
+	RecurTypeAutomated   RecurType = "Automated"
+	RecurTypeReminded    RecurType = "Reminded"
+	RecurTypeUnScheduled RecurType = "UnScheduled"
 )
 
 // RecurringIntervalType represents the documented recurring schedule interval types.
@@ -21,7 +22,21 @@ const (
 	RecurringIntervalTypeYearly  RecurringIntervalType = "Yearly"
 )
 
-// RecurringTransactionResponse represents the QuickBooks recurring transaction response envelope.
+// RecurringTransactionQueryResponse represents the QuickBooks recurring transaction query response envelope.
+type RecurringTransactionQueryResponse struct {
+	QueryResponse RecurringTransactionQueryResult `json:"QueryResponse"`
+	Time          time.Time                       `json:"time"`
+}
+
+// RecurringTransactionQueryResult represents recurring transaction query results.
+type RecurringTransactionQueryResult struct {
+	RecurringTransaction []RecurringTransaction `json:"RecurringTransaction,omitempty"`
+	StartPosition        int                    `json:"startPosition,omitempty"`
+	MaxResults           int                    `json:"maxResults,omitempty"`
+	TotalCount           int                    `json:"totalCount,omitempty"`
+}
+
+// RecurringTransactionResponse represents the QuickBooks create or delete recurring transaction response envelope.
 type RecurringTransactionResponse struct {
 	RecurringTransaction RecurringTransaction `json:"RecurringTransaction"`
 	Time                 time.Time            `json:"time"`
@@ -79,21 +94,25 @@ type RecurringTransactionDeleteResponse struct {
 
 // RecurringInfo represents recurring schedule metadata on a transaction template.
 type RecurringInfo struct {
-	Active       *bool                    `json:"Active,omitempty"`
-	RecurType    RecurType                `json:"RecurType,omitempty"`
-	Name         string                   `json:"Name,omitempty"`
-	ScheduleInfo *RecurringScheduleInfo   `json:"ScheduleInfo,omitempty"`
+	Active       *bool                  `json:"Active,omitempty"`
+	RecurType    RecurType              `json:"RecurType,omitempty"`
+	Name         string                 `json:"Name,omitempty"`
+	ScheduleInfo *RecurringScheduleInfo `json:"ScheduleInfo,omitempty"`
 }
 
 // RecurringScheduleInfo represents the schedule for a recurring transaction.
+// QBO documents several numeric schedule fields as String; JSON examples use numbers for
+// NumInterval, DayOfMonth, DaysBefore, RemindDays, and MaxOccurrences.
 type RecurringScheduleInfo struct {
 	StartDate      *Date                 `json:"StartDate,omitempty"`
 	EndDate        *Date                 `json:"EndDate,omitempty"`
 	NextDate       *Date                 `json:"NextDate,omitempty"`
 	PreviousDate   *Date                 `json:"PreviousDate,omitempty"`
 	IntervalType   RecurringIntervalType `json:"IntervalType,omitempty"`
+	DayOfWeek      string                `json:"DayOfWeek,omitempty"`
 	NumInterval    int                   `json:"NumInterval,omitempty"`
 	DayOfMonth     int                   `json:"DayOfMonth,omitempty"`
+	WeekOfMonth    string                `json:"WeekOfMonth,omitempty"`
 	DaysBefore     int                   `json:"DaysBefore,omitempty"`
 	RemindDays     int                   `json:"RemindDays,omitempty"`
 	MaxOccurrences int                   `json:"MaxOccurrences,omitempty"`
