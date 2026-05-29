@@ -13,7 +13,7 @@ type CustomerBalanceQuery struct {
 	Customer          string
 	AccountingMethod  ReportBasis
 	DateMacro         ReportDateMacro
-	ARPaid            string
+	ARPaid            ReportARPaid
 	ReportDate        *Date
 	SortOrder         ReportSortOrder
 	SummarizeColumnBy SummarizeColumnBy
