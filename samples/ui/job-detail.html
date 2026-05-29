@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job #1842 — ServiceMaster</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <h1>ServiceMaster</h1>
+        <p>Riverside Plumbing &amp; Electric</p>
+      </div>
+      <nav>
+        <span class="nav-section">Operations</span>
+        <a href="office-dashboard.html">Dashboard</a>
+        <a href="dispatcher-board.html">Schedule board</a>
+        <a href="job-detail.html" class="active">Jobs</a>
+        <a href="#">Customers</a>
+        <span class="nav-section">Field</span>
+        <a href="technician-day.html">Technician app (preview)</a>
+        <span class="nav-section">Ideation</span>
+        <a href="index.html">← All mockups</a>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div>
+          <h2 style="display: inline;">Job #1842</h2>
+          <span class="badge badge-info" style="margin-left: 0.5rem; vertical-align: middle;">In progress</span>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" class="btn btn-sm">Reassign</button>
+          <button type="button" class="btn btn-sm btn-primary">Mark complete</button>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="detail-layout">
+          <div>
+            <section class="card" style="margin-bottom: 1.25rem;">
+              <div class="card-header">
+                <h3>Leak repair — kitchen supply line</h3>
+                <span class="badge badge-neutral">Plumbing · Service</span>
+              </div>
+              <div class="card-body">
+                <dl class="field-row">
+                  <dt>Customer</dt>
+                  <dd>Pat Nguyen · (555) 014-2298</dd>
+                  <dt>Property</dt>
+                  <dd>412 Elm Street, Unit 2B — Gate code #4421</dd>
+                  <dt>Window</dt>
+                  <dd>Today 11:30 AM – 1:00 PM</dd>
+                  <dt>Assigned</dt>
+                  <dd>Marcus Chen</dd>
+                  <dt>Dispatcher note</dt>
+                  <dd>Customer reports slow drip under sink since Tuesday. Shutoff valve behind dishwasher may be stuck.</dd>
+                </dl>
+                <div class="map-placeholder" style="margin-top: 1rem;">Map preview · 12 min from previous stop</div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-header">
+                <h3>Field checklist</h3>
+                <span style="font-size: 0.8125rem; color: var(--text-muted);">2 of 5 done</span>
+              </div>
+              <div class="card-body" style="padding-top: 0;">
+                <ul class="checklist">
+                  <li>
+                    <input type="checkbox" id="c1" checked>
+                    <label for="c1">Confirm shutoff location and test water off</label>
+                  </li>
+                  <li>
+                    <input type="checkbox" id="c2" checked>
+                    <label for="c2">Photo: before condition (uploaded)</label>
+                  </li>
+                  <li>
+                    <input type="checkbox" id="c3">
+                    <label for="c3">Replace supply line and fittings</label>
+                  </li>
+                  <li>
+                    <input type="checkbox" id="c4">
+                    <label for="c4">Pressure test · no leaks 10 min</label>
+                  </li>
+                  <li>
+                    <input type="checkbox" id="c5">
+                    <label for="c5">Customer sign-off on work performed</label>
+                  </li>
+                </ul>
+              </div>
+            </section>
+          </div>
+
+          <aside>
+            <section class="card" style="margin-bottom: 1.25rem;">
+              <div class="card-header">
+                <h3>Activity</h3>
+              </div>
+              <div class="card-body">
+                <ol class="timeline">
+                  <li class="done">
+                    <div class="event">
+                      <time>8:02 AM</time>
+                      <p><strong>Job created</strong> from phone intake</p>
+                    </div>
+                  </li>
+                  <li class="done">
+                    <div class="event">
+                      <time>9:15 AM</time>
+                      <p><strong>Assigned</strong> to Marcus Chen</p>
+                    </div>
+                  </li>
+                  <li class="done">
+                    <div class="event">
+                      <time>11:18 AM</time>
+                      <p><strong>En route</strong> · ETA shared with customer</p>
+                    </div>
+                  </li>
+                  <li class="active">
+                    <div class="event">
+                      <time>11:34 AM</time>
+                      <p><strong>On site</strong> · Work started</p>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="event">
+                      <time>—</time>
+                      <p>Complete &amp; invoice</p>
+                    </div>
+                  </li>
+                </ol>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-header">
+                <h3>Parts on truck</h3>
+              </div>
+              <div class="card-body" style="font-size: 0.875rem;">
+                <p style="margin: 0 0 0.5rem;">✓ 3/8" braided supply line (qty 2)</p>
+                <p style="margin: 0 0 0.5rem;">✓ Compression fittings kit</p>
+                <p style="margin: 0; color: var(--warning);">⚠ Teflon tape — low stock</p>
+                <button type="button" class="btn btn-sm" style="margin-top: 1rem; width: 100%;">Request parts transfer</button>
+              </div>
+            </section>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
