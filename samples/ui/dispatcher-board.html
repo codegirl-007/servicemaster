@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dispatcher board — ServiceMaster</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <h1>ServiceMaster</h1>
+        <p>Riverside Plumbing &amp; Electric</p>
+      </div>
+      <nav>
+        <span class="nav-section">Operations</span>
+        <a href="office-dashboard.html">Dashboard</a>
+        <a href="dispatcher-board.html" class="active">Schedule board</a>
+        <a href="job-detail.html">Jobs</a>
+        <a href="#">Customers</a>
+        <span class="nav-section">Field</span>
+        <a href="technician-day.html">Technician app (preview)</a>
+        <span class="nav-section">Ideation</span>
+        <a href="index.html">← All mockups</a>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <h2>Schedule board</h2>
+        <div class="topbar-actions">
+          <input type="search" class="search-input" placeholder="Search jobs…" aria-label="Search jobs">
+          <select class="filter-select" aria-label="Trade filter">
+            <option>All trades</option>
+            <option>Plumbing</option>
+            <option>Electrical</option>
+            <option>HVAC</option>
+          </select>
+          <a href="#" class="btn btn-primary">+ New job</a>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="schedule-toolbar">
+          <div class="date-nav">
+            <button type="button" class="btn btn-sm" aria-label="Previous day">←</button>
+            <strong>Friday, May 29, 2026</strong>
+            <button type="button" class="btn btn-sm" aria-label="Next day">→</button>
+            <button type="button" class="btn btn-sm btn-ghost">Today</button>
+          </div>
+          <div class="filter-chips" role="group" aria-label="View filters">
+            <span class="chip active">All techs</span>
+            <span class="chip">On route</span>
+            <span class="chip">Available</span>
+            <span class="chip">Needs parts</span>
+          </div>
+        </div>
+
+        <div class="schedule-board">
+          <div class="schedule-grid">
+            <div class="corner">Technician</div>
+            <div class="time-col">7a</div>
+            <div class="time-col">8a</div>
+            <div class="time-col">9a</div>
+            <div class="time-col">10a</div>
+            <div class="time-col">11a</div>
+            <div class="time-col">12p</div>
+            <div class="time-col">1p</div>
+            <div class="time-col">2p</div>
+
+            <div class="tech-row-label">Marcus Chen<span>Plumbing · 4 jobs</span></div>
+            <div class="slot"></div>
+            <div class="slot" style="grid-column: span 2;">
+              <div class="job-block plumbing">
+                <strong>Water heater — Oak St</strong>
+                Install · 8:00–10:00
+              </div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot" style="grid-column: span 2;">
+              <div class="job-block plumbing">
+                <strong>Leak repair — 412 Elm</strong>
+                Service · 11:30–1:00
+              </div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot">
+              <div class="job-block plumbing urgent">
+                <strong>Emergency shutoff</strong>
+                Callback · 2:00
+              </div>
+            </div>
+
+            <div class="tech-row-label">Sofia Ruiz<span>Electrical · 3 jobs</span></div>
+            <div class="slot" style="grid-column: span 2;">
+              <div class="job-block electrical">
+                <strong>Panel upgrade — Maple Ave</strong>
+                Estimate · 7:30–9:30
+              </div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot" style="grid-column: span 3;">
+              <div class="job-block electrical">
+                <strong>Outlet troubleshooting — Pine Rd</strong>
+                Service · 10:00–1:30
+              </div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+
+            <div class="tech-row-label">James Okonkwo<span>HVAC · 2 jobs</span></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot" style="grid-column: span 2;">
+              <div class="job-block hvac">
+                <strong>AC tune-up — Cedar Ln</strong>
+                Maintenance · 9:00–11:00
+              </div>
+            </div>
+            <div class="slot"></div>
+            <div class="slot" style="grid-column: span 2;">
+              <div class="job-block hvac">
+                <strong>No-cool diagnostic — Birch Ct</strong>
+                Service · 12:30–2:30
+              </div>
+            </div>
+            <div class="slot"></div>
+
+            <div class="tech-row-label">Elena Vasquez<span>Plumbing · Available 1p</span></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+            <div class="slot"></div>
+          </div>
+        </div>
+
+        <section class="unassigned-panel card" style="margin-top: 1.25rem;">
+          <div class="card-header">
+            <h3>Unassigned — 3 jobs</h3>
+            <span class="badge badge-warning">Needs dispatch</span>
+          </div>
+          <div class="card-body" style="padding-top: 0;">
+            <ul class="job-list">
+              <li>
+                <div class="meta">
+                  <h4>Garbage disposal install</h4>
+                  <p>892 Westbrook Dr · Plumbing · Customer requested afternoon</p>
+                </div>
+                <span class="badge badge-neutral">New</span>
+                <a href="job-detail.html" class="btn btn-sm">Assign</a>
+              </li>
+              <li>
+                <div class="meta">
+                  <h4>Ceiling fan — 2 units</h4>
+                  <p>15 Harbor View · Electrical · Parts on truck</p>
+                </div>
+                <span class="badge badge-info">Confirmed</span>
+                <a href="#" class="btn btn-sm btn-primary">Assign</a>
+              </li>
+              <li>
+                <div class="meta">
+                  <h4>Duct cleaning follow-up</h4>
+                  <p>220 Industrial Pkwy · HVAC · Warranty</p>
+                </div>
+                <span class="badge badge-success">Low priority</span>
+                <a href="#" class="btn btn-sm">Assign</a>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

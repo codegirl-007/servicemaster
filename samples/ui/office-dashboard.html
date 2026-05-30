@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office dashboard — ServiceMaster</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <h1>ServiceMaster</h1>
+        <p>Riverside Plumbing &amp; Electric</p>
+      </div>
+      <nav>
+        <span class="nav-section">Operations</span>
+        <a href="office-dashboard.html" class="active">Dashboard</a>
+        <a href="dispatcher-board.html">Schedule board</a>
+        <a href="job-detail.html">Jobs</a>
+        <a href="#">Customers</a>
+        <span class="nav-section">Field</span>
+        <a href="technician-day.html">Technician app (preview)</a>
+        <span class="nav-section">Ideation</span>
+        <a href="index.html">← All mockups</a>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <h2>Good morning, Dana</h2>
+        <div class="topbar-actions">
+          <span style="font-size: 0.875rem; color: var(--text-muted);">Friday, May 29</span>
+          <a href="dispatcher-board.html" class="btn btn-primary">Open schedule</a>
+        </div>
+      </header>
+
+      <div class="content">
+        <div class="grid-4" style="margin-bottom: 1.5rem;">
+          <div class="card stat-card">
+            <p class="label">Jobs today</p>
+            <p class="value">18</p>
+            <p class="delta delta-up">↑ 2 vs yesterday</p>
+          </div>
+          <div class="card stat-card">
+            <p class="label">On route now</p>
+            <p class="value">6</p>
+            <p class="delta" style="color: var(--text-muted);">4 techs active</p>
+          </div>
+          <div class="card stat-card">
+            <p class="label">Unassigned</p>
+            <p class="value" style="color: var(--warning);">3</p>
+            <p class="delta delta-down">Needs dispatch</p>
+          </div>
+          <div class="card stat-card">
+            <p class="label">At risk (SLA)</p>
+            <p class="value" style="color: var(--danger);">2</p>
+            <p class="delta">Window closes by 2pm</p>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <section class="card">
+            <div class="card-header">
+              <h3>Technician status</h3>
+              <a href="dispatcher-board.html" class="btn btn-sm btn-ghost">View board →</a>
+            </div>
+            <div class="card-body" style="padding-top: 0;">
+              <ul class="job-list">
+                <li>
+                  <div class="avatar" aria-hidden="true">MC</div>
+                  <div class="meta">
+                    <h4>Marcus Chen</h4>
+                    <p>En route · Leak repair — 412 Elm · ETA 11:20</p>
+                  </div>
+                  <span class="badge badge-info">On job</span>
+                </li>
+                <li>
+                  <div class="avatar" aria-hidden="true">SR</div>
+                  <div class="meta">
+                    <h4>Sofia Ruiz</h4>
+                    <p>At site · Panel upgrade — Maple Ave</p>
+                  </div>
+                  <span class="badge badge-success">Working</span>
+                </li>
+                <li>
+                  <div class="avatar" aria-hidden="true">JO</div>
+                  <div class="meta">
+                    <h4>James Okonkwo</h4>
+                    <p>Driving · AC tune-up — Cedar Ln</p>
+                  </div>
+                  <span class="badge badge-neutral">Travel</span>
+                </li>
+                <li>
+                  <div class="avatar" aria-hidden="true">EV</div>
+                  <div class="meta">
+                    <h4>Elena Vasquez</h4>
+                    <p>Available after 1:00pm · Plumbing</p>
+                  </div>
+                  <span class="badge badge-warning">Open slot</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-header">
+              <h3>Attention needed</h3>
+            </div>
+            <div class="card-body" style="padding-top: 0;">
+              <ul class="job-list">
+                <li>
+                  <div class="meta">
+                    <h4>Emergency shutoff — Marcus</h4>
+                    <p>Customer called twice · Callback priority · 2:00 window</p>
+                  </div>
+                  <span class="badge badge-danger">Urgent</span>
+                </li>
+                <li>
+                  <div class="meta">
+                    <h4>No-cool — Birch Ct</h4>
+                    <p>Parts not on truck · James requested transfer from warehouse</p>
+                  </div>
+                  <span class="badge badge-warning">Blocked</span>
+                </li>
+                <li>
+                  <div class="meta">
+                    <h4>3 unassigned jobs</h4>
+                    <p>Afternoon capacity tight · 1 electrical, 2 plumbing/HVAC</p>
+                  </div>
+                  <a href="dispatcher-board.html" class="btn btn-sm">Dispatch</a>
+                </li>
+              </ul>
+            </div>
+          </section>
+        </div>
+
+        <section class="card" style="margin-top: 1.25rem;">
+          <div class="card-header">
+            <h3>Today's pipeline</h3>
+            <select class="filter-select" aria-label="Sort jobs">
+              <option>By priority</option>
+              <option>By trade</option>
+              <option>By time window</option>
+            </select>
+          </div>
+          <div class="card-body" style="padding-top: 0;">
+            <ul class="job-list">
+              <li>
+                <div class="meta">
+                  <h4>Water heater install — Oak St</h4>
+                  <p>Marcus · 8:00–10:00 · Plumbing · In progress</p>
+                </div>
+                <span class="badge badge-info">In progress</span>
+              </li>
+              <li>
+                <div class="meta">
+                  <h4>Panel upgrade — Maple Ave</h4>
+                  <p>Sofia · 7:30–9:30 · Electrical · On site</p>
+                </div>
+                <span class="badge badge-success">On site</span>
+              </li>
+              <li>
+                <div class="meta">
+                  <h4>Garbage disposal — Westbrook Dr</h4>
+                  <p>Unassigned · Afternoon window · New lead from web</p>
+                </div>
+                <span class="badge badge-neutral">Unassigned</span>
+              </li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
