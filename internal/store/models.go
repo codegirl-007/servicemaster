@@ -46,6 +46,16 @@ type QboConnectionToken struct {
 	UpdatedAt             time.Time
 }
 
+type QboOauthState struct {
+	ID             uuid.UUID
+	TenantID       uuid.UUID
+	StateChecksum  string
+	EncryptedState []byte
+	ExpiresAt      time.Time
+	ConsumedAt     sql.NullTime
+	CreatedAt      time.Time
+}
+
 type Tenant struct {
 	ID        uuid.UUID
 	Name      string
