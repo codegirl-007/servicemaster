@@ -43,94 +43,111 @@ const stateTTL = 10 * time.Minute
 // refreshTokenLifetime is how long QBO refresh tokens are valid (~6 months).
 const refreshTokenLifetime = 180 * 24 * time.Hour
 
-// dataStore narrows *store.Queries to the methods the OAuth service needs.
-type dataStore interface {
+// StateStore handles non-transactional OAuth state read and write operations.
+type StateStore interface {
 	CreateOAuthState(context.Context, store.CreateOAuthStateParams) (store.QboOauthState, error)
 	GetActiveOAuthStateByChecksum(context.Context, string) (store.QboOauthState, error)
-	ConsumeOAuthState(context.Context, uuid.UUID) (uuid.UUID, error)
+}
+
+// TokenLoader loads stored OAuth tokens for a connection.
+type TokenLoader interface {
+	Load(ctx context.Context, connectionID uuid.UUID) (tokens.Tokens, error)
+}
+
+// TxRunner executes a function within a database transaction.
+type TxRunner interface {
+	RunInTx(ctx context.Context, fn func(context.Context, TxDataStore) error) error
+}
+
+// TxDataStore provides data access methods available within the Exchange
+// transaction. The production implementation wraps both *store.Queries and
+// *tokens.Service so that all Exchange writes go through a single sql.Tx.
+type TxDataStore interface {
 	GetQBOConnectionByTenant(context.Context, uuid.UUID) (store.QboConnection, error)
 	CreateQBOConnection(context.Context, store.CreateQBOConnectionParams) (store.QboConnection, error)
 	UpdateQBOConnectionState(context.Context, store.UpdateQBOConnectionStateParams) (store.QboConnection, error)
 	UpdateQBOConnectionCompanyName(context.Context, store.UpdateQBOConnectionCompanyNameParams) (store.QboConnection, error)
+	ConsumeOAuthState(context.Context, uuid.UUID) (uuid.UUID, error)
+	StoreTokens(ctx context.Context, connectionID uuid.UUID, tenantID uuid.UUID, accessToken string, refreshToken string, accessExpiresAt time.Time, refreshExpiresAt time.Time) error
 	CreateQBOConnectionEvent(context.Context, store.CreateQBOConnectionEventParams) (store.QboConnectionEvent, error)
 }
 
-// tokenService narrows *tokens.Service to the methods the OAuth service needs.
-type tokenService interface {
-	Store(context.Context, uuid.UUID, uuid.UUID, string, string, time.Time, time.Time) error
-	Load(context.Context, uuid.UUID) (tokens.Tokens, error)
+// dbTxRunner is the production TxRunner backed by *sql.DB.
+type dbTxRunner struct {
+	db        *sql.DB
+	encryptor tokens.Encryptor
 }
 
-// exchangeTx bundles a dataStore, tokenService, and commit/rollback
-// functions so that Exchange can use either a real DB transaction or
-// a test no-op pair through the same code path.
-type exchangeTx struct {
-	ds        dataStore
-	tokenSvc  tokenService
-	commit    func() error
-	rollback  func() error
+// RunInTx begins a transaction, constructs transactional data stores, calls fn,
+// and commits on success or rolls back on failure.
+func (r *dbTxRunner) RunInTx(ctx context.Context, fn func(context.Context, TxDataStore) error) error {
+	tx, err := r.db.BeginTx(ctx, nil)
+	if err != nil {
+		return fmt.Errorf("begin transaction: %w", err)
+	}
+	committed := false
+	defer func() {
+		if !committed {
+			if err := tx.Rollback(); err != nil && !errors.Is(err, sql.ErrTxDone) {
+				slog.Warn("exchange transaction rollback", "error", err)
+			}
+		}
+	}()
+	qtx := store.New(tx)
+	ts := tokens.NewService(qtx, r.encryptor)
+	txStore := &txDataStore{qtx: qtx, tokenSvc: ts}
+	if err := fn(ctx, txStore); err != nil {
+		return err
+	}
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("commit transaction: %w", err)
+	}
+	committed = true
+	return nil
+}
+
+// txDataStore is the production TxDataStore backed by transactional
+// *store.Queries and *tokens.Service instances.
+type txDataStore struct {
+	qtx      *store.Queries
+	tokenSvc *tokens.Service
+}
+
+func (s *txDataStore) GetQBOConnectionByTenant(ctx context.Context, tenantID uuid.UUID) (store.QboConnection, error) {
+	return s.qtx.GetQBOConnectionByTenant(ctx, tenantID)
+}
+
+func (s *txDataStore) CreateQBOConnection(ctx context.Context, arg store.CreateQBOConnectionParams) (store.QboConnection, error) {
+	return s.qtx.CreateQBOConnection(ctx, arg)
+}
+
+func (s *txDataStore) UpdateQBOConnectionState(ctx context.Context, arg store.UpdateQBOConnectionStateParams) (store.QboConnection, error) {
+	return s.qtx.UpdateQBOConnectionState(ctx, arg)
+}
+
+func (s *txDataStore) UpdateQBOConnectionCompanyName(ctx context.Context, arg store.UpdateQBOConnectionCompanyNameParams) (store.QboConnection, error) {
+	return s.qtx.UpdateQBOConnectionCompanyName(ctx, arg)
+}
+
+func (s *txDataStore) ConsumeOAuthState(ctx context.Context, id uuid.UUID) (uuid.UUID, error) {
+	return s.qtx.ConsumeOAuthState(ctx, id)
+}
+
+func (s *txDataStore) StoreTokens(ctx context.Context, connectionID uuid.UUID, tenantID uuid.UUID, accessToken string, refreshToken string, accessExpiresAt time.Time, refreshExpiresAt time.Time) error {
+	return s.tokenSvc.Store(ctx, connectionID, tenantID, accessToken, refreshToken, accessExpiresAt, refreshExpiresAt)
+}
+
+func (s *txDataStore) CreateQBOConnectionEvent(ctx context.Context, arg store.CreateQBOConnectionEventParams) (store.QboConnectionEvent, error) {
+	return s.qtx.CreateQBOConnectionEvent(ctx, arg)
 }
 
 // Service manages the QBO OAuth 2.0 connection flow.
 type Service struct {
-	store        dataStore
-	tokenService tokenService
+	stateStore   StateStore
+	tokenLoader  TokenLoader
 	encryptor    tokens.Encryptor
 	oauth2Config oauth2.Config
-	beginTx      func(context.Context) (*exchangeTx, error)
-}
-
-// newService is the unexported constructor used by both production and tests.
-// Tests inject a test endpoint and nil db to use the no-op transaction path.
-func newService(
-	ep oauth2.Endpoint,
-	clientID string,
-	clientSecret string,
-	redirectURL string,
-	scopes []string,
-	nonTxDS dataStore,
-	nonTxTokenSvc tokenService,
-	enc tokens.Encryptor,
-	db *sql.DB,
-) *Service {
-	s := &Service{
-		store:        nonTxDS,
-		tokenService: nonTxTokenSvc,
-		encryptor:    enc,
-		oauth2Config: oauth2.Config{
-			ClientID:     clientID,
-			ClientSecret: clientSecret,
-			RedirectURL:  redirectURL,
-			Endpoint:     ep,
-			Scopes:       scopes,
-		},
-	}
-	if db != nil {
-		s.beginTx = func(ctx context.Context) (*exchangeTx, error) {
-			tx, err := db.BeginTx(ctx, nil)
-			if err != nil {
-				return nil, fmt.Errorf("begin transaction: %w", err)
-			}
-			qtx := store.New(tx)
-			ts := tokens.NewService(qtx, s.encryptor)
-			return &exchangeTx{
-				ds:       qtx,
-				tokenSvc: ts,
-				commit:   tx.Commit,
-				rollback: tx.Rollback,
-			}, nil
-		}
-	} else {
-		s.beginTx = func(_ context.Context) (*exchangeTx, error) {
-			return &exchangeTx{
-				ds:       nonTxDS,
-				tokenSvc: nonTxTokenSvc,
-				commit:   func() error { return nil },
-				rollback: func() error { return nil },
-			}, nil
-		}
-	}
-	return s
+	txRunner     TxRunner
 }
 
 // NewService creates a new QBO OAuth service wired to the Intuit endpoint.
@@ -142,17 +159,47 @@ func NewService(
 	db *sql.DB,
 ) *Service {
 	scopes := strings.Fields(cfg.QBOScopes)
-	return newService(
-		intuitEndpoint,
-		cfg.QBOClientID,
-		cfg.QBOClientSecret,
-		cfg.QBORedirectURI,
-		scopes,
-		queries,
-		tokenService,
-		encryptor,
-		db,
-	)
+	return &Service{
+		stateStore:  queries,
+		tokenLoader: tokenService,
+		encryptor:   encryptor,
+		oauth2Config: oauth2.Config{
+			ClientID:     cfg.QBOClientID,
+			ClientSecret: cfg.QBOClientSecret,
+			RedirectURL:  cfg.QBORedirectURI,
+			Endpoint:     intuitEndpoint,
+			Scopes:       scopes,
+		},
+		txRunner: &dbTxRunner{db: db, encryptor: encryptor},
+	}
+}
+
+// newServiceForTest is the test-only constructor that accepts direct
+// interface implementations instead of wiring production dependencies.
+func newServiceForTest(
+	ep oauth2.Endpoint,
+	clientID string,
+	clientSecret string,
+	redirectURL string,
+	scopes []string,
+	stateStore StateStore,
+	tokenLoader TokenLoader,
+	encryptor tokens.Encryptor,
+	txRunner TxRunner,
+) *Service {
+	return &Service{
+		stateStore:  stateStore,
+		tokenLoader: tokenLoader,
+		encryptor:   encryptor,
+		oauth2Config: oauth2.Config{
+			ClientID:     clientID,
+			ClientSecret: clientSecret,
+			RedirectURL:  redirectURL,
+			Endpoint:     ep,
+			Scopes:       scopes,
+		},
+		txRunner: txRunner,
+	}
 }
 
 // AuthURL generates an OAuth state, persists it to the database, and returns
@@ -173,7 +220,7 @@ func (s *Service) AuthURL(ctx context.Context, tenantID uuid.UUID) (string, erro
 		return "", fmt.Errorf("encrypt state: %w", err)
 	}
 
-	if _, err := s.store.CreateOAuthState(ctx, store.CreateOAuthStateParams{
+	if _, err := s.stateStore.CreateOAuthState(ctx, store.CreateOAuthStateParams{
 		ID:             uuid.New(),
 		TenantID:       tenantID,
 		StateChecksum:  state,
@@ -201,21 +248,9 @@ func (s *Service) Exchange(
 		return err
 	}
 
-	etx, err := s.beginTx(ctx)
-	if err != nil {
-		return fmt.Errorf("begin exchange transaction: %w", err)
-	}
-	defer func() {
-		if err := etx.rollback(); err != nil && !errors.Is(err, sql.ErrTxDone) {
-			slog.Warn("exchange transaction rollback", "error", err)
-		}
-	}()
-
-	if err := s.writeExchangeResults(ctx, etx.ds, etx.tokenSvc, oauthState, token, realmID, companyName); err != nil {
-		return err
-	}
-
-	return etx.commit()
+	return s.txRunner.RunInTx(ctx, func(ctx context.Context, tx TxDataStore) error {
+		return s.writeExchangeResults(ctx, tx, oauthState, token, realmID, companyName)
+	})
 }
 
 // prequelExchange performs the read-only validation and Intuit API call
@@ -225,7 +260,7 @@ func (s *Service) prequelExchange(
 	code string,
 	stateChecksum string,
 ) (store.QboOauthState, *oauth2.Token, error) {
-	oauthState, err := s.store.GetActiveOAuthStateByChecksum(ctx, stateChecksum)
+	oauthState, err := s.stateStore.GetActiveOAuthStateByChecksum(ctx, stateChecksum)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return store.QboOauthState{}, nil, ErrStateNotFound
@@ -261,11 +296,10 @@ func (s *Service) prequelExchange(
 }
 
 // writeExchangeResults performs all DB writes for the exchange using the
-// provided store and token service (these may be transactional or not).
+// provided transactional data store so they commit or roll back atomically.
 func (s *Service) writeExchangeResults(
 	ctx context.Context,
-	ds dataStore,
-	tokenSvc tokenService,
+	tx TxDataStore,
 	oauthState store.QboOauthState,
 	token *oauth2.Token,
 	realmID string,
@@ -273,13 +307,13 @@ func (s *Service) writeExchangeResults(
 ) error {
 	// Determine the connection ID — reuse existing or create new.
 	connectionID := uuid.New()
-	existingConn, err := ds.GetQBOConnectionByTenant(ctx, oauthState.TenantID)
+	existingConn, err := tx.GetQBOConnectionByTenant(ctx, oauthState.TenantID)
 	if err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
 			return fmt.Errorf("lookup existing connection: %w", err)
 		}
 
-		if _, err := ds.CreateQBOConnection(ctx, store.CreateQBOConnectionParams{
+		if _, err := tx.CreateQBOConnection(ctx, store.CreateQBOConnectionParams{
 			ID:       connectionID,
 			TenantID: oauthState.TenantID,
 			RealmID:  realmID,
@@ -294,14 +328,14 @@ func (s *Service) writeExchangeResults(
 	} else {
 		connectionID = existingConn.ID
 
-		if _, err := ds.UpdateQBOConnectionState(ctx, store.UpdateQBOConnectionStateParams{
+		if _, err := tx.UpdateQBOConnectionState(ctx, store.UpdateQBOConnectionStateParams{
 			ID:    connectionID,
 			State: "connected",
 		}); err != nil {
 			return fmt.Errorf("update connection state: %w", err)
 		}
 
-		if _, err := ds.UpdateQBOConnectionCompanyName(ctx, store.UpdateQBOConnectionCompanyNameParams{
+		if _, err := tx.UpdateQBOConnectionCompanyName(ctx, store.UpdateQBOConnectionCompanyNameParams{
 			ID: connectionID,
 			CompanyName: sql.NullString{
 				String: companyName,
@@ -313,7 +347,7 @@ func (s *Service) writeExchangeResults(
 	}
 
 	// Encrypt and store the tokens.
-	if err := tokenSvc.Store(
+	if err := tx.StoreTokens(
 		ctx,
 		connectionID,
 		oauthState.TenantID,
@@ -326,7 +360,7 @@ func (s *Service) writeExchangeResults(
 	}
 
 	// Consume the state — single-use enforcement.
-	if _, err := ds.ConsumeOAuthState(ctx, oauthState.ID); err != nil {
+	if _, err := tx.ConsumeOAuthState(ctx, oauthState.ID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return ErrStateConsumed
 		}
@@ -346,7 +380,7 @@ func (s *Service) writeExchangeResults(
 		msg = "Connected"
 	}
 
-	if _, err := ds.CreateQBOConnectionEvent(ctx, store.CreateQBOConnectionEventParams{
+	if _, err := tx.CreateQBOConnectionEvent(ctx, store.CreateQBOConnectionEventParams{
 		ID:              uuid.New(),
 		QboConnectionID: connectionID,
 		TenantID:        oauthState.TenantID,
@@ -364,7 +398,7 @@ func (s *Service) writeExchangeResults(
 // The caller is responsible for handling token expiry (the oauth2 transport
 // sets the Authorization header automatically).
 func (s *Service) NewClient(ctx context.Context, connectionID uuid.UUID) (*http.Client, error) {
-	tok, err := s.tokenService.Load(ctx, connectionID)
+	tok, err := s.tokenLoader.Load(ctx, connectionID)
 	if err != nil {
 		return nil, fmt.Errorf("load tokens: %w", err)
 	}
