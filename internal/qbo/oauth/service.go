@@ -42,10 +42,28 @@ const stateTTL = 10 * time.Minute
 // refreshTokenLifetime is how long QBO refresh tokens are valid (~6 months).
 const refreshTokenLifetime = 180 * 24 * time.Hour
 
+// dataStore narrows *store.Queries to the methods the OAuth service needs.
+type dataStore interface {
+	CreateOAuthState(context.Context, store.CreateOAuthStateParams) (store.QboOauthState, error)
+	GetActiveOAuthStateByChecksum(context.Context, string) (store.QboOauthState, error)
+	ConsumeOAuthState(context.Context, uuid.UUID) (uuid.UUID, error)
+	GetQBOConnectionByTenant(context.Context, uuid.UUID) (store.QboConnection, error)
+	CreateQBOConnection(context.Context, store.CreateQBOConnectionParams) (store.QboConnection, error)
+	UpdateQBOConnectionState(context.Context, store.UpdateQBOConnectionStateParams) (store.QboConnection, error)
+	UpdateQBOConnectionCompanyName(context.Context, store.UpdateQBOConnectionCompanyNameParams) (store.QboConnection, error)
+	CreateQBOConnectionEvent(context.Context, store.CreateQBOConnectionEventParams) (store.QboConnectionEvent, error)
+}
+
+// tokenService narrows *tokens.Service to the methods the OAuth service needs.
+type tokenService interface {
+	Store(context.Context, uuid.UUID, uuid.UUID, string, string, time.Time, time.Time) error
+	Load(context.Context, uuid.UUID) (tokens.Tokens, error)
+}
+
 // Service manages the QBO OAuth 2.0 connection flow.
 type Service struct {
-	queries      *store.Queries
-	tokenService *tokens.Service
+	store        dataStore
+	tokenService tokenService
 	encryptor    tokens.Encryptor
 	oauth2Config oauth2.Config
 }
@@ -58,7 +76,7 @@ func NewService(
 	cfg config.Config,
 ) *Service {
 	return &Service{
-		queries:      queries,
+		store:        queries,
 		tokenService: tokenService,
 		encryptor:    encryptor,
 		oauth2Config: oauth2.Config{
@@ -89,7 +107,7 @@ func (s *Service) AuthURL(ctx context.Context, tenantID uuid.UUID) (string, erro
 		return "", fmt.Errorf("encrypt state: %w", err)
 	}
 
-	if _, err := s.queries.CreateOAuthState(ctx, store.CreateOAuthStateParams{
+	if _, err := s.store.CreateOAuthState(ctx, store.CreateOAuthStateParams{
 		ID:             uuid.New(),
 		TenantID:       tenantID,
 		StateChecksum:  state,
@@ -111,7 +129,7 @@ func (s *Service) Exchange(
 	realmID string,
 	companyName string,
 ) error {
-	oauthState, err := s.queries.GetActiveOAuthStateByChecksum(ctx, stateChecksum)
+	oauthState, err := s.store.GetActiveOAuthStateByChecksum(ctx, stateChecksum)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return ErrStateNotFound
@@ -147,14 +165,14 @@ func (s *Service) Exchange(
 
 	// Determine the connection ID — reuse existing or create new.
 	connectionID := uuid.New()
-	existingConn, err := s.queries.GetQBOConnectionByTenant(ctx, oauthState.TenantID)
+	existingConn, err := s.store.GetQBOConnectionByTenant(ctx, oauthState.TenantID)
 	if err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
 			return fmt.Errorf("lookup existing connection: %w", err)
 		}
 
 		// No existing connection — create one.
-		if _, err := s.queries.CreateQBOConnection(ctx, store.CreateQBOConnectionParams{
+		if _, err := s.store.CreateQBOConnection(ctx, store.CreateQBOConnectionParams{
 			ID:       connectionID,
 			TenantID: oauthState.TenantID,
 			RealmID:  realmID,
@@ -170,14 +188,14 @@ func (s *Service) Exchange(
 		// Existing connection found — update it.
 		connectionID = existingConn.ID
 
-		if _, err := s.queries.UpdateQBOConnectionState(ctx, store.UpdateQBOConnectionStateParams{
+		if _, err := s.store.UpdateQBOConnectionState(ctx, store.UpdateQBOConnectionStateParams{
 			ID:    connectionID,
 			State: "connected",
 		}); err != nil {
 			return fmt.Errorf("update connection state: %w", err)
 		}
 
-		if _, err := s.queries.UpdateQBOConnectionCompanyName(ctx, store.UpdateQBOConnectionCompanyNameParams{
+		if _, err := s.store.UpdateQBOConnectionCompanyName(ctx, store.UpdateQBOConnectionCompanyNameParams{
 			ID: connectionID,
 			CompanyName: sql.NullString{
 				String: companyName,
@@ -202,7 +220,7 @@ func (s *Service) Exchange(
 	}
 
 	// Consume the state — single-use enforcement (last irreversible step).
-	if _, err := s.queries.ConsumeOAuthState(ctx, oauthState.ID); err != nil {
+	if _, err := s.store.ConsumeOAuthState(ctx, oauthState.ID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return ErrStateConsumed
 		}
@@ -219,7 +237,7 @@ func (s *Service) Exchange(
 		msg = "Connected"
 	}
 
-	if _, err := s.queries.CreateQBOConnectionEvent(ctx, store.CreateQBOConnectionEventParams{
+	if _, err := s.store.CreateQBOConnectionEvent(ctx, store.CreateQBOConnectionEventParams{
 		ID:              uuid.New(),
 		QboConnectionID: connectionID,
 		TenantID:        oauthState.TenantID,
