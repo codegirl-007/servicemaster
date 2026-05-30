@@ -69,6 +69,8 @@ func (s *Service) Store(
 			Time:  refreshExpiresAt,
 			Valid: true,
 		},
+		TokenType: "bearer",
+		Scope:     sql.NullString{},
 	})
 
 	if err != nil {
