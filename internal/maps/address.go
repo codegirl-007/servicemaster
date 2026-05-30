@@ -1,17 +1,17 @@
 package maps
 
-// LatLong represents a geographic coordinate pair.
-type LatLong struct {
+// LatLng represents a geographic coordinate pair.
+type LatLng struct {
 	// Lat is the latitude in decimal degrees.
 	Lat float64
-	// Longitude is the longitude in decimal degrees.
-	Longitude float64
+	// Lng is the longitude in decimal degrees.
+	Lng float64
 }
 
 // AddressInput represents a free-form address to be geocoded.
 type AddressInput struct {
 	// Street is the street address line (e.g. "123 Main St").
-	Street string
+	Lines []string
 	// City is the city name.
 	City string
 	// State is the state or region code (e.g. "CA").

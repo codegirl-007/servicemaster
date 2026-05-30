@@ -11,7 +11,7 @@ type Place struct {
 	// FormattedAddress is the full address as a single string.
 	FormattedAddress string
 	// Coordinates is the geographic location of the place.
-	Coordinates LatLong
+	Coordinates LatLng
 	// PhoneNumber is the place's contact phone number.
 	PhoneNumber string
 	// Website is the place's website URL.
@@ -21,7 +21,7 @@ type Place struct {
 	// Types are the place categories (e.g. "restaurant", "plumber").
 	Types []string
 	// Provider identifies the backend that returned this place.
-	Provider string
+	Provider Provider
 }
 
 // PlacePrediction represents an autocomplete prediction from a place search.

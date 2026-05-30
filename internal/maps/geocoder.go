@@ -5,11 +5,11 @@ import "context"
 // GeocodeResult is the result of a geocode or reverse-geocode operation.
 type GeocodeResult struct {
 	// Coordinates is the geographic position.
-	Coordinates LatLong
+	Coordinates LatLng
 	// NormalizedAddress is the canonical address from the provider.
 	NormalizedAddress NormalizedAddress
-	// Provider identifies the backend that produced this result (e.g. "google").
-	Provider string
+	// Provider identifies the backend that produced this result.
+	Provider Provider
 	// Confidence is a 0-1 score indicating how confident the provider is in this result.
 	Confidence float64
 }
@@ -19,5 +19,5 @@ type Geocoder interface {
 	// Geocode converts an address into coordinates and a normalized address.
 	Geocode(ctx context.Context, input AddressInput) (GeocodeResult, error)
 	// ReverseGeocode converts coordinates into an approximate address.
-	ReverseGeocode(ctx context.Context, latlng LatLong) (GeocodeResult, error)
+	ReverseGeocode(ctx context.Context, latlng LatLng) (GeocodeResult, error)
 }

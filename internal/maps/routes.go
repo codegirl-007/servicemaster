@@ -8,11 +8,11 @@ import (
 // RouteRequest contains parameters for calculating a route.
 type RouteRequest struct {
 	// Origin is the starting point.
-	Origin LatLong
+	Origin LatLng
 	// Destination is the end point.
-	Destination LatLong
+	Destination LatLng
 	// Waypoints are intermediate stops.
-	Waypoints []LatLong
+	Waypoints []LatLng
 	// DepartureTime is the desired departure time. Zero value means "now".
 	DepartureTime time.Time
 }
@@ -24,9 +24,9 @@ type RouteLeg struct {
 	// Duration is the leg travel duration.
 	Duration time.Duration
 	// StartLocation is the leg origin coordinate.
-	StartLocation LatLong
+	StartLocation LatLng
 	// EndLocation is the leg destination coordinate.
-	EndLocation LatLong
+	EndLocation LatLng
 	// Polyline is the encoded polyline string for this leg.
 	Polyline string
 }
@@ -44,15 +44,15 @@ type RouteResult struct {
 	// Legs is the list of route legs between consecutive waypoints.
 	Legs []RouteLeg
 	// Provider identifies the backend that produced this result.
-	Provider string
+	Provider Provider
 }
 
 // RouteMatrixRequest contains parameters for a distance matrix calculation.
 type RouteMatrixRequest struct {
 	// Origins is the list of origin coordinates.
-	Origins []LatLong
+	Origins []LatLng
 	// Destinations is the list of destination coordinates.
-	Destinations []LatLong
+	Destinations []LatLng
 	// DepartureTime is the desired departure time. Zero value means "now".
 	DepartureTime time.Time
 }
@@ -76,7 +76,7 @@ type RouteMatrixResult struct {
 	// Elements is the flattened list of matrix entries.
 	Elements []RouteMatrixElement
 	// Provider identifies the backend that produced this result.
-	Provider string
+	Provider Provider
 }
 
 // Router calculates routes and distance matrices.
