@@ -28,8 +28,18 @@ type Config struct {
 	DatabaseConnMaxIdleTime time.Duration
 	// TokenEncryptionKeyBase64 is the base64-encoded key used to encrypt stored tokens.
 	TokenEncryptionKeyBase64 string
-	// GoogleMapsAPIKey is to use Google Maps API
+	// GoogleMapsAPIKey is to use Google Maps API.
 	GoogleMapsAPIKey string
+	// QBOClientID is the QuickBooks Online OAuth 2.0 client ID.
+	QBOClientID string
+	// QBOClientSecret is the QuickBooks Online OAuth 2.0 client secret.
+	QBOClientSecret string
+	// QBORedirectURI is the OAuth redirect URI registered with the Intuit developer portal.
+	QBORedirectURI string
+	// QBOScopes is the space-separated list of OAuth scopes requested during connect.
+	QBOScopes string
+	// DefaultTenantID is the tenant UUID used for QBO OAuth flows until user auth exists.
+	DefaultTenantID string
 }
 
 const (
@@ -55,6 +65,11 @@ func Load() (Config, error) {
 		DatabaseConnMaxIdleTime:  getEnvDuration("DATABASE_CONN_MAX_IDLE_TIME", defaultDatabaseConnMaxIdleTime),
 		TokenEncryptionKeyBase64: getEnv("TOKEN_ENCRYPTION_KEY_BASE64", ""),
 		GoogleMapsAPIKey:         getEnv("GOOGLE_MAPS_API_KEY", ""),
+		QBOClientID:              getEnv("QBO_CLIENT_ID", ""),
+		QBOClientSecret:          getEnv("QBO_CLIENT_SECRET", ""),
+		QBORedirectURI:           getEnv("QBO_REDIRECT_URI", ""),
+		QBOScopes:                getEnv("QBO_SCOPES", "com.intuit.quickbooks.accounting"),
+		DefaultTenantID:          getEnv("DEFAULT_TENANT_ID", ""),
 	}
 
 	if err := config.Validate(); err != nil {
@@ -72,6 +87,18 @@ func (c Config) Validate() error {
 
 	if c.TokenEncryptionKeyBase64 == "" {
 		return fmt.Errorf("TOKEN_ENCRYPTION_KEY_BASE64 is required")
+	}
+
+	if c.QBOClientID == "" {
+		return fmt.Errorf("QBO_CLIENT_ID is required")
+	}
+
+	if c.QBOClientSecret == "" {
+		return fmt.Errorf("QBO_CLIENT_SECRET is required")
+	}
+
+	if c.QBORedirectURI == "" {
+		return fmt.Errorf("QBO_REDIRECT_URI is required")
 	}
 
 	return nil
