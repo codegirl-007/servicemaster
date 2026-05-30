@@ -66,16 +66,18 @@ type Service struct {
 	tokenService tokenService
 	encryptor    tokens.Encryptor
 	oauth2Config oauth2.Config
+	beginTx      func(context.Context, *sql.TxOptions) (*sql.Tx, error)
 }
 
-// NewService creates a new QBO OAuth service.
+// NewService creates a new QBO OAuth service. Pass nil for db in tests.
 func NewService(
 	queries *store.Queries,
 	tokenService *tokens.Service,
 	encryptor tokens.Encryptor,
 	cfg config.Config,
+	db *sql.DB,
 ) *Service {
-	return &Service{
+	s := &Service{
 		store:        queries,
 		tokenService: tokenService,
 		encryptor:    encryptor,
@@ -87,6 +89,10 @@ func NewService(
 			Scopes:       strings.Fields(cfg.QBOScopes),
 		},
 	}
+	if db != nil {
+		s.beginTx = db.BeginTx
+	}
+	return s
 }
 
 // AuthURL generates an OAuth state, persists it to the database, and returns
@@ -122,6 +128,7 @@ func (s *Service) AuthURL(ctx context.Context, tenantID uuid.UUID) (string, erro
 
 // Exchange validates the OAuth state, exchanges the authorization code for
 // tokens, creates the QBO connection, and persists the encrypted tokens.
+// All DB writes are performed atomically in a single transaction.
 func (s *Service) Exchange(
 	ctx context.Context,
 	code string,
@@ -129,50 +136,99 @@ func (s *Service) Exchange(
 	realmID string,
 	companyName string,
 ) error {
+	// Steps 1-3: validate state and exchange code with Intuit (no DB writes).
+	oauthState, token, err := s.prequelExchange(ctx, code, stateChecksum)
+	if err != nil {
+		return err
+	}
+
+	// Steps 4-7: all DB writes inside a single transaction.
+	if s.beginTx != nil {
+		tx, err := s.beginTx(ctx, nil)
+		if err != nil {
+			return fmt.Errorf("begin transaction: %w", err)
+		}
+		defer tx.Rollback()
+
+		qtx := store.New(tx)
+		txTokenSvc := tokens.NewService(qtx, s.encryptor)
+
+		if err := s.writeExchangeResults(ctx, qtx, txTokenSvc, oauthState, token, realmID, companyName); err != nil {
+			return err
+		}
+
+		if err := tx.Commit(); err != nil {
+			return fmt.Errorf("commit transaction: %w", err)
+		}
+		return nil
+	}
+
+	// Test path — no transaction (in-memory fake store).
+	return s.writeExchangeResults(ctx, s.store, s.tokenService, oauthState, token, realmID, companyName)
+}
+
+// prequelExchange performs the read-only validation and Intuit API call
+// that must happen before any DB writes.
+func (s *Service) prequelExchange(
+	ctx context.Context,
+	code string,
+	stateChecksum string,
+) (store.QboOauthState, *oauth2.Token, error) {
 	oauthState, err := s.store.GetActiveOAuthStateByChecksum(ctx, stateChecksum)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return ErrStateNotFound
+			return store.QboOauthState{}, nil, ErrStateNotFound
 		}
-		return fmt.Errorf("lookup state: %w", err)
+		return store.QboOauthState{}, nil, fmt.Errorf("lookup state: %w", err)
 	}
 
-	// Decrypt the state to verify the tenant binding.
 	plaintext, err := s.encryptor.Decrypt(oauthState.EncryptedState)
 	if err != nil {
-		return fmt.Errorf("decrypt state: %w", err)
+		return store.QboOauthState{}, nil, fmt.Errorf("decrypt state: %w", err)
 	}
 
 	parts := strings.SplitN(string(plaintext), "|", 2)
 	if len(parts) != 2 {
-		return fmt.Errorf("invalid state format")
+		return store.QboOauthState{}, nil, fmt.Errorf("invalid state format")
 	}
 
 	stateTenantID, err := uuid.Parse(parts[0])
 	if err != nil {
-		return fmt.Errorf("parse state tenant: %w", err)
+		return store.QboOauthState{}, nil, fmt.Errorf("parse state tenant: %w", err)
 	}
 
 	if stateTenantID != oauthState.TenantID {
-		return ErrTenantMismatch
+		return store.QboOauthState{}, nil, ErrTenantMismatch
 	}
 
-	// Exchange the authorization code for an OAuth token.
 	token, err := s.oauth2Config.Exchange(ctx, code)
 	if err != nil {
-		return fmt.Errorf("exchange code: %w", err)
+		return store.QboOauthState{}, nil, fmt.Errorf("exchange code: %w", err)
 	}
 
+	return oauthState, token, nil
+}
+
+// writeExchangeResults performs all DB writes for the exchange using the
+// provided store and token service (these may be transactional or not).
+func (s *Service) writeExchangeResults(
+	ctx context.Context,
+	ds dataStore,
+	tokenSvc tokenService,
+	oauthState store.QboOauthState,
+	token *oauth2.Token,
+	realmID string,
+	companyName string,
+) error {
 	// Determine the connection ID — reuse existing or create new.
 	connectionID := uuid.New()
-	existingConn, err := s.store.GetQBOConnectionByTenant(ctx, oauthState.TenantID)
+	existingConn, err := ds.GetQBOConnectionByTenant(ctx, oauthState.TenantID)
 	if err != nil {
 		if !errors.Is(err, sql.ErrNoRows) {
 			return fmt.Errorf("lookup existing connection: %w", err)
 		}
 
-		// No existing connection — create one.
-		if _, err := s.store.CreateQBOConnection(ctx, store.CreateQBOConnectionParams{
+		if _, err := ds.CreateQBOConnection(ctx, store.CreateQBOConnectionParams{
 			ID:       connectionID,
 			TenantID: oauthState.TenantID,
 			RealmID:  realmID,
@@ -185,17 +241,16 @@ func (s *Service) Exchange(
 			return fmt.Errorf("create connection: %w", err)
 		}
 	} else {
-		// Existing connection found — update it.
 		connectionID = existingConn.ID
 
-		if _, err := s.store.UpdateQBOConnectionState(ctx, store.UpdateQBOConnectionStateParams{
+		if _, err := ds.UpdateQBOConnectionState(ctx, store.UpdateQBOConnectionStateParams{
 			ID:    connectionID,
 			State: "connected",
 		}); err != nil {
 			return fmt.Errorf("update connection state: %w", err)
 		}
 
-		if _, err := s.store.UpdateQBOConnectionCompanyName(ctx, store.UpdateQBOConnectionCompanyNameParams{
+		if _, err := ds.UpdateQBOConnectionCompanyName(ctx, store.UpdateQBOConnectionCompanyNameParams{
 			ID: connectionID,
 			CompanyName: sql.NullString{
 				String: companyName,
@@ -207,7 +262,7 @@ func (s *Service) Exchange(
 	}
 
 	// Encrypt and store the tokens.
-	if err := s.tokenService.Store(
+	if err := tokenSvc.Store(
 		ctx,
 		connectionID,
 		oauthState.TenantID,
@@ -219,8 +274,8 @@ func (s *Service) Exchange(
 		return fmt.Errorf("store tokens: %w", err)
 	}
 
-	// Consume the state — single-use enforcement (last irreversible step).
-	if _, err := s.store.ConsumeOAuthState(ctx, oauthState.ID); err != nil {
+	// Consume the state — single-use enforcement.
+	if _, err := ds.ConsumeOAuthState(ctx, oauthState.ID); err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return ErrStateConsumed
 		}
@@ -237,7 +292,7 @@ func (s *Service) Exchange(
 		msg = "Connected"
 	}
 
-	if _, err := s.store.CreateQBOConnectionEvent(ctx, store.CreateQBOConnectionEventParams{
+	if _, err := ds.CreateQBOConnectionEvent(ctx, store.CreateQBOConnectionEventParams{
 		ID:              uuid.New(),
 		QboConnectionID: connectionID,
 		TenantID:        oauthState.TenantID,
