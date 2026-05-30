@@ -60,16 +60,79 @@ type tokenService interface {
 	Load(context.Context, uuid.UUID) (tokens.Tokens, error)
 }
 
+// exchangeTx bundles a dataStore, tokenService, and commit/rollback
+// functions so that Exchange can use either a real DB transaction or
+// a test no-op pair through the same code path.
+type exchangeTx struct {
+	ds        dataStore
+	tokenSvc  tokenService
+	commit    func() error
+	rollback  func() error
+}
+
 // Service manages the QBO OAuth 2.0 connection flow.
 type Service struct {
 	store        dataStore
 	tokenService tokenService
 	encryptor    tokens.Encryptor
 	oauth2Config oauth2.Config
-	beginTx      func(context.Context, *sql.TxOptions) (*sql.Tx, error)
+	beginTx      func(context.Context) (*exchangeTx, error)
 }
 
-// NewService creates a new QBO OAuth service. Pass nil for db in tests.
+// newService is the unexported constructor used by both production and tests.
+// Tests inject a test endpoint and nil db to use the no-op transaction path.
+func newService(
+	ep oauth2.Endpoint,
+	clientID string,
+	clientSecret string,
+	redirectURL string,
+	scopes []string,
+	nonTxDS dataStore,
+	nonTxTokenSvc tokenService,
+	enc tokens.Encryptor,
+	db *sql.DB,
+) *Service {
+	s := &Service{
+		store:        nonTxDS,
+		tokenService: nonTxTokenSvc,
+		encryptor:    enc,
+		oauth2Config: oauth2.Config{
+			ClientID:     clientID,
+			ClientSecret: clientSecret,
+			RedirectURL:  redirectURL,
+			Endpoint:     ep,
+			Scopes:       scopes,
+		},
+	}
+	if db != nil {
+		s.beginTx = func(ctx context.Context) (*exchangeTx, error) {
+			tx, err := db.BeginTx(ctx, nil)
+			if err != nil {
+				return nil, fmt.Errorf("begin transaction: %w", err)
+			}
+			qtx := store.New(tx)
+			ts := tokens.NewService(qtx, s.encryptor)
+			return &exchangeTx{
+				ds:       qtx,
+				tokenSvc: ts,
+				commit:   tx.Commit,
+				rollback: tx.Rollback,
+			}, nil
+		}
+	} else {
+		s.beginTx = func(_ context.Context) (*exchangeTx, error) {
+			return &exchangeTx{
+				ds:       nonTxDS,
+				tokenSvc: nonTxTokenSvc,
+				commit:   func() error { return nil },
+				rollback: func() error { return nil },
+			}, nil
+		}
+	}
+	return s
+}
+
+// NewService creates a new QBO OAuth service wired to the Intuit endpoint.
 func NewService(
 	queries *store.Queries,
 	tokenService *tokens.Service,
@@ -77,22 +140,18 @@ func NewService(
 	cfg config.Config,
 	db *sql.DB,
 ) *Service {
-	s := &Service{
-		store:        queries,
-		tokenService: tokenService,
-		encryptor:    encryptor,
-		oauth2Config: oauth2.Config{
-			ClientID:     cfg.QBOClientID,
-			ClientSecret: cfg.QBOClientSecret,
-			RedirectURL:  cfg.QBORedirectURI,
-			Endpoint:     intuitEndpoint,
-			Scopes:       strings.Fields(cfg.QBOScopes),
-		},
-	}
-	if db != nil {
-		s.beginTx = db.BeginTx
-	}
-	return s
+	scopes := strings.Fields(cfg.QBOScopes)
+	return newService(
+		intuitEndpoint,
+		cfg.QBOClientID,
+		cfg.QBOClientSecret,
+		cfg.QBORedirectURI,
+		scopes,
+		queries,
+		tokenService,
+		encryptor,
+		db,
+	)
 }
 
 // AuthURL generates an OAuth state, persists it to the database, and returns
@@ -136,35 +195,22 @@ func (s *Service) Exchange(
 	realmID string,
 	companyName string,
 ) error {
-	// Steps 1-3: validate state and exchange code with Intuit (no DB writes).
 	oauthState, token, err := s.prequelExchange(ctx, code, stateChecksum)
 	if err != nil {
 		return err
 	}
 
-	// Steps 4-7: all DB writes inside a single transaction.
-	if s.beginTx != nil {
-		tx, err := s.beginTx(ctx, nil)
-		if err != nil {
-			return fmt.Errorf("begin transaction: %w", err)
-		}
-		defer tx.Rollback()
+	etx, err := s.beginTx(ctx)
+	if err != nil {
+		return fmt.Errorf("begin exchange transaction: %w", err)
+	}
+	defer etx.rollback()
 
-		qtx := store.New(tx)
-		txTokenSvc := tokens.NewService(qtx, s.encryptor)
-
-		if err := s.writeExchangeResults(ctx, qtx, txTokenSvc, oauthState, token, realmID, companyName); err != nil {
-			return err
-		}
-
-		if err := tx.Commit(); err != nil {
-			return fmt.Errorf("commit transaction: %w", err)
-		}
-		return nil
+	if err := s.writeExchangeResults(ctx, etx.ds, etx.tokenSvc, oauthState, token, realmID, companyName); err != nil {
+		return err
 	}
 
-	// Test path — no transaction (in-memory fake store).
-	return s.writeExchangeResults(ctx, s.store, s.tokenService, oauthState, token, realmID, companyName)
+	return etx.commit()
 }
 
 // prequelExchange performs the read-only validation and Intuit API call
@@ -283,9 +329,12 @@ func (s *Service) writeExchangeResults(
 	}
 
 	// Log a connected event for the audit trail.
-	metadata, _ := json.Marshal(map[string]string{
+	metadata, err := json.Marshal(map[string]string{
 		"realm_id": realmID,
 	})
+	if err != nil {
+		return fmt.Errorf("marshal event metadata: %w", err)
+	}
 
 	msg := "Connected to " + companyName
 	if companyName == "" {

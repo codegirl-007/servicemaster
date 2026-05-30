@@ -188,18 +188,17 @@ func newTestService(fs *fakeStore, tokenStore *fakeTokenDataStore, tokenURL stri
 		AuthURL:  "https://example.com/auth",
 		TokenURL: tokenURL,
 	}
-	return &Service{
-		store:        fs,
-		tokenService: tokens.NewService(tokenStore, testEncryptor),
-		encryptor:    testEncryptor,
-		oauth2Config: oauth2.Config{
-			ClientID:     "test-client",
-			ClientSecret: "test-secret",
-			RedirectURL:  "http://localhost:8080/qbo/callback",
-			Endpoint:     ep,
-			Scopes:       []string{"com.intuit.quickbooks.accounting"},
-		},
-	}
+	return newService(
+		ep,
+		"test-client",
+		"test-secret",
+		"http://localhost:8080/qbo/callback",
+		[]string{"com.intuit.quickbooks.accounting"},
+		fs,
+		tokens.NewService(tokenStore, testEncryptor),
+		testEncryptor,
+		nil,
+	)
 }
 
 func fakeTokenServer() *httptest.Server {
@@ -557,6 +556,86 @@ func TestNewClient(t *testing.T) {
 	}
 	if client == nil {
 		t.Fatal("expected non-nil client")
+	}
+}
+
+func TestExchange_BeginTxFails(t *testing.T) {
+	ts := fakeTokenServer()
+	defer ts.Close()
+
+	fs := newFakeStore()
+	fts := newFakeTokenDataStore()
+	svc := newTestService(fs, fts, ts.URL)
+
+	// Override beginTx to simulate a DB connection failure.
+	svc.beginTx = func(_ context.Context) (*exchangeTx, error) {
+		return nil, errors.New("db connection lost")
+	}
+
+	stateChecksum := "begin-tx-fail"
+	expiresAt := time.Now().Add(10 * time.Minute)
+	fs.states[stateChecksum] = store.QboOauthState{
+		ID:             uuid.New(),
+		TenantID:       testTenantID,
+		StateChecksum:  stateChecksum,
+		EncryptedState: encryptState(t, testTenantID, expiresAt),
+		ExpiresAt:      expiresAt,
+		CreatedAt:      time.Now(),
+	}
+
+	err := svc.Exchange(context.Background(), "auth-code", stateChecksum, "r1", "C")
+	if err == nil {
+		t.Fatal("expected error from failed beginTx")
+	}
+}
+
+// errConsumeStore wraps fakeStore but always fails ConsumeOAuthState
+// to simulate a concurrent-consumption race.
+type errConsumeStore struct {
+	*fakeStore
+}
+
+func (e *errConsumeStore) ConsumeOAuthState(_ context.Context, _ uuid.UUID) (uuid.UUID, error) {
+	return uuid.UUID{}, sql.ErrNoRows
+}
+
+func TestExchange_WriteTimeStateConsumed(t *testing.T) {
+	ts := fakeTokenServer()
+	defer ts.Close()
+
+	fs := &errConsumeStore{newFakeStore()}
+	fts := newFakeTokenDataStore()
+
+	ep := oauth2.Endpoint{
+		AuthURL:  "https://example.com/auth",
+		TokenURL: ts.URL,
+	}
+	svc := newService(
+		ep,
+		"test-client",
+		"test-secret",
+		"http://localhost:8080/qbo/callback",
+		[]string{"com.intuit.quickbooks.accounting"},
+		fs,
+		tokens.NewService(fts, testEncryptor),
+		testEncryptor,
+		nil,
+	)
+
+	stateChecksum := "write-time-consumed"
+	expiresAt := time.Now().Add(10 * time.Minute)
+	fs.states[stateChecksum] = store.QboOauthState{
+		ID:             uuid.New(),
+		TenantID:       testTenantID,
+		StateChecksum:  stateChecksum,
+		EncryptedState: encryptState(t, testTenantID, expiresAt),
+		ExpiresAt:      expiresAt,
+		CreatedAt:      time.Now(),
+	}
+
+	err := svc.Exchange(context.Background(), "auth-code", stateChecksum, "r1", "C")
+	if !errors.Is(err, ErrStateConsumed) {
+		t.Errorf("expected ErrStateConsumed, got %v", err)
 	}
 }
 
