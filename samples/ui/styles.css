@@ -412,27 +412,24 @@ a:hover {
   font-size: 0.6875rem;
   line-height: 1.35;
   overflow: hidden;
-  border-left: 3px solid;
+  border: none;
   cursor: pointer;
 }
 
 .job-block.plumbing {
-  background: #e6f3f7;
-  border-left-color: #0d6e8a;
+  background: #d4eaf0;
 }
 
 .job-block.electrical {
-  background: #fef3e2;
-  border-left-color: #b45309;
+  background: #fce8cc;
 }
 
 .job-block.hvac {
-  background: #e8f5ee;
-  border-left-color: #1a7f4e;
+  background: #d4eddf;
 }
 
 .job-block.urgent {
-  box-shadow: inset 0 0 0 1px var(--danger);
+  background: #f5d0cc;
 }
 
 .job-block strong {
