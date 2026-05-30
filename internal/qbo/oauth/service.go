@@ -204,7 +204,7 @@ func (s *Service) Exchange(
 	if err != nil {
 		return fmt.Errorf("begin exchange transaction: %w", err)
 	}
-	defer etx.rollback()
+	defer func() { _ = etx.rollback() }()
 
 	if err := s.writeExchangeResults(ctx, etx.ds, etx.tokenSvc, oauthState, token, realmID, companyName); err != nil {
 		return err
