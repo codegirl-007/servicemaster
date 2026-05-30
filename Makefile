@@ -50,3 +50,17 @@ migrate-create:
 		exit 1; \
 	fi
 	goose -dir $(MIGRATIONS_DIR) create $(name) sql
+
+db-up:
+	@if docker ps -a --format '{{.Names}}' | grep -q '^servicemaster-postgres$$'; then \
+		echo "Starting existing Postgres container..."; \
+		docker start servicemaster-postgres; \
+	else \
+		echo "Creating Postgres container..."; \
+		docker run --name servicemaster-postgres \
+			-e POSTGRES_USER=servicemaster \
+			-e POSTGRES_PASSWORD=servicemaster \
+			-e POSTGRES_DB=servicemaster_dev \
+			-p 5432:5432 \
+			-d postgres:16; \
+	fi
