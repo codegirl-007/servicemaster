@@ -28,6 +28,8 @@ type Config struct {
 	DatabaseConnMaxIdleTime time.Duration
 	// TokenEncryptionKeyBase64 is the base64-encoded key used to encrypt stored tokens.
 	TokenEncryptionKeyBase64 string
+	// GoogleMapsAPIKey is to use Google Maps API
+	GoogleMapsAPIKey string
 }
 
 const (
@@ -52,6 +54,7 @@ func Load() (Config, error) {
 		DatabaseConnMaxLifetime:  getEnvDuration("DATABASE_CONN_MAX_LIFETIME", defaultDatabaseConnMaxLifetime),
 		DatabaseConnMaxIdleTime:  getEnvDuration("DATABASE_CONN_MAX_IDLE_TIME", defaultDatabaseConnMaxIdleTime),
 		TokenEncryptionKeyBase64: getEnv("TOKEN_ENCRYPTION_KEY_BASE64", ""),
+		GoogleMapsAPIKey:         getEnv("GOOGLE_MAPS_API_KEY", ""),
 	}
 
 	if err := config.Validate(); err != nil {
