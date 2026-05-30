@@ -54,7 +54,7 @@ func Load() (Config, error) {
 		DatabaseConnMaxLifetime:  getEnvDuration("DATABASE_CONN_MAX_LIFETIME", defaultDatabaseConnMaxLifetime),
 		DatabaseConnMaxIdleTime:  getEnvDuration("DATABASE_CONN_MAX_IDLE_TIME", defaultDatabaseConnMaxIdleTime),
 		TokenEncryptionKeyBase64: getEnv("TOKEN_ENCRYPTION_KEY_BASE64", ""),
-		GoogleMapsAPIKey: getEnv("GOOGLE_MAPS_API_KEY",""),
+		GoogleMapsAPIKey:         getEnv("GOOGLE_MAPS_API_KEY", ""),
 	}
 
 	if err := config.Validate(); err != nil {
