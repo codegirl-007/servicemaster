@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log/slog"
 	"net/http"
 	"strings"
 	"time"
@@ -204,7 +205,11 @@ func (s *Service) Exchange(
 	if err != nil {
 		return fmt.Errorf("begin exchange transaction: %w", err)
 	}
-	defer func() { _ = etx.rollback() }()
+	defer func() {
+		if err := etx.rollback(); err != nil && !errors.Is(err, sql.ErrTxDone) {
+			slog.Warn("exchange transaction rollback", "error", err)
+		}
+	}()
 
 	if err := s.writeExchangeResults(ctx, etx.ds, etx.tokenSvc, oauthState, token, realmID, companyName); err != nil {
 		return err
