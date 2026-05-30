@@ -46,6 +46,11 @@ jobs:
         run: echo "TOKEN_ENCRYPTION_KEY_BASE64=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
       - name: Set database URL
         run: echo "DATABASE_URL=postgres://servicemaster:servicemaster@localhost:5432/servicemaster_dev?sslmode=disable" >> "$GITHUB_ENV"
+      - name: Set QBO OAuth env vars
+        run: |
+          echo "QBO_CLIENT_ID=dummy" >> "$GITHUB_ENV"
+          echo "QBO_CLIENT_SECRET=dummy" >> "$GITHUB_ENV"
+          echo "QBO_REDIRECT_URI=http://localhost:8080/qbo/callback" >> "$GITHUB_ENV"
       - name: Run migrations
         run: make migrate-up
       - name: Build server
