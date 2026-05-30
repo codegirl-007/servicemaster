@@ -6,13 +6,14 @@ endif
 MIGRATIONS_DIR := db/migrations
 DB_DRIVER := postgres
 
-.PHONY: help run test vet sqlc migrate-status migrate-up migrate-down migrate-reset migrate-create
+.PHONY: help run test vet lint sqlc migrate-status migrate-up migrate-down migrate-reset migrate-create
 
 help:
 	@echo "Available targets:"
 	@echo "  make run                 Run the API server"
 	@echo "  make test                Run Go tests"
 	@echo "  make vet                 Run go vet"
+	@echo "  make lint                Run golangci-lint"
 	@echo "  make sqlc                Generate sqlc code"
 	@echo "  make migrate-status      Show migration status"
 	@echo "  make migrate-up          Apply all pending migrations"
@@ -28,6 +29,9 @@ test:
 
 vet:
 	go vet ./...
+
+lint:
+	golangci-lint run ./...
 
 sqlc:
 	sqlc generate

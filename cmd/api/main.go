@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"errors"
-	"log"
+	"log/slog"
 	"net/http"
 	"os"
 	"os/signal"
@@ -18,18 +18,20 @@ func main() {
 	// load configs
 	cfg, err := config.Load()
 	if err != nil {
-		log.Fatalf("load config: %v", err)
+		slog.Error("load config", "error", err)
+		os.Exit(1)
 	}
 
-	log.Println("initializing database...")
+	slog.Info("initializing database")
 
 	databaseHandle, err := db.Open(cfg)
 	if err != nil {
-		log.Fatalf("initializing database: %v", err)
+		slog.Error("initializing database", "error", err)
+		os.Exit(1)
 	}
 	defer databaseHandle.Close()
 
-	log.Println("database initialized")
+	slog.Info("database initialized")
 
 	mux := http.NewServeMux()
 
@@ -60,7 +62,7 @@ func main() {
 	serverErrors := make(chan error, 1)
 
 	go func() {
-		log.Printf("starting http server on %s", cfg.HTTPAddr)
+		slog.Info("starting http server", "addr", cfg.HTTPAddr)
 
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
 			serverErrors <- err
@@ -73,18 +75,20 @@ func main() {
 
 	select {
 	case err := <-serverErrors:
-		log.Fatalf("http server: %v", err)
-	case signal := <-shutdownSignals:
-		log.Printf("received shutdown signal: %s", signal)
+		slog.Error("http server", "error", err)
+		os.Exit(1)
+	case s := <-shutdownSignals:
+		slog.Info("received shutdown signal", "signal", s)
 	}
 
 	shutdownContext, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	if err := server.Shutdown(shutdownContext); err != nil {
-		log.Fatalf("shutdown http server: %v", err)
+		slog.Error("shutdown http server", "error", err)
+		os.Exit(1)
 	}
 
-	log.Println("server stopped")
+	slog.Info("server stopped")
 
 }
