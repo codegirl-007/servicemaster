@@ -17,8 +17,15 @@ type Encryptor interface {
 	Decrypt(ciphertext []byte) ([]byte, error)
 }
 
+// DataStore narrows *store.Queries to the methods the token service needs.
+type DataStore interface {
+	UpsertQBOConnectionTokens(context.Context, store.UpsertQBOConnectionTokensParams) (store.QboConnectionToken, error)
+	GetQBOConnectionTokens(context.Context, uuid.UUID) (store.QboConnectionToken, error)
+	ReplaceQBOConnectionTokensIfVersion(context.Context, store.ReplaceQBOConnectionTokensIfVersionParams) (store.QboConnectionToken, error)
+}
+
 type Service struct {
-	queries   *store.Queries
+	store     DataStore
 	encryptor Encryptor
 }
 
@@ -33,9 +40,9 @@ type Tokens struct {
 
 var ErrConcurrentRefresh = errors.New("qbo token refresh lost concurrent update")
 
-func NewService(queries *store.Queries, encryptor Encryptor) *Service {
+func NewService(store DataStore, encryptor Encryptor) *Service {
 	return &Service{
-		queries:   queries,
+		store:     store,
 		encryptor: encryptor,
 	}
 }
@@ -59,7 +66,7 @@ func (s *Service) Store(
 		return fmt.Errorf("encrypt refresh token: %w", err)
 	}
 
-	_, err = s.queries.UpsertQBOConnectionTokens(ctx, store.UpsertQBOConnectionTokensParams{
+	_, err = s.store.UpsertQBOConnectionTokens(ctx, store.UpsertQBOConnectionTokensParams{
 		QboConnectionID:       connectionID,
 		TenantID:              tenantID,
 		EncryptedAccessToken:  encryptedAccessToken,
@@ -81,7 +88,7 @@ func (s *Service) Store(
 }
 
 func (s *Service) Load(ctx context.Context, connectionID uuid.UUID) (Tokens, error) {
-	row, err := s.queries.GetQBOConnectionTokens(ctx, connectionID)
+	row, err := s.store.GetQBOConnectionTokens(ctx, connectionID)
 	if err != nil {
 		return Tokens{}, fmt.Errorf("GetQBOConnectionTokens: %w", err)
 	}
@@ -127,7 +134,7 @@ func (s *Service) ReplaceIfVersion(
 		return fmt.Errorf("encrypt refresh token: %w", err)
 	}
 
-	_, err = s.queries.ReplaceQBOConnectionTokensIfVersion(ctx, store.ReplaceQBOConnectionTokensIfVersionParams{
+	_, err = s.store.ReplaceQBOConnectionTokensIfVersion(ctx, store.ReplaceQBOConnectionTokensIfVersionParams{
 		QboConnectionID:       connectionID,
 		Version:               version,
 		EncryptedAccessToken:  encryptedAccessToken,
@@ -135,7 +142,7 @@ func (s *Service) ReplaceIfVersion(
 		AccessTokenExpiresAt:  accessExpiresAt,
 		RefreshTokenExpiresAt: sql.NullTime{
 			Time:  refreshExpiresAt,
-			Valid: refreshExpiresAt.IsZero(),
+			Valid: true,
 		},
 		TokenType: "bearer",
 		Scope:     sql.NullString{},

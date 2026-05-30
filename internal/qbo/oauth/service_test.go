@@ -145,41 +145,52 @@ func (f *fakeStore) CreateQBOConnectionEvent(_ context.Context, arg store.Create
 	return e, nil
 }
 
-type fakeTokenService struct {
-	tokens map[uuid.UUID]tokens.Tokens
+type fakeTokenDataStore struct {
+	rows map[uuid.UUID]store.QboConnectionToken
 }
 
-func newFakeTokenService() *fakeTokenService {
-	return &fakeTokenService{tokens: make(map[uuid.UUID]tokens.Tokens)}
+func newFakeTokenDataStore() *fakeTokenDataStore {
+	return &fakeTokenDataStore{rows: make(map[uuid.UUID]store.QboConnectionToken)}
 }
 
-func (f *fakeTokenService) Store(_ context.Context, connectionID uuid.UUID, _ uuid.UUID, accessToken string, refreshToken string, accessExpiresAt time.Time, refreshExpiresAt time.Time) error {
-	f.tokens[connectionID] = tokens.Tokens{
-		ConnectionID:     connectionID,
-		AccessToken:      accessToken,
-		RefreshToken:     refreshToken,
-		AccessExpiresAt:  accessExpiresAt,
-		RefreshExpiresAt: refreshExpiresAt,
+func (f *fakeTokenDataStore) UpsertQBOConnectionTokens(_ context.Context, arg store.UpsertQBOConnectionTokensParams) (store.QboConnectionToken, error) {
+	row := store.QboConnectionToken{
+		QboConnectionID:       arg.QboConnectionID,
+		TenantID:              arg.TenantID,
+		EncryptedAccessToken:  arg.EncryptedAccessToken,
+		EncryptedRefreshToken: arg.EncryptedRefreshToken,
+		AccessTokenExpiresAt:  arg.AccessTokenExpiresAt,
+		RefreshTokenExpiresAt: arg.RefreshTokenExpiresAt,
+		TokenType:             arg.TokenType,
+		Scope:                 arg.Scope,
+		Version:               1,
+		CreatedAt:             time.Now(),
+		UpdatedAt:             time.Now(),
 	}
-	return nil
+	f.rows[arg.QboConnectionID] = row
+	return row, nil
 }
 
-func (f *fakeTokenService) Load(_ context.Context, connectionID uuid.UUID) (tokens.Tokens, error) {
-	tok, ok := f.tokens[connectionID]
+func (f *fakeTokenDataStore) GetQBOConnectionTokens(_ context.Context, connectionID uuid.UUID) (store.QboConnectionToken, error) {
+	row, ok := f.rows[connectionID]
 	if !ok {
-		return tokens.Tokens{}, sql.ErrNoRows
+		return store.QboConnectionToken{}, sql.ErrNoRows
 	}
-	return tok, nil
+	return row, nil
 }
 
-func newTestService(store *fakeStore, tokenService *fakeTokenService, tokenURL string) *Service {
+func (f *fakeTokenDataStore) ReplaceQBOConnectionTokensIfVersion(_ context.Context, _ store.ReplaceQBOConnectionTokensIfVersionParams) (store.QboConnectionToken, error) {
+	return store.QboConnectionToken{}, sql.ErrNoRows
+}
+
+func newTestService(fs *fakeStore, tokenStore *fakeTokenDataStore, tokenURL string) *Service {
 	ep := oauth2.Endpoint{
 		AuthURL:  "https://example.com/auth",
 		TokenURL: tokenURL,
 	}
 	return &Service{
-		store:        store,
-		tokenService: tokenService,
+		store:        fs,
+		tokenService: tokens.NewService(tokenStore, testEncryptor),
 		encryptor:    testEncryptor,
 		oauth2Config: oauth2.Config{
 			ClientID:     "test-client",
@@ -209,7 +220,7 @@ func fakeTokenServer() *httptest.Server {
 
 func TestAuthURL(t *testing.T) {
 	fs := newFakeStore()
-	svc := newTestService(fs, newFakeTokenService(), "http://example.com/token")
+	svc := newTestService(fs, newFakeTokenDataStore(), "http://example.com/token")
 
 	url, err := svc.AuthURL(context.Background(), testTenantID)
 	if err != nil {
@@ -246,7 +257,7 @@ func TestExchange_HappyPath(t *testing.T) {
 	defer ts.Close()
 
 	fs := newFakeStore()
-	fts := newFakeTokenService()
+	fts := newFakeTokenDataStore()
 	svc := newTestService(fs, fts, ts.URL)
 
 	// Pre-populate a valid state.
@@ -290,15 +301,15 @@ func TestExchange_HappyPath(t *testing.T) {
 	}
 
 	// Tokens were stored.
-	if len(fts.tokens) != 1 {
-		t.Fatalf("expected 1 token, got %d", len(fts.tokens))
+	if len(fts.rows) != 1 {
+		t.Fatalf("expected 1 token row, got %d", len(fts.rows))
 	}
-	for _, tok := range fts.tokens {
-		if tok.AccessToken != "test-access-token" {
-			t.Errorf("access_token = %q, want \"test-access-token\"", tok.AccessToken)
+	for _, row := range fts.rows {
+		if string(row.EncryptedAccessToken) != "test-access-token" {
+			t.Errorf("encrypted_access_token = %q, want \"test-access-token\"", string(row.EncryptedAccessToken))
 		}
-		if tok.RefreshToken != "test-refresh-token" {
-			t.Errorf("refresh_token = %q, want \"test-refresh-token\"", tok.RefreshToken)
+		if string(row.EncryptedRefreshToken) != "test-refresh-token" {
+			t.Errorf("encrypted_refresh_token = %q, want \"test-refresh-token\"", string(row.EncryptedRefreshToken))
 		}
 	}
 
@@ -315,7 +326,7 @@ func TestExchange_StateNotFound(t *testing.T) {
 	ts := fakeTokenServer()
 	defer ts.Close()
 
-	svc := newTestService(newFakeStore(), newFakeTokenService(), ts.URL)
+	svc := newTestService(newFakeStore(), newFakeTokenDataStore(), ts.URL)
 	err := svc.Exchange(context.Background(), "code", "nonexistent-state", "r1", "C")
 	if !errors.Is(err, ErrStateNotFound) {
 		t.Errorf("expected ErrStateNotFound, got %v", err)
@@ -327,7 +338,7 @@ func TestExchange_StateExpired(t *testing.T) {
 	defer ts.Close()
 
 	fs := newFakeStore()
-	svc := newTestService(fs, newFakeTokenService(), ts.URL)
+	svc := newTestService(fs, newFakeTokenDataStore(), ts.URL)
 
 	stateChecksum := "expired-state"
 	encrypted := encryptState(t, testTenantID, time.Now().Add(-1*time.Hour))
@@ -351,7 +362,7 @@ func TestExchange_TenantMismatch(t *testing.T) {
 	defer ts.Close()
 
 	fs := newFakeStore()
-	svc := newTestService(fs, newFakeTokenService(), ts.URL)
+	svc := newTestService(fs, newFakeTokenDataStore(), ts.URL)
 
 	otherTenant := uuid.MustParse("00000000-0000-0000-0000-000000000099")
 	stateChecksum := "mismatch-state"
@@ -378,7 +389,7 @@ func TestExchange_StateAlreadyConsumed(t *testing.T) {
 	defer ts.Close()
 
 	fs := newFakeStore()
-	fts := newFakeTokenService()
+	fts := newFakeTokenDataStore()
 	svc := newTestService(fs, fts, ts.URL)
 
 	// Pre-populate a state that is already consumed.
@@ -409,7 +420,7 @@ func TestExchange_TokenEndpointFails(t *testing.T) {
 	defer ts.Close()
 
 	fs := newFakeStore()
-	svc := newTestService(fs, newFakeTokenService(), ts.URL)
+	svc := newTestService(fs, newFakeTokenDataStore(), ts.URL)
 
 	stateChecksum := "token-fail-state"
 	expiresAt := time.Now().Add(10 * time.Minute)
@@ -433,7 +444,7 @@ func TestExchange_MalformedState(t *testing.T) {
 	defer ts.Close()
 
 	fs := newFakeStore()
-	svc := newTestService(fs, newFakeTokenService(), ts.URL)
+	svc := newTestService(fs, newFakeTokenDataStore(), ts.URL)
 
 	stateChecksum := "malformed-state"
 	fs.states[stateChecksum] = store.QboOauthState{
@@ -456,7 +467,7 @@ func TestExchange_Reconnect(t *testing.T) {
 	defer ts.Close()
 
 	fs := newFakeStore()
-	fts := newFakeTokenService()
+	fts := newFakeTokenDataStore()
 	svc := newTestService(fs, fts, ts.URL)
 
 	// Pre-populate an existing disconnected connection.
@@ -507,17 +518,17 @@ func TestExchange_Reconnect(t *testing.T) {
 	}
 
 	// Tokens were stored under the existing connection ID.
-	tok, ok := fts.tokens[existingID]
+	row, ok := fts.rows[existingID]
 	if !ok {
 		t.Fatal("tokens not stored under existing connection ID")
 	}
-	if tok.AccessToken != "test-access-token" {
-		t.Errorf("access_token = %q, want \"test-access-token\"", tok.AccessToken)
+	if string(row.EncryptedAccessToken) != "test-access-token" {
+		t.Errorf("encrypted_access_token = %q, want \"test-access-token\"", string(row.EncryptedAccessToken))
 	}
 }
 
 func TestNewClient_NoTokens(t *testing.T) {
-	fts := newFakeTokenService()
+	fts := newFakeTokenDataStore()
 	svc := newTestService(newFakeStore(), fts, "http://example.com/token")
 
 	_, err := svc.NewClient(context.Background(), uuid.New())
@@ -527,16 +538,17 @@ func TestNewClient_NoTokens(t *testing.T) {
 }
 
 func TestNewClient(t *testing.T) {
-	fts := newFakeTokenService()
+	fts := newFakeTokenDataStore()
 	svc := newTestService(newFakeStore(), fts, "http://example.com/token")
 
 	connID := uuid.New()
 	expiry := time.Now().Add(1 * time.Hour)
-	fts.tokens[connID] = tokens.Tokens{
-		ConnectionID:    connID,
-		AccessToken:     "stored-access",
-		RefreshToken:    "stored-refresh",
-		AccessExpiresAt: expiry,
+	fts.rows[connID] = store.QboConnectionToken{
+		QboConnectionID:      connID,
+		EncryptedAccessToken:  []byte("stored-access"),
+		EncryptedRefreshToken: []byte("stored-refresh"),
+		AccessTokenExpiresAt:  expiry,
+		Version:               1,
 	}
 
 	client, err := svc.NewClient(context.Background(), connID)
